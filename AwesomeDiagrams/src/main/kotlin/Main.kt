@@ -1,5 +1,5 @@
 package ru.nsu.diagrams
 
 fun main() {
-    println("Start a app!")
+    println("Start a app!   ")
 }
