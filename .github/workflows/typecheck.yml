@@ -1,0 +1,22 @@
+name: typecheck
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    name: Check Code Quality
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: cd frontend; npm run typecheck
+        uses: ScaCap/action-ktlint@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review # Change reporter
