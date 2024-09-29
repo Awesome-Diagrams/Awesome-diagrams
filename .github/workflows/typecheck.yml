@@ -5,18 +5,23 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [13.x]
+
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
+          node-version: 10
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
         run: cd frontend; npm install
-      - name: Typecheck
-        uses: andoshin11/typescript-error-reporter-action@v1.0.2
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Run typecheck
+        run: npm run typecheck
