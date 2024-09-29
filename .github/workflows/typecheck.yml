@@ -5,18 +5,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  lint:
-    name: Check Code Quality
+  test:
     runs-on: ubuntu-latest
-    permissions: write-all
-
+    strategy:
+      matrix:
+        node-version: [13.x]
     steps:
-      - name: Clone repo
-        uses: actions/checkout@master
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          fetch-depth: 1
-      - name: cd frontend; npm run typecheck
-        uses: ScaCap/action-ktlint@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review # Change reporter
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: cd frontend; npm install
+      - name: Typecheck
+        uses: andoshin11/typescript-error-reporter-action@v1.0.2

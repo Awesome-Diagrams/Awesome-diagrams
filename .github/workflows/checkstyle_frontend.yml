@@ -1,22 +1,28 @@
-name: checkstyle_frontend
+name: Lint
 
 on:
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  lint:
-    name: Check Code Quality
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
-    permissions: write-all
 
     steps:
-      - name: Clone repo
-        uses: actions/checkout@master
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
-          fetch-depth: 1
-      - name: cd frontend; npm run lint
-        uses: ScaCap/action-ktlint@master
+          node-version: 12
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
         with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review # Change reporter
+          tsc: true
