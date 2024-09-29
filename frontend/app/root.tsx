@@ -23,6 +23,8 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const n = 5;
+  Math.abs("test")
   return (
     <html lang="en">
       <head>
