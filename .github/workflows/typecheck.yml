@@ -5,24 +5,22 @@ on:
     branches: [ "main" ]
 
 jobs:
-  typecheck:
+  tsc:
+    name: runner / tsc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 16
-
-      # ESLint and Prettier must be in `package.json`
-      - name: Install Node.js dependencies
-        run: cd frontend; npm install
-
-      - name: Check out code.
-        uses: actions/checkout@v4
-        run: cd frontend; npm run typecheck
-      - name: misspell
-        uses: reviewdog/action-misspell@v1
+      - uses: actions/checkout@v2
+      - uses: EPMatt/reviewdog-action-tsc@v1
         with:
           github_token: ${{ secrets.github_token }}
-          locale: "US"
+          # Change reviewdog reporter if you need
+          # [github-pr-check,github-check,github-pr-review].
+          # More about reviewdog reporters at
+          # https://github.com/reviewdog/reviewdog#reporters
+          reporter: github-pr-review
+          # Change reporter level if you need
+          # [info,warning,error].
+          # More about reviewdog reporter level at
+          # https://github.com/reviewdog/reviewdog#reporters
+          level: info
+          workdir: frontend
