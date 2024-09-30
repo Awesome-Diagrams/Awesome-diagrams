@@ -24,6 +24,5 @@ jobs:
         with:
           working-directory: frontend
           token: ${{ secrets.GITHUB_TOKEN }} # optional
-          eslint-args: '--ignore-path=.gitignore --quiet'
           extensions: 'js,jsx,ts,tsx'
           annotations: true

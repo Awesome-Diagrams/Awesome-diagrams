@@ -31,5 +31,6 @@ jobs:
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
+          github_token: ${{ secrets.github_token }}
           tsc: true
           tsc_dir: frontend
