@@ -18,8 +18,11 @@ jobs:
       - name: Install Node.js dependencies
         run: cd frontend; npm install
 
-      - name: TypeScript report
-        uses: fersilva16/ts-report-action@1.1.0
+      - name: Check out code.
+        uses: actions/checkout@v4
+        run: cd frontend; npm run typecheck
+      - name: misspell
+        uses: reviewdog/action-misspell@v1
         with:
-          project: frontend
-          token: ${{ secrets.GITHUB_TOKEN }} # optional
+          github_token: ${{ secrets.github_token }}
+          locale: "US"
