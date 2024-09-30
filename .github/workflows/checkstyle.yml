@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - name: ktlint src/* --format
+      - name: Run linter
         uses: ScaCap/action-ktlint@master
         with:
           github_token: ${{ secrets.github_token }}
