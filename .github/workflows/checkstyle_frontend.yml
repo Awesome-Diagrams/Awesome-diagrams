@@ -2,10 +2,8 @@ name: checkstyle_frontend
 
 on:
   pull_request:
-  push:
-    branches:
-      - master
-
+    branches: [ "main" ]
+    
 jobs:
   eslint:
     runs-on: ubuntu-latest
