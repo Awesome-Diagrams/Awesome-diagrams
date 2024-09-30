@@ -1,8 +1,14 @@
-name: checkstyle_frontend
+name: checksyle_frontend
 
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   run-linters:
@@ -11,17 +17,18 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
           node-version: 16
 
       # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
-        run: cd frontend; npm install
+        run: npm ci
 
-      # ESLint and Prettier must be in `package.json`
-      - name: Run linter
-        run: cd frontend; npm run lint
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          eslint: true
