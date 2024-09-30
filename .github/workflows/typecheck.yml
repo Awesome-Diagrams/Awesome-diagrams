@@ -32,4 +32,4 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           tsc: true
-          working-dir: frontend
+          tsc_dir: frontend
