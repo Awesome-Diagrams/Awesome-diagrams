@@ -5,21 +5,21 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  typecheck:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
+          node-version: 16
+
+      # ESLint and Prettier must be in `package.json`
+      - name: Install Node.js dependencies
         run: cd frontend; npm install
-      - name: Typecheck
-        uses: andoshin11/typescript-error-reporter-action@v1.0.2
+
+      - name: TypeScript report
+        uses: fersilva16/ts-report-action@1.1.0
         with:
-          working-directory: frontend
+          project: frontend
           token: ${{ secrets.GITHUB_TOKEN }} # optional
