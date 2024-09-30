@@ -6,6 +6,7 @@ on:
 
 jobs:
   tsc:
+    permissions: write-all
     name: runner / tsc
     runs-on: ubuntu-latest
     steps:
