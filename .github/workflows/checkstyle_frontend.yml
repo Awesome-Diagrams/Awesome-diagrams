@@ -24,4 +24,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} # optional
           extensions: 'js,jsx,ts,tsx'
           annotations: true
-          ignore-pattern: 'app/internal/svgContainer/*'
+          ignore-pattern: |
+            app/internal/svgContainer/
+            frontend/app/internal/svgContainer/
