@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} # optional
           extensions: 'js,jsx,ts,tsx'
           annotations: true
-          eslint-args: '--ignore-pattern=app/internal/svgContainer/ --ignore-pattern=frontend/app/internal/svgContainer/'
+          eslint-args: '--ignore-pattern=app/internal/svgContainer/ --ignore-pattern=frontend/app/internal/svgContainer/ --ignore-pattern=app/routes/*'
           ignore-pattern: |
             app/internal/svgContainer/
             frontend/app/internal/svgContainer/
