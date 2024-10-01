@@ -17,6 +17,7 @@
     "@svgdotjs/svg.js": "^3.2.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "eslint-import-resolver-node": "^0.3.9",
     "isbot": "^4.1.0",
     "lucide-react": "^0.441.0",
     "react": "^18.2.0",
