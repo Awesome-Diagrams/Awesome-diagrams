@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo, CSSProperties } from 'react';
+import { useRef, useEffect, CSSProperties } from 'react';
 import { SVG, Svg } from "@svgdotjs/svg.js";
 import { SvgContainerHandle } from './hook';
 
@@ -8,12 +8,12 @@ export const SvgContainer = (props: SvgContainerProps) => {
   useEffect(() => {
     if (wrapper && wrapper.current) {
       if (wrapper.current.children.length === 0) {
-        let svg = SVG().addTo(wrapper.current).size('100%', '100%');
+        const svg = SVG().addTo(wrapper.current).size('100%', '100%');
         props.setHandle({ svg, container: wrapper.current });
         props.onload?.(svg, wrapper.current);
       }
     }
-  }, [wrapper]);
+  }, [wrapper, props]);
 
   const style: CSSProperties = {
   };

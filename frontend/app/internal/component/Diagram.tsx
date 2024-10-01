@@ -5,7 +5,7 @@ import { Svg } from "@svgdotjs/svg.js";
 export const Diagram = () => {
     const { setHandle, svgContainer } = useSvgContainer();
 
-    const handleOnload = (svg: Svg, container: HTMLDivElement) => {
+    const handleOnload = (svg: Svg) => {
         // Set svg dimensions 
         svg.size(300, 300);
     }
@@ -13,7 +13,7 @@ export const Diagram = () => {
     const clickHandler = updateSvg(svgContainer, svg => {
         const circle = svg.circle(100);
 
-        circle.on('click', (e) => {
+        circle.on('click', () => {
             circle.move(Math.floor(Math.random() * 50), Math.floor(Math.random() * 50));
         })
     })

@@ -29,7 +29,7 @@ export const useSvg = (
 
   useEffect(() => {
     let objs: Element[] = [];
-    let current = callbackRef.current;
+    const current = callbackRef.current;
     if (current && container) objs = current(container.svg) || [];
     return () => objs.forEach((obj) => obj.remove());
   }, [...deps, container]);
