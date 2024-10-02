@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint ./app",
+    "lint": "eslint --ignore-path .gitignore  --ignore-pattern app/internal/svgContainer/* --cache --cache-location ./node_modules/.cache/eslint ./app",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
@@ -14,8 +14,10 @@
     "@remix-run/node": "^2.12.0",
     "@remix-run/react": "^2.12.0",
     "@remix-run/serve": "^2.12.0",
+    "@svgdotjs/svg.js": "^3.2.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "eslint-import-resolver-node": "^0.3.9",
     "isbot": "^4.1.0",
     "lucide-react": "^0.441.0",
     "react": "^18.2.0",
