@@ -1,7 +1,6 @@
-import { useSvgContainer, updateSvg } from "~/internal/svgContainer/hook";
+import { SvgContainerHandle } from "~/internal/svgContainer/hook";
 import { SvgContainer } from "~/internal/svgContainer/SvgContainer";
 import { Svg } from "@svgdotjs/svg.js";
-import { SvgContainerHandle } from "~/internal/svgContainer/hook";
 
 interface DiagramProps {
     setHandle: React.Dispatch<React.SetStateAction<SvgContainerHandle | undefined>>;

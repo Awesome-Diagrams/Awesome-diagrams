@@ -1,5 +1,3 @@
-import { Diagram } from "~/internal/component/diagram/Diagram";
-import { ToolBar } from "~/internal/component/tools/ToolBar";
 import { Workspace } from "~/internal/component/Workspace";
 
 export default function DiagramIndex() {
