@@ -4,27 +4,24 @@ on:
   pull_request:
     branches: [ "main" ]
     
+    name: Lint Code Base
+
 jobs:
   eslint:
+    permissions: write-all
+    name: Lint Code Base
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Checkout Code
+        uses: actions/checkout@v3
         with:
-          node-version: 16
+          fetch-depth: 0
 
-      # ESLint and Prettier must be in `package.json`
-      - name: Install Node.js dependencies
-        run: cd frontend; npm install
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_TYPESCRIPT_ES: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: sibiraj-s/action-eslint@v3
-        with:
-          working-directory: frontend
-          token: ${{ secrets.GITHUB_TOKEN }} # optional
-          extensions: 'js,jsx,ts,tsx'
-          annotations: true
-          eslint-args: '--ignore-pattern=app/internal/svgContainer/ --ignore-pattern=frontend/app/internal/svgContainer/ --ignore-pattern=app/routes/ --ignore-pattern=frontend/app/routes'
-          ignore-pattern: |
-            app/internal/svgContainer/
-            frontend/app/internal/svgContainer/
