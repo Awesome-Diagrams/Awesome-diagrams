@@ -23,5 +23,6 @@ jobs:
         uses: github/super-linter@v4
         env:
           VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_TSX_ES: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
