@@ -1,5 +1,5 @@
-import { SvgContainerHandle } from "~/internal/svgContainer/hook";
-import { SvgContainer } from "~/internal/svgContainer/SvgContainer";
+import { SvgContainerHandle } from "~/internal/svg/svgContainer/hook";
+import { SvgContainer } from "~/internal/svg/svgContainer/SvgContainer";
 import { Svg } from "@svgdotjs/svg.js";
 
 interface DiagramProps {

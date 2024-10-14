@@ -1,6 +1,6 @@
 import { ToolBar } from "./tools/ToolBar"
 import { Diagram } from "./diagram/Diagram"
-import { useSvgContainer } from "../svgContainer/hook";
+import { useSvgContainer } from "../svg/svgContainer/hook";
 
 export const Workspace = () => {
     const { setHandle, svgContainer } = useSvgContainer();
