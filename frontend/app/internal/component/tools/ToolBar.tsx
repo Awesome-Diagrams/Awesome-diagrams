@@ -15,32 +15,29 @@ interface DiagramProps {
 }
 
 export const ToolBar = ({ svgContainer }: DiagramProps) => {
+  const constraints = new Box(0, 0, 1080, 720);
+
   const addCircle = updateSvg(svgContainer, (svg) => {
-    const constraints = new Box(0, 0, 1080, 720);
     const shape = new Circle({ r: 50, cx: 100, cy: 100 });
     new SvgShapeDraggable(shape, svg, constraints);
   });
 
   const addSquare = updateSvg(svgContainer, (svg) => {
-    const constraints = new Box(0, 0, 1080, 720);
     const shape = new Rect({ width: 100, height: 100, x: 100, y: 100 });
     new SvgShapeDraggable(shape, svg, constraints);
   });
 
   const addRectangle = updateSvg(svgContainer, (svg) => {
-    const constraints = new Box(0, 0, 1080, 720);
     const shape = new Rect({ width: 140, height: 90, x: 100, y: 100 });
     new SvgShapeDraggable(shape, svg, constraints);
   });
 
   const addOval = updateSvg(svgContainer, (svg) => {
-    const constraints = new Box(0, 0, 1080, 720);
     const shape = new Ellipse({ cx: 100, cy: 100, rx: 100, ry: 50 });
     new SvgShapeDraggable(shape, svg, constraints);
   });
 
   const addTriangle = updateSvg(svgContainer, (svg) => {
-    const constraints = new Box(0, 0, 1080, 720);
     const sideLength = 100;
     const height = (Math.sqrt(3) / 2) * sideLength;
     const x = 100;
