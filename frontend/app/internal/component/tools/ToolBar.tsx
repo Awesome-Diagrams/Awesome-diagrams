@@ -1,6 +1,8 @@
-import { SquarePlus } from "lucide-react";
-import { SvgContainerHandle, updateSvg } from "~/internal/svgContainer/hook";
+import { SvgContainerHandle, updateSvg } from "~/internal/svg/svgContainer/hook";
 import { Button } from "~/components/ui/button";
+import { Box, Circle} from "@svgdotjs/svg.js";
+import { SvgShapeDraggable } from "~/internal/svg/svgShape/svgShapeDraggable";
+import { SquarePlus } from "lucide-react";
 
 interface DiagramProps {
     svgContainer: SvgContainerHandle | undefined;
@@ -8,11 +10,9 @@ interface DiagramProps {
 
 export const ToolBar = ({svgContainer}: DiagramProps) => {
     const clickHandler = updateSvg(svgContainer, svg => {
-        const circle = svg.circle(100);
-
-        circle.on('click', () => {
-            circle.move(Math.floor(Math.random() * 100), Math.floor(Math.random() * 100));
-        })
+        const constraints = new Box(0, 0, 1080, 720)
+        const shape = new Circle({r: 50, cx: 100, cy: 100});
+        new SvgShapeDraggable(shape, svg, constraints);
     })
 
     return (
