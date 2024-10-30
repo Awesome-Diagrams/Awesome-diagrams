@@ -3,7 +3,9 @@ import { Button } from "~/components/ui/button";
 import { Box, Circle} from "@svgdotjs/svg.js";
 import { SquarePlus } from "lucide-react";
 import { SvgShape } from "~/internal/svg/svgShape/svgShape";
-import { ConstraintDraggable } from "~/internal/svg/svgShape/draggable/ConstraintDraggable";
+import { GeneralDraggable } from "~/internal/svg/svgShape/draggable/GeneralDraggable";
+import { ConstraintMovable } from "~/internal/svg/svgShape/movable/ConstraintMovable";
+import { GeneralMovable } from "~/internal/svg/svgShape/movable/GeneralMovable";
 
 
 interface DiagramProps {
@@ -14,7 +16,7 @@ export const ToolBar = ({svgContainer}: DiagramProps) => {
     const clickHandler = updateSvg(svgContainer, svg => {
         const constraint = new Box(0, 0, 1080, 720)
         const shape = new Circle({r: 50, cx: 100, cy: 100});
-        new SvgShape(shape, svg).setDraggable(new ConstraintDraggable(constraint));
+        new SvgShape(shape, svg, new ConstraintMovable(shape, constraint)).setDraggable(new GeneralDraggable());
     })
 
     return (

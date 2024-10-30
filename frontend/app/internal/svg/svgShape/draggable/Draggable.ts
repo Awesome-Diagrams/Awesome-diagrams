@@ -1,6 +1,6 @@
 import { Shape } from "@svgdotjs/svg.js";
+import { Movable } from "../movable/Movable";
 
 export interface Draggable {
-    onDrag(ev: Event): void;
-    init(shape: Shape): void;
+    init(shape: Shape, movable: Movable): void;
 }
