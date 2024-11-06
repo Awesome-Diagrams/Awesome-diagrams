@@ -49,7 +49,6 @@ export class UseCaseShape {
         this.rect.cx(cx).cy(cy);
     }
 
-
     private startEditing() {
         const prevText = this.textElement.text();
 
@@ -69,9 +68,11 @@ export class UseCaseShape {
 
         textarea.focus();
         textarea.addEventListener('blur', () => {
-            this.textElement.text(textarea.value);
-            this.updateTextAndRectPosition();
-            textarea.remove();
+            if (textarea.value != '') {
+                this.textElement.text(textarea.value);
+                this.updateTextAndRectPosition();
+            }
+                textarea.remove();
         });
         textarea.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
