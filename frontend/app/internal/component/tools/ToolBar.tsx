@@ -6,6 +6,7 @@ import { SvgShape } from "~/internal/svg/svgShape/svgShape";
 import { GeneralDraggable } from "~/internal/svg/svgShape/draggable/GeneralDraggable";
 import { ConstraintMovable } from "~/internal/svg/svgShape/movable/ConstraintMovable";
 import { GeneralMovable } from "~/internal/svg/svgShape/movable/GeneralMovable";
+import { UseCaseShape } from "~/internal/svg/svgShape/shapes/UseCaseShape";
 
 
 interface DiagramProps {
@@ -16,7 +17,7 @@ export const ToolBar = ({svgContainer}: DiagramProps) => {
     const clickHandler = updateSvg(svgContainer, svg => {
         const constraint = new Box(0, 0, 1080, 720)
         const shape = new Circle({r: 50, cx: 100, cy: 100});
-        new SvgShape(shape, svg, new ConstraintMovable(shape, constraint)).setDraggable(new GeneralDraggable());
+        new UseCaseShape(shape, svg, constraint);
     })
 
     return (

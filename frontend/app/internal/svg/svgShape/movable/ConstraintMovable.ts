@@ -1,11 +1,11 @@
-import { Box, Shape } from "@svgdotjs/svg.js";
+import { Box, G, Shape } from "@svgdotjs/svg.js";
 import { Movable } from "./Movable";
 
 export class ConstraintMovable implements Movable {
     private shape: Shape;
     private constraint: Box;
 
-    constructor(shape: Shape, constraint: Box) {
+    constructor(shape: Shape | G, constraint: Box) {
         this.shape = shape;
         this.constraint = constraint;
     }
