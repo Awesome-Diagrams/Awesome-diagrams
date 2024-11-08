@@ -5,6 +5,8 @@ import { ConstraintMovable } from "../movable/ConstraintMovable";
 import { GeneralDraggable } from "../draggable/GeneralDraggable";
 
 export class UseCaseShape {
+    private selRectGapSize : number = 20;
+
     private draggable?: Draggable;
     private group: G;
     private shape: Shape;
@@ -12,6 +14,8 @@ export class UseCaseShape {
     private rect: Rect;
     private svg: Svg;
     private movable: Movable;
+    private isSelected: boolean = false;
+    private selectionOutline?: Rect; 
 
     constructor(shape: Shape, svg: Svg, constraint: Box) {
         this.shape = shape;
@@ -26,14 +30,40 @@ export class UseCaseShape {
         this.rect = new Rect().width(100).height(30).fill('transparent').stroke({ color: 'white', width: 1 }).opacity(0);
         this.group.add(this.rect);
 
+        this.selectionOutline = new Rect()
+            .width((this.shape.width() as number) + this.selRectGapSize)
+            .height((this.shape.height() as number)  + this.selRectGapSize)
+            .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
+            .fill('none')
+            .hide();
+        this.group.add(this.selectionOutline);
+
         svg.add(this.group);
-        this.movable = new ConstraintMovable(this.group, constraint);
+        this.movable = new ConstraintMovable(this.group, constraint, this.selRectGapSize);
         this.setDraggable(new GeneralDraggable());
 
         this.updateTextAndRectPosition();
 
         this.rect.on('click', () => this.startEditing());
+        this.shape.on('click', () => this.toggleSelection())
     }
+
+    private toggleSelection() {
+        if (!this.selectionOutline?.visible()) {
+            this.selectionOutline?.show();
+            this.draggable?.setDraggable(true); 
+
+            document.addEventListener('click', this.handleDocumentClick);
+        }
+    }
+
+    private handleDocumentClick = (event: MouseEvent) => {
+        if (!this.group.node.contains(event.target as Node)) {
+            this.selectionOutline?.hide();
+            this.draggable?.setDraggable(false);
+            document.removeEventListener('click', this.handleDocumentClick);
+        }
+    };
 
     public setDraggable(draggable: Draggable): UseCaseShape {
         this.draggable = draggable;
@@ -47,6 +77,8 @@ export class UseCaseShape {
         this.textElement.cx(cx);
         this.textElement.cy(cy);
         this.rect.cx(cx).cy(cy);
+
+        this.selectionOutline?.cx(cx).cy(cy);
     }
 
     private startEditing() {
