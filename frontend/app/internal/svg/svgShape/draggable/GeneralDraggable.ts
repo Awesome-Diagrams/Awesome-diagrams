@@ -14,7 +14,7 @@ export class GeneralDraggable implements Draggable {
             if (!this.isDraggable) return;
 
             const { box } = (e as any).detail;
-            let { x, y } = box;
+            const { x, y } = box;
 
             movable.move(x, y, box.x2, box.y2);
         }
