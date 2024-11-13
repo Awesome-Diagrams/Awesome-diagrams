@@ -1,7 +1,7 @@
 import { SvgContainerHandle, updateSvg } from "~/internal/svg/svgContainer/hook";
 import { Button } from "~/components/ui/button";
-import { Box, Circle, Rect , Shape } from "@svgdotjs/svg.js";
-import { SquarePlus, Circle as CircleIcon, Square, RectangleHorizontal, Triangle } from "lucide-react";
+import { Box } from "@svgdotjs/svg.js";
+import { SquarePlus } from "lucide-react";
 import { GeneralDraggable } from "~/internal/svg/svgShape/draggable/GeneralDraggable";
 import { UseCaseShape } from "~/internal/svg/svgShape/shapes/UseCaseShape";
 import {
@@ -10,35 +10,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useCallback, useState } from "react";
+import {ShapeConfig, shapeConfigs} from "~/internal/svg/diagramShapes/SvgFigureConfigs"
 
 interface DiagramProps {
     svgContainer: SvgContainerHandle | undefined;
 }
-
-type ShapeConfig = {
-    name: string,
-    createShape: () => Shape
-
-}
-
-const shapeConfigs: ShapeConfig[] = [
-    {
-        name: "Circle",
-        //icon: CircleIcon,
-        createShape: () => new Circle({ r: 50, cx: 100, cy: 100 }),
-    },
-    {
-        name: "Square",
-       // icon: Square,
-        createShape: () => new Rect({ width: 90, height: 90, x: 100, y: 100 }),
-    },
-    {
-        name: "Rectangle",
-       // icon: RectangleHorizontal,
-        createShape: () => new Rect({ width: 140, height: 90, x: 100, y: 100 }),
-    },
-];
 
 export const ToolBar = ({ svgContainer }: DiagramProps) => {
     return (
@@ -53,7 +29,6 @@ export const ToolBar = ({ svgContainer }: DiagramProps) => {
                     <DropdownMenuContent className="w-56">
                         {shapeConfigs.map((config, idx) => (
                             <DropdownMenuItem key={idx}>
-                                { /*<config.icon className="mr-2 h-4 w-4" /> */}
                                 <ShapeDropDownMenu config={config} svgContainer={svgContainer!} />
                             </DropdownMenuItem>
                         ))}
@@ -78,6 +53,9 @@ const ShapeDropDownMenu = ({config, svgContainer}: ShapeDropDownMenuProps) => {
     });
 
     return (<>
-       <span className="w-full h-full" onClick={clickHandler}>{config.name}</span> 
+       <button className="h-full w-full flex flex-row gap-1" onClick={clickHandler}>
+            <config.icon className="mr-2 h-4 w-4" />
+            <div>{config.name}</div>
+        </button> 
     </>)
 }
