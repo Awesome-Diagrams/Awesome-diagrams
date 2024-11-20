@@ -1,10 +1,10 @@
-import { Svg, Text, Rect, G, Circle, Shape, Box } from "@svgdotjs/svg.js";
-import { Draggable } from "../draggable/Draggable";
-import { Movable } from "../movable/Movable";
-import { ConstraintMovable } from "../movable/ConstraintMovable";
-import { GeneralDraggable } from "../draggable/GeneralDraggable";
+import { Svg, Text, Rect, G, Shape, Box } from "@svgdotjs/svg.js";
+import { Draggable } from "./draggable/Draggable";
+import { Movable } from "./movable/Movable";
+import { ConstraintMovable } from "./movable/ConstraintMovable";
+import { GeneralDraggable } from "./draggable/GeneralDraggable";
 
-export class UseCaseShape {
+export class ShapeType {
     private selRectGapSize : number = 20;
 
     private draggable?: Draggable;
@@ -12,14 +12,12 @@ export class UseCaseShape {
     private shape: Shape;
     private textElement: Text;
     private rect: Rect;
-    private svg: Svg;
     private movable: Movable;
     private isSelected: boolean = false;
     private selectionOutline?: Rect; 
 
     constructor(shape: Shape, svg: Svg, constraint: Box) {
         this.shape = shape;
-        this.svg = svg;
 
         this.group = new G();
         this.group.add(this.shape);
@@ -65,7 +63,7 @@ export class UseCaseShape {
         }
     };
 
-    public setDraggable(draggable: Draggable): UseCaseShape {
+    public setDraggable(draggable: Draggable): ShapeType {
         this.draggable = draggable;
         this.draggable.init(this.group, this.movable);
         return this;

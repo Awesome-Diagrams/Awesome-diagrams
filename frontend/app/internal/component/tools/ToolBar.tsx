@@ -2,15 +2,14 @@ import { SvgContainerHandle, updateSvg } from "~/internal/svg/svgContainer/hook"
 import { Button } from "~/components/ui/button";
 import { Box } from "@svgdotjs/svg.js";
 import { SquarePlus } from "lucide-react";
-import { GeneralDraggable } from "~/internal/svg/svgShape/draggable/GeneralDraggable";
-import { UseCaseShape } from "~/internal/svg/svgShape/shapes/UseCaseShape";
+import { ShapeType } from "~/internal/type/shape/ShapeType";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import {ShapeConfig, shapeConfigs} from "~/internal/svg/diagramShapes/SvgFigureConfigs"
+import {ShapeConfig, shapeConfigs} from "~/internal/config/FigureConfigs"
 
 interface DiagramProps {
     svgContainer: SvgContainerHandle | undefined;
@@ -49,7 +48,7 @@ const ShapeDropDownMenu = ({config, svgContainer}: ShapeDropDownMenuProps) => {
     const clickHandler = updateSvg(svgContainer, () => {
         const constraint = new Box(0, 0, 1080, 720);
         const shape = config.createShape();
-        new UseCaseShape(shape, svgContainer.svg, constraint);
+        new ShapeType(shape, svgContainer.svg, constraint);
     });
 
     return (<>

@@ -37,7 +37,7 @@ export const shapeConfigs: ShapeConfig[] = [
             const x = 100;
             const y = 100;
             const points = `${x},${y} ${x - sideLength / 2},${y + height} ${x + sideLength / 2},${y + height}`;
-            var draw = SVG().addTo('body').size(300, 130);
+            const draw = SVG().addTo('body').size(300, 130);
             return draw.polyline(points) as Shape;
         },
     },
