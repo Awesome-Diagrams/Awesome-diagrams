@@ -1,6 +1,4 @@
-import { SvgContainerHandle, updateSvg } from "~/internal/svg/svgContainer/hook";
 import { Button } from "~/components/ui/button";
-import { Box } from "@svgdotjs/svg.js";
 import { SquarePlus } from "lucide-react";
 import {
     DropdownMenu,
@@ -48,7 +46,7 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             return;
         }
         diagram?.diagram?.addElem(config.shapeType)
-    }, [])
+    }, [diagram, config])
 
     return (<>
        <button className="h-full w-full flex flex-row gap-1" onClick={clickHandler}>

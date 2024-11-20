@@ -1,4 +1,4 @@
-import { G, Rect, Shape } from "@svgdotjs/svg.js";
+import { G, Rect } from "@svgdotjs/svg.js";
 
 export type DiagramSerialized = {
     height: number;

@@ -1,5 +1,5 @@
 import { ToolBar } from "./tools/ToolBar"
-import { Diagram } from "./diagram/Diagram"
+import { DiagramMenu } from "./diagram/DiagramMenu"
 import { ImportCard } from "./tools/file/ImportCard";
 import { ExportCard } from "./tools/file/ExportCard";
 
@@ -10,10 +10,10 @@ export const Workspace = () => {
             <div className="flex basis-1/4">
                 <ImportCard />
                 <ExportCard />
-                <ToolBar svgContainer={svgContainer}/>
+                <ToolBar />
             </div>
             <div className="flex basis-3/4 justify-center">
-                <Diagram  setHandle={setHandle} />
+                <DiagramMenu />
             </div>
         </div>
     )

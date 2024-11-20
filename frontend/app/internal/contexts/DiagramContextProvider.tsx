@@ -1,5 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react"
-import { updateSvg, useSvgContainer } from "../svg/svgContainer/hook";
+import { createContext, useCallback, useContext, useState } from "react"
 import { Svg } from "@svgdotjs/svg.js";
 import { Diagram } from "../model/diagram/Diagram";
 
@@ -14,7 +13,12 @@ export const useDiagram = () => {
   return useContext(DiagramContext);
 };
 
-export const DiagramContextProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+export interface DiagramContextProviderProps {
+    children: React.ReactNode
+
+}
+
+export const DiagramContextProvider = ({ children }: DiagramContextProviderProps) => {
     const [diagram, setDiagram] = useState<Diagram>();
 
     const reset = useCallback((svg: Svg) => {
