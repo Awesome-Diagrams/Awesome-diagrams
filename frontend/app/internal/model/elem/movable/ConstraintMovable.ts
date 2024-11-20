@@ -16,7 +16,7 @@ export class ConstraintMovable implements Movable {
         });
     }
 
-    public move(x: number, y: number, x2?: number, y2?: number) {
+    public move(x: number, y: number) {
 
         const box = this.shape.bbox();
 

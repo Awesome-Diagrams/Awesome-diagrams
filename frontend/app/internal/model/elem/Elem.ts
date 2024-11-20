@@ -1,23 +1,55 @@
-import { Svg, Text, Rect, G, Shape, Box } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse } from "@svgdotjs/svg.js";
 import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";
 import { GeneralDraggable } from "./draggable/GeneralDraggable";
+import { ShapeType } from "./ShapeType";
+import { GeneralMovable } from "./movable/GeneralMovable";
+import { MovableType } from "./movable/MovableType";
+import { DraggableType } from "./draggable/DraggableType";
 
-export class ShapeType {
+export class Elem {
+
+    // TODO: extract in constants
     private selRectGapSize : number = 20;
 
     private draggable?: Draggable;
+    private movable: Movable;
+    private isSelected: boolean = false;
+
+    // svg
+    private svg: Svg;
+    private selectionOutline?: Rect; 
     private group: G;
     private shape: Shape;
     private textElement: Text;
     private rect: Rect;
-    private movable: Movable;
-    private isSelected: boolean = false;
-    private selectionOutline?: Rect; 
+    private constraint: Box;
 
-    constructor(shape: Shape, svg: Svg, constraint: Box) {
-        this.shape = shape;
+    constructor(shapeType: ShapeType, svg: Svg) {
+
+        // TODO: add to config
+        switch (shapeType) {
+            case 'CIRCLE':
+                this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
+                break;
+            case 'OVAL':
+                this.shape = new Ellipse({ cx: 100, cy: 100, rx: 100, ry: 50 });
+                break;
+            case 'RECTANGLE':
+                this.shape = new Rect({ width: 140, height: 90, x: 100, y: 100 });
+                break;
+            case 'SQUARE':
+                this.shape = new Rect({ width: 90, height: 90, x: 100, y: 100 });
+                break;
+            case 'TRIANGLE':
+                // FIXME
+                this.shape = new Circle({ r: 50, cx: 100, cy: 100 })
+                break;
+        }
+
+        this.svg = svg;
+        this.svg.add(this.shape);
 
         this.group = new G();
         this.group.add(this.shape);
@@ -35,15 +67,57 @@ export class ShapeType {
             .fill('none')
             .hide();
         this.group.add(this.selectionOutline);
-
         svg.add(this.group);
-        this.movable = new ConstraintMovable(this.group, constraint, this.selRectGapSize);
-        this.setDraggable(new GeneralDraggable());
+
+        this.movable = new GeneralMovable(this.shape)
+        this.setDraggable('GENERAL');
 
         this.updateTextAndRectPosition();
 
         this.rect.on('click', () => this.startEditing());
         this.shape.on('click', () => this.toggleSelection())
+
+        // TODO: extract in config
+        this.constraint = new Box(0, 0, 1080, 720);
+    }
+
+    public move(x: number, y: number) {
+        this.movable.move(x, y);
+    }
+
+    public setText(text: string) {
+        this.textElement.plain(text)
+    }
+
+    public setConstraint(width: number, height: number): Elem {
+        this.constraint = new Box(0, 0, width, height);
+
+        return this;
+    }
+
+    public setMovable(movableType: MovableType): Elem {
+        switch (movableType) {
+            case 'CONSTRAINT':
+                // TODO: extract in conig
+                this.movable = new ConstraintMovable(this.shape, this.constraint, 3);
+                break;
+            case 'GENERAL':
+                this.movable = new GeneralMovable(this.shape);
+                break;
+        }
+
+        return this;
+    }
+
+    public setDraggable(draggableType: DraggableType): Elem {
+        switch (draggableType) {
+            case 'GENERAL':
+                this.draggable = new GeneralDraggable();
+                break;
+        }
+
+        this.draggable.init(this.group, this.movable);
+        return this;
     }
 
     private toggleSelection() {
@@ -63,12 +137,6 @@ export class ShapeType {
         }
     };
 
-    public setDraggable(draggable: Draggable): ShapeType {
-        this.draggable = draggable;
-        this.draggable.init(this.group, this.movable);
-        return this;
-    }
-
     private updateTextAndRectPosition() {
         const cx = this.shape.cx();
         const cy = this.shape.cy();
@@ -81,7 +149,6 @@ export class ShapeType {
 
     private startEditing() {
         const prevText = this.textElement.text();
-
 
         const textarea = document.createElement('textarea');
         textarea.value = this.textElement.text();

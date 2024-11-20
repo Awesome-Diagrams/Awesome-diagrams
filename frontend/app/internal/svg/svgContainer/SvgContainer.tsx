@@ -12,7 +12,7 @@ export const SvgContainer = (props: SvgContainerProps) => {
         props.setHandle({ svg, container: wrapper.current });
         props.onload?.(svg, wrapper.current);
       }
-    }handleOnload
+    }
   }, [wrapper, props]);
 
   const style: CSSProperties = {

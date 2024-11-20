@@ -16,7 +16,7 @@ export class GeneralDraggable implements Draggable {
             const { box } = (e as any).detail;
             const { x, y } = box;
 
-            movable.move(x, y, box.x2, box.y2);
+            movable.move(x, y);
         }
 
         shape.on('dragmove.namespace', onDrag);
