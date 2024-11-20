@@ -9,16 +9,11 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "~/components/ui/dialog"
-import { SvgContainerHandle } from "~/internal/svg/svgContainer/hook";
 
-interface ExportCardProps {
-  svgContainer: SvgContainerHandle | undefined;
-}
 
-export const ExportCard = ({svgContainer}: ExportCardProps) => {
+export const ExportCard = () => {
   const handleExport = useCallback(() => {
-    console.log(svgContainer?.svg.children())
-  }, [svgContainer])
+  }, [])
 
   return (
     <Dialog>

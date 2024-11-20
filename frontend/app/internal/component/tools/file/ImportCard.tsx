@@ -11,17 +11,13 @@ import {
   } from "~/components/ui/dialog"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { SvgContainerHandle } from "~/internal/svg/svgContainer/hook";
-import { SvgContainer } from "~/internal/svg/svgContainer/SvgContainer";
 
-interface ImportCardProps {
-  svgContainer: SvgContainerHandle | undefined;
-}
 
-export const ImportCard = ({svgContainer}: ImportCardProps) => {
+export const ImportCard = () => {
   const handleImport = useCallback(() => {
 
   }, [])
+
   return (
     <Dialog>
         <DialogTrigger asChild>
