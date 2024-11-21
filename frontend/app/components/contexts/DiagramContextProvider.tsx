@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { Svg } from "@svgdotjs/svg.js";
-import { Diagram } from "../model/diagram/Diagram";
+import { Diagram } from "~/internal/model/diagram/Diagram";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
@@ -15,11 +15,11 @@ export const useDiagram = () => {
 
 export interface DiagramContextProviderProps {
     children: React.ReactNode
-
 }
 
 export const DiagramContextProvider = ({ children }: DiagramContextProviderProps) => {
     const [diagram, setDiagram] = useState<Diagram>();
+    
 
     const reset = useCallback((svg: Svg) => {
         setDiagram(new Diagram(svg))

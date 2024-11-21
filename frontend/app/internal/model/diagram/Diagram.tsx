@@ -28,8 +28,10 @@ export class Diagram {
     }
 
     addElem(shapeType: ShapeType): Elem {
+        console.log(this.svg.children())
         const elem = new Elem(shapeType, this.svg)
-            .setConstraint(this.width, this.height)
+            //.setConstraint(this.width, this.height)
+            //.setMovable('CONSTRAINT')
 
         this.elems.push(elem)
 

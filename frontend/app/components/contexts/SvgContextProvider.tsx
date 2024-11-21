@@ -1,10 +1,10 @@
 import { createContext, useCallback, useContext, useEffect } from "react"
-import { updateSvg, useSvgContainer } from "../svg/svgContainer/hook";
-import { Svg } from "@svgdotjs/svg.js";
+import { SVG, Svg } from "@svgdotjs/svg.js";
+import { useSvgContainer } from "~/internal/svg/hook/hook";
 
 type SvgContextType = {
     reset: (div: HTMLDivElement) => void
-    update: (effect: (svg: Svg) => void) => void
+    //update: (effect: (svg: Svg) => void) => void
     svg: Svg | undefined
 }
 
@@ -21,22 +21,22 @@ export interface SvgContextProviderProps {
 export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
     const { setHandle, svgContainer } = useSvgContainer();
 
-    const update = (effect: (svg: Svg) => void) => updateSvg(svgContainer, effect);
+    //const update = (effect: (svg: Svg) => void) => updateSvg(svgContainer, effect);
 
     useEffect(() => {
         setHandle(undefined)
-    }, [setHandle])
+    }, [])
 
     const reset = useCallback((div: HTMLDivElement) => {
-        setHandle({container: div, svg: new Svg()})
-    }, [setHandle])
+        setHandle({container: div, svg: SVG().addTo(div).size('100%', '100%')})
+    }, [])
 
     return (
         <SvgContext.Provider
             value={{
                 reset: reset,
                 svg: svgContainer?.svg,
-                update: update
+                //update: update
             }}
         >
             {children}

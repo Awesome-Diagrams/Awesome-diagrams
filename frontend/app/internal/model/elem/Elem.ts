@@ -7,6 +7,7 @@ import { ShapeType } from "./ShapeType";
 import { GeneralMovable } from "./movable/GeneralMovable";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
+import { updateSvg } from "~/internal/svg/hook/hook";
 
 export class Elem {
 
@@ -49,7 +50,10 @@ export class Elem {
         }
 
         this.svg = svg;
-        this.svg.add(this.shape);
+        console.log(this.svg)
+
+        console.log(this.svg)
+        this.svg.add(this.shape)
 
         this.group = new G();
         this.group.add(this.shape);
@@ -67,7 +71,7 @@ export class Elem {
             .fill('none')
             .hide();
         this.group.add(this.selectionOutline);
-        svg.add(this.group);
+        this.svg.add(this.group);
 
         this.movable = new GeneralMovable(this.shape)
         this.setDraggable('GENERAL');
