@@ -21,13 +21,18 @@ export class UseCaseShape {
         this.shape = shape;
         this.svg = svg;
 
-        this.group = new G();
+        this.group = new G().cx(this.shape.cx()).cy(this.shape.cy());
         this.group.add(this.shape);
 
-        this.textElement = new Text().plain('').font({ fill: 'white', size: 16, anchor: 'middle' });
+        this.textElement = new Text().plain('')
+                           .font({ fill: 'white', size: 16, anchor: 'middle' })
+                           .cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.textElement);
 
-        this.rect = new Rect().width(100).height(30).fill('transparent').stroke({ color: 'white', width: 1 }).opacity(0);
+        this.rect = new Rect().width(100).height(30)
+                    .fill('transparent')
+                    .stroke({ color: 'white', width: 1 })
+                    .opacity(0).cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.rect);
 
         this.selectionOutline = new Rect()
@@ -35,14 +40,12 @@ export class UseCaseShape {
             .height((this.shape.height() as number)  + this.selRectGapSize)
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
-            .hide();
+            .hide().cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.selectionOutline);
 
         svg.add(this.group);
         this.movable = new ConstraintMovable(this.group, constraint, this.selRectGapSize);
         this.setDraggable(new GeneralDraggable());
-
-        this.updateTextAndRectPosition();
 
         this.rect.on('click', () => this.startEditing());
         this.shape.on('click', () => this.toggleSelection())
@@ -71,16 +74,6 @@ export class UseCaseShape {
         return this;
     }
 
-    private updateTextAndRectPosition() {
-        const cx = this.shape.cx();
-        const cy = this.shape.cy();
-        this.textElement.cx(cx);
-        this.textElement.cy(cy);
-        this.rect.cx(cx).cy(cy);
-
-        this.selectionOutline?.cx(cx).cy(cy);
-    }
-
     private startEditing() {
         const prevText = this.textElement.text();
 
@@ -100,11 +93,12 @@ export class UseCaseShape {
 
         textarea.focus();
         textarea.addEventListener('blur', () => {
-            if (textarea.value != '') {
+            if (textarea.value.trim() === '') {
+                this.textElement.plain(textarea.value);
+            } else {
                 this.textElement.text(textarea.value);
-                this.updateTextAndRectPosition();
             }
-                textarea.remove();
+            textarea.remove();
         });
         textarea.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
