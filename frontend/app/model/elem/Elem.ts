@@ -143,16 +143,6 @@ export class Elem {
         }
     };
 
-    private updateTextAndRectPosition() {
-        const cx = this.shape.cx();
-        const cy = this.shape.cy();
-        this.textElement.cx(cx);
-        this.textElement.cy(cy);
-        this.rect.cx(cx).cy(cy);
-
-        this.selectionOutline?.cx(cx).cy(cy);
-    }
-
     private startEditing() {
         const prevText = this.textElement.text();
 
@@ -171,11 +161,12 @@ export class Elem {
 
         textarea.focus();
         textarea.addEventListener('blur', () => {
-            if (textarea.value != '') {
+            if (textarea.value.trim() === '') {
+                this.textElement.plain(textarea.value);
+            } else {
                 this.textElement.text(textarea.value);
-                this.updateTextAndRectPosition();
             }
-                textarea.remove();
+            textarea.remove();
         });
         textarea.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
