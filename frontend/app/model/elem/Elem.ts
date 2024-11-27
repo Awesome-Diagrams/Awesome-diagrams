@@ -105,10 +105,10 @@ export class Elem {
     public setMovable(movableType: MovableType): Elem {
         switch (movableType) {
             case 'CONSTRAINT':
-                this.movable = new ConstraintMovable(this.shape, this.constraint, 3);
+                this.movable = new ConstraintMovable(this.group, this.constraint, this.selRectGapSize);
                 break;
             case 'GENERAL':
-                this.movable = new GeneralMovable(this.shape);
+                this.movable = new GeneralMovable(this.group);
                 break;
         }
 
@@ -122,8 +122,12 @@ export class Elem {
                 break;
         }
 
-        this.draggable.init(this.group, this.movable);
+        this.draggable.init(this);
         return this;
+    }
+
+    public getShape() {
+        return this.shape
     }
 
     private toggleSelection() {

@@ -1,14 +1,14 @@
-import { Shape } from "@svgdotjs/svg.js";
+import { G, Shape } from "@svgdotjs/svg.js";
 import { Movable } from "./Movable";
 
 export class GeneralMovable implements Movable {
-    private shape: Shape;
+    private group: G;
 
-    constructor(shape: Shape) {
-        this.shape = shape;
+    constructor(group: G) {
+        this.group = group;
     }
 
     public move(x: number, y: number) {
-        this.shape.move(x, y);
+        this.group.move(x, y);
     }
 }

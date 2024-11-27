@@ -2,11 +2,11 @@ import { Box, G, Shape } from "@svgdotjs/svg.js";
 import { Movable } from "./Movable";
 
 export class ConstraintMovable implements Movable {
-    private shape: Shape | G;
+    private group: G;
     private constraint: Box;
 
-    constructor(shape: Shape | G, constraint: Box, selRectGapSize : number = 0) {
-        this.shape = shape;
+    constructor(group: G, constraint: Box, selRectGapSize : number = 0) {
+        this.group = group;
 
         this.constraint = new Box({
             x: constraint.x - selRectGapSize / 2,
@@ -18,11 +18,11 @@ export class ConstraintMovable implements Movable {
 
     public move(x: number, y: number) {
 
-        const box = this.shape.bbox();
+        const box = this.group.bbox();
 
         x = Math.max(this.constraint.x, Math.min(x, this.constraint.x2 - box.w));
         y = Math.max(this.constraint.y, Math.min(y, this.constraint.y2 - box.h));
 
-        this.shape.move(x, y);
+        this.group.move(x, y);
     }
 }

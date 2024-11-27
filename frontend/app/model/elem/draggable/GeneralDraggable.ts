@@ -2,12 +2,13 @@ import { G, Shape } from "@svgdotjs/svg.js";
 import { Draggable } from "./Draggable";
 import { DragHandler } from "~/internal/svg/svgDraggable/svg.draggable"
 import { Movable } from "../movable/Movable";
+import { Elem } from "../Elem";
 
 export class GeneralDraggable implements Draggable {
     private isDraggable: boolean = false;
 
-    init(shape: Shape | G, movable: Movable) {
-        new DragHandler(shape).init(true);
+    init(elem: Elem) {
+        new DragHandler(elem.getShape()).init(true);
 
         const onDrag = (e: Event): void => {
             e.preventDefault();
@@ -16,10 +17,10 @@ export class GeneralDraggable implements Draggable {
             const { box } = (e as any).detail;
             const { x, y } = box;
 
-            movable.move(x, y);
+            elem.move(x, y);
         }
 
-        shape.on('dragmove.namespace', onDrag);
+        elem.getShape().on('dragmove.namespace', onDrag);
     }
 
     public setDraggable(isDraggable : boolean) {
