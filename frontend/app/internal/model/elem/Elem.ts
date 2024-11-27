@@ -50,18 +50,19 @@ export class Elem {
         }
 
         this.svg = svg;
-        console.log(this.svg)
 
-        console.log(this.svg)
-        this.svg.add(this.shape)
-
-        this.group = new G();
+        this.group = new G().cx(this.shape.cx()).cy(this.shape.cy());
         this.group.add(this.shape);
 
-        this.textElement = new Text().plain('').font({ fill: 'white', size: 16, anchor: 'middle' });
+        this.textElement = new Text().plain('')
+                           .font({ fill: 'white', size: 16, anchor: 'middle' })
+                           .cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.textElement);
 
-        this.rect = new Rect().width(100).height(30).fill('transparent').stroke({ color: 'white', width: 1 }).opacity(0);
+        this.rect = new Rect().width(100).height(30)
+                    .fill('transparent')
+                    .stroke({ color: 'white', width: 1 })
+                    .opacity(0).cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.rect);
 
         this.selectionOutline = new Rect()
@@ -69,14 +70,12 @@ export class Elem {
             .height((this.shape.height() as number)  + this.selRectGapSize)
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
-            .hide();
+            .hide().cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.selectionOutline);
+
         this.svg.add(this.group);
-
         this.movable = new GeneralMovable(this.shape)
-        this.setDraggable('GENERAL');
-
-        this.updateTextAndRectPosition();
+        this.setDraggable('GENERAL')
 
         this.rect.on('click', () => this.startEditing());
         this.shape.on('click', () => this.toggleSelection())

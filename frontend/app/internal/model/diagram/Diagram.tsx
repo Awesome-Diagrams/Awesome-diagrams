@@ -27,8 +27,15 @@ export class Diagram {
         return this
     }
 
+    getWidth(): number {
+        return this.width
+    }
+
+    getHeight() {
+        return this.height
+    }
+
     addElem(shapeType: ShapeType): Elem {
-        console.log(this.svg.children())
         const elem = new Elem(shapeType, this.svg)
             //.setConstraint(this.width, this.height)
             //.setMovable('CONSTRAINT')
