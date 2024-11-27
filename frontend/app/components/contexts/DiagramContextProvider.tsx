@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { Svg } from "@svgdotjs/svg.js";
-import { Diagram } from "~/internal/model/diagram/Diagram";
+import { Diagram } from "~/model/diagram/Diagram";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;

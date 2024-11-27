@@ -62,7 +62,9 @@ export class Elem {
         this.rect = new Rect().width(100).height(30)
                     .fill('transparent')
                     .stroke({ color: 'white', width: 1 })
-                    .opacity(0).cx(this.group.cx()).cy(this.group.cy());
+                    .opacity(0)
+                    .cx(this.group.cx())
+                    .cy(this.group.cy());
         this.group.add(this.rect);
 
         this.selectionOutline = new Rect()
@@ -70,7 +72,9 @@ export class Elem {
             .height((this.shape.height() as number)  + this.selRectGapSize)
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
-            .hide().cx(this.group.cx()).cy(this.group.cy());
+            .hide()
+            .cx(this.group.cx())
+            .cy(this.group.cy());
         this.group.add(this.selectionOutline);
 
         this.svg.add(this.group);
@@ -101,7 +105,6 @@ export class Elem {
     public setMovable(movableType: MovableType): Elem {
         switch (movableType) {
             case 'CONSTRAINT':
-                // TODO: extract in conig
                 this.movable = new ConstraintMovable(this.shape, this.constraint, 3);
                 break;
             case 'GENERAL':

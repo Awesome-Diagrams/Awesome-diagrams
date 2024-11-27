@@ -9,31 +9,26 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "~/components/ui/dialog"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
 
 
-export const ImportCard = () => {
-  const handleImport = useCallback(() => {
-
+export const ExportDiagramCard = () => {
+  const handleExport = useCallback(() => {
   }, [])
 
   return (
     <Dialog>
         <DialogTrigger asChild>
-          <Button>Import</Button>
+          <Button>Export diagram</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Import diagram from file</DialogTitle>
+            <DialogTitle>Export diagram</DialogTitle>
             <DialogDescription>
-              Choose file of diagram to import.
+                Are you sure to save diagram?
             </DialogDescription>
           </DialogHeader>
-          <Label htmlFor="diagram">Diagram</Label>
-          <Input id="diagram" type="file" accept=".json"/>
           <DialogFooter>
-            <Button type="submit" onClick={handleImport}>Save changes</Button>
+            <Button type="submit" onClick={handleExport}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -16,7 +16,7 @@ export const AddShapeMenu = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button title="Add Shape">
-                    <SquarePlus />
+                    Add shape
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

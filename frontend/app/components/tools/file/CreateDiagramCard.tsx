@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "~/components/ui/button"
 import {
     Dialog,
@@ -12,7 +12,7 @@ import {
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useSvg } from "~/components/contexts/SvgContextProvider";
 
-export const CreateCard = () => {
+export const CreateDiagramCard = () => {
   const svg = useSvg()
   const diagram = useDiagram()
 
@@ -24,7 +24,7 @@ export const CreateCard = () => {
   return (
     <Dialog>
         <DialogTrigger asChild>
-          <Button>Create</Button>
+          <Button>Create diagram</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

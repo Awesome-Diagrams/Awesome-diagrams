@@ -10,33 +10,28 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "~/components/ui/sidebar"
+import { AddShapeMenu } from "./tools/edit/AddShapeMenu"
+import { CreateDiagramCard } from "./tools/file/CreateDiagramCard"
+import { ExportDiagramCard } from "./tools/file/ExportDiagramCard"
+import { ImportDiagramCard } from "./tools/file/ImportDiagramCard"
  
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Create new diagram",
+    content: <CreateDiagramCard />,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Add shape",
+    content: <AddShapeMenu />,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Export diagram",
+    content: <ExportDiagramCard />,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Import diagram",
+    content: <ImportDiagramCard />,
   },
 ]
  
@@ -45,17 +40,14 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Awesome diagram</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
+                  <div key={item.title}>
+                    {item.content}
+                  </div>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

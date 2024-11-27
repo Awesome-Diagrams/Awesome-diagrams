@@ -36,14 +36,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <SidebarProvider>
-          <AppSidebar />
-          <SvgContextProvider>
-            <DiagramContextProvider>
-              {children}  
-            </DiagramContextProvider>
-          </SvgContextProvider>
-        </SidebarProvider>
+        <SvgContextProvider>
+          <DiagramContextProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              {children}
+           </SidebarProvider>
+          </DiagramContextProvider>
+        </SvgContextProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
