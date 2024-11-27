@@ -74,8 +74,8 @@ export class Elem {
         this.group.add(this.selectionOutline);
 
         this.svg.add(this.group);
-        this.movable = new GeneralMovable(this.shape)
-        this.setDraggable('GENERAL')
+        this.movable = new GeneralMovable(this.group);
+        this.setDraggable('GENERAL');
 
         this.rect.on('click', () => this.startEditing());
         this.shape.on('click', () => this.toggleSelection())
