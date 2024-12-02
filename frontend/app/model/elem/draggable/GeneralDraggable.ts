@@ -3,6 +3,7 @@ import { Draggable } from "./Draggable";
 import { DragHandler } from "~/internal/svg/svgDraggable/svg.draggable"
 import { Movable } from "../movable/Movable";
 import { Elem } from "../Elem";
+import { DraggableType } from "./DraggableType";
 
 export class GeneralDraggable implements Draggable {
     private isDraggable: boolean = false;
@@ -25,5 +26,9 @@ export class GeneralDraggable implements Draggable {
 
     public setDraggable(isDraggable : boolean) {
         this.isDraggable = isDraggable;
+    }
+
+    public getType(): DraggableType {
+        return 'GENERAL'
     }
 }

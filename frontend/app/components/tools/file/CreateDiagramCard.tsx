@@ -17,8 +17,8 @@ export const CreateDiagramCard = () => {
   const diagram = useDiagram()
 
   const handleCreate= useCallback(() => {
-    const newSvg = svg?.reset(document.getElementById('svgContainer')! as HTMLDivElement)
-    diagram!.reset(newSvg!)
+    var newDiagram = diagram!.reset()
+    svg?.reset(newDiagram.getSvg(), document.getElementById('svgContainer')! as HTMLDivElement)
   }, [svg])
 
   return (

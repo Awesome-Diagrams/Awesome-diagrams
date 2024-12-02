@@ -1,4 +1,4 @@
-import { Svg } from "@svgdotjs/svg.js";
+import { SVG, Svg } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { ShapeType } from "../elem/ShapeType";
 
@@ -11,8 +11,8 @@ export class Diagram {
     // svg
     private svg: Svg
 
-    constructor(svg: Svg) {
-        this.svg = svg
+    constructor() {
+        this.svg = SVG().size('100%', '100%')
     }
 
     setWidth(width: number): Diagram {
@@ -33,6 +33,14 @@ export class Diagram {
 
     getHeight() {
         return this.height
+    }
+
+    getElems() {
+        return this
+    }
+
+    getSvg() {
+        return this.svg
     }
 
     addElem(shapeType: ShapeType): Elem {

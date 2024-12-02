@@ -3,7 +3,7 @@ import { SVG, Svg } from "@svgdotjs/svg.js";
 import { useSvgContainer } from "~/internal/svg/hook/hook";
 
 type SvgContextType = {
-    reset: (div: HTMLDivElement) => Svg
+    reset: (svg: Svg, div: HTMLDivElement) => void
     svg: Svg | undefined
 }
 
@@ -24,11 +24,9 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
         setHandle(undefined)
     }, [])
 
-    const reset = useCallback((div: HTMLDivElement) => {
-        const res = SVG().addTo(div).size('100%', '100%')
-        setHandle({container: div, svg: res})
-        
-        return res
+    const reset = useCallback((svg: Svg, div: HTMLDivElement) => {
+        svg.addTo(div)
+        setHandle({container: div, svg: svg})
     }, [])
 
     return (
@@ -36,7 +34,6 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
             value={{
                 reset: reset,
                 svg: svgContainer?.svg,
-                //update: update
             }}
         >
             {children}

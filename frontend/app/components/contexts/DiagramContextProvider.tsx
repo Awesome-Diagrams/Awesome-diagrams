@@ -4,7 +4,7 @@ import { Diagram } from "~/model/diagram/Diagram";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
-    reset: (svg: Svg) => void
+    reset: () => Diagram
 }
 
 const DiagramContext = createContext<DiagramContextType | undefined>(undefined);
@@ -21,8 +21,11 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
     const [diagram, setDiagram] = useState<Diagram>();
     
 
-    const reset = useCallback((svg: Svg) => {
-        setDiagram(new Diagram(svg))
+    const reset = useCallback(() => {
+        var diagram = new Diagram()
+        setDiagram(diagram)
+        
+        return diagram
     }, [])
 
     return (

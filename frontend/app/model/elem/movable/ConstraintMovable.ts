@@ -1,5 +1,6 @@
 import { Box, G, Shape } from "@svgdotjs/svg.js";
 import { Movable } from "./Movable";
+import { MovableType } from "./MovableType";
 
 export class ConstraintMovable implements Movable {
     private group: G;
@@ -24,5 +25,9 @@ export class ConstraintMovable implements Movable {
         y = Math.max(this.constraint.y, Math.min(y, this.constraint.y2 - box.h));
 
         this.group.move(x, y);
+    }
+
+    public getType(): MovableType {
+        return 'CONSTRAINT'
     }
 }

@@ -7,7 +7,6 @@ import { ShapeType } from "./ShapeType";
 import { GeneralMovable } from "./movable/GeneralMovable";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
-import { updateSvg } from "~/internal/svg/hook/hook";
 
 export class Elem {
 
@@ -128,6 +127,34 @@ export class Elem {
 
     public getShape() {
         return this.shape
+    }
+
+    public getGroup() {
+        return this.group
+    }
+
+    public getRect() {
+        return this.rect
+    }
+
+    public getTextElement(): Text {
+        return this.textElement
+    }
+
+    public getSelectionOutline() {
+        return this.selectionOutline
+    }
+
+    public getIsSelected() {
+        return this.isSelected
+    }
+
+    public getDraggable() {
+        return this.draggable
+    }
+
+    public getMovable() {
+        return this.movable
     }
 
     private toggleSelection() {

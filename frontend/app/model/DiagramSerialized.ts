@@ -1,0 +1,21 @@
+import { G, Rect, Shape, Text } from "@svgdotjs/svg.js";
+import { DraggableType } from "~/model/elem/draggable/DraggableType";
+import { MovableType } from "~/model/elem/movable/MovableType";
+
+export type DiagramSerialized = {
+    height: number;
+    width: number;
+    shapes: ElemSerialized[]
+}
+
+export type ElemSerialized = {
+    draggable?: DraggableType;
+    group: G;
+    shape: Shape;
+    textElement: Text;
+    rect: Rect;
+    movable: MovableType;
+    isSelected: boolean;
+    selectionOutline?: Rect; 
+}
+
