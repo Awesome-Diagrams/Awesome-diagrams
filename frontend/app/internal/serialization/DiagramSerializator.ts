@@ -21,6 +21,5 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
         rect: elem.getRect(),
         movable: elem.getMovable().getType(),
         isSelected: elem.getIsSelected(),
-        selectionOutline: elem.getSelectionOutline(),
     })
 }

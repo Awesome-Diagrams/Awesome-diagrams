@@ -16,6 +16,5 @@ export type ElemSerialized = {
     rect: Rect;
     movable: MovableType;
     isSelected: boolean;
-    selectionOutline?: Rect; 
 }
 

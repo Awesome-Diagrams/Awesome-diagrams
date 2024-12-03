@@ -19,7 +19,6 @@ export const deserializeElem = (elemSerialized: ElemSerialized, svg?: Svg): Elem
     var res = new Elem(svg)
         .setShape(elemSerialized.shape)
         .setGroup(elemSerialized.group)
-        .
 
     return res
 }
