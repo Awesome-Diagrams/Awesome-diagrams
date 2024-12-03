@@ -114,8 +114,8 @@ export class Elem {
         return this
     }
 
-    public setConstraint(width: number, height: number): Elem {
-        this.constraint = new Box(0, 0, width, height);
+    public setConstraint(box: Box): Elem {
+        this.constraint = box;
 
         return this;
     }
@@ -147,6 +147,10 @@ export class Elem {
 
     public getShape() {
         return this.shape
+    }
+
+    public getConstraint() {
+        return this.constraint
     }
 
     public getGroup() {

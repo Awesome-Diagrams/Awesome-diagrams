@@ -1,4 +1,4 @@
-import { SVG, Svg } from "@svgdotjs/svg.js";
+import { SVG, Svg, Box } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 
 export class Diagram {
@@ -48,7 +48,7 @@ export class Diagram {
 
     addDefaultElem(): Elem {
         const elem = new Elem(this.svg)
-            .setConstraint(this.width, this.height)
+            .setConstraint(new Box(0, 0, this.width, this.height))
             .setMovable('CONSTRAINT')
 
         this.elems.push(elem)
