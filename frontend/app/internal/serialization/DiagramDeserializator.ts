@@ -19,6 +19,11 @@ export const deserializeElem = (elemSerialized: ElemSerialized, svg?: Svg): Elem
     var res = new Elem(svg)
         .setShape(elemSerialized.shape)
         .setGroup(elemSerialized.group)
+        .setRect(elemSerialized.rect)
+        .setText(elemSerialized.textElement)
+        .setConstraint(elemSerialized.constraint)
+        .setMovable(elemSerialized.movable)
+        .setDraggable(elemSerialized.draggable)
 
     return res
 }

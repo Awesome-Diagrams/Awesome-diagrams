@@ -1,4 +1,4 @@
-import { G, Rect, Shape, Text } from "@svgdotjs/svg.js";
+import { Box, G, Rect, Shape, Text } from "@svgdotjs/svg.js";
 import { DraggableType } from "~/model/elem/draggable/DraggableType";
 import { MovableType } from "~/model/elem/movable/MovableType";
 
@@ -9,12 +9,13 @@ export type DiagramSerialized = {
 }
 
 export type ElemSerialized = {
-    draggable?: DraggableType;
+    draggable: DraggableType;
     group: G;
     shape: Shape;
     textElement: Text;
     rect: Rect;
     movable: MovableType;
     isSelected: boolean;
+    constraint: Box;
 }
 

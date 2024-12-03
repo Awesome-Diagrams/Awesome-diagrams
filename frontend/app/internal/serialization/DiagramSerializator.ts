@@ -14,12 +14,13 @@ export const serializeDiagram = (diagram: Diagram): DiagramSerialized  => {
 
 export const serializeElem = (elem: Elem): ElemSerialized => {
     return ({
-        draggable: elem.getDraggable()?.getType(),
+        draggable: elem.getDraggable()!.getType(),
         group: elem.getGroup(),
         shape: elem.getShape(),
         textElement: elem.getTextElement(),
         rect: elem.getRect(),
         movable: elem.getMovable().getType(),
         isSelected: elem.getIsSelected(),
+        constraint: elem.getConstraint(),
     })
 }
