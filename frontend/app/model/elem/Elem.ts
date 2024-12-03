@@ -35,14 +35,11 @@ export class Elem {
         this.svg = svg;
 
         // group
-        this.group = new G().cx(this.shape.cx()).cy(this.shape.cy());
-        this.group.add(this.shape);
+        this.group = new G();
 
         // text element
         this.textElement = new Text().plain('')
                            .font({ fill: 'white', size: 16, anchor: 'middle' })
-                           .cx(this.group.cx()).cy(this.group.cy());
-        this.group.add(this.textElement);
 
         // rect
         this.rect = new Rect()
@@ -51,9 +48,6 @@ export class Elem {
                     .fill('transparent')
                     .stroke({ color: 'white', width: 1 })
                     .opacity(0)
-                    .cx(this.group.cx())
-                    .cy(this.group.cy());
-        this.group.add(this.rect);
 
         // selection outline
         this.selectionOutline = new Rect()
@@ -62,11 +56,7 @@ export class Elem {
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
             .hide()
-            .cx(this.group.cx())
-            .cy(this.group.cy());
-        this.group.add(this.selectionOutline);
 
-        this.svg?.add(this.group);
         // movable
         this.movable = new GeneralMovable(this.group);
 
@@ -80,6 +70,9 @@ export class Elem {
         // TODO: extract in config
         // constraint
         this.constraint = new Box(0, 0, 1080, 720);
+
+        // configure
+        this.configureGroup()
     }
 
     public move(x: number, y: number) {
@@ -194,15 +187,18 @@ export class Elem {
     }
 
     private configureGroup() {
-        // configure position
-        this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
         this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
-
-        // add to group
         this.group.add(this.shape)
+
+        this.textElement.cx(this.shape.cx()).cy(this.shape.cy())
         this.group.add(this.textElement);
+
+        this.rect.cx(this.shape.cx()).cy(this.shape.cy())
         this.group.add(this.rect);
+        
+        this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.selectionOutline)
+
         this.svg?.add(this.group)
     }
 
