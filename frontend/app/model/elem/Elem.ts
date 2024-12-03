@@ -183,10 +183,14 @@ export class Elem {
     }
 
     private configureGroup() {
+        // configure position
+        this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
         this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
+
+        // add to group
+        this.group.add(this.shape)
         this.group.add(this.textElement);
         this.group.add(this.rect);
-        this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.selectionOutline)
         this.svg?.add(this.group)
     }
