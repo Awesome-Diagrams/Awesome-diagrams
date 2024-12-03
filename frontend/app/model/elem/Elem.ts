@@ -52,8 +52,6 @@ export class Elem {
 
         // selection outline
         this.selectionOutline = new Rect()
-            .width((this.shape.width() as number) + this.selRectGapSize)
-            .height((this.shape.height() as number)  + this.selRectGapSize)
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
             .hide()
@@ -64,26 +62,30 @@ export class Elem {
         // draggable
         this.setDraggable('GENERAL');
 
-        // event
-        this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', () => this.toggleSelection())
-
         // TODO: extract in config
         // constraint
         this.constraint = new Box(0, 0, 1080, 720);
 
         // configure
-        this.configureGroup()
+        this.configureAll()
     }
 
     public move(x: number, y: number) {
         this.movable.move(x, y);
     }
 
+    public setRect(rect: Rect): Elem {
+        this.rect = rect
+
+        this.configureAll()
+
+        return this
+    }
+
     public setGroup(group: G): Elem {
         this.group = group
 
-        this.configureGroup()
+        this.configureAll()
 
         return this
     }
@@ -91,7 +93,7 @@ export class Elem {
     public setShape(shape: Shape): Elem {
         this.shape = shape
 
-        this.configureShape()
+        this.configureAll()
 
         return this
     }
@@ -99,13 +101,15 @@ export class Elem {
     public setSvg(svg: Svg): Elem {
         this.svg = svg
 
-        this.configureSvg()
+        this.configureAll()
 
         return this
     }
 
     public setText(textElem: Text): Elem {
         this.textElement = textElem
+
+        this.configureAll()
 
         return this
     }
@@ -201,8 +205,8 @@ export class Elem {
     }
 
     private configureAll() {
-        this.configureGroup()
         this.configureSelectionOutline()
+        this.configureGroup()
         this.configureEvent()
     }
 
