@@ -28,18 +28,23 @@ export class Elem {
     constructor(svg?: Svg) {
 
         // TODO: add to config
+        // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
 
+        // svg
         this.svg = svg;
 
+        // group
         this.group = new G().cx(this.shape.cx()).cy(this.shape.cy());
         this.group.add(this.shape);
 
+        // text element
         this.textElement = new Text().plain('')
                            .font({ fill: 'white', size: 16, anchor: 'middle' })
                            .cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.textElement);
 
+        // rect
         this.rect = new Rect()
                     .width(100)
                     .height(30)
@@ -50,6 +55,7 @@ export class Elem {
                     .cy(this.group.cy());
         this.group.add(this.rect);
 
+        // selection outline
         this.selectionOutline = new Rect()
             .width((this.shape.width() as number) + this.selRectGapSize)
             .height((this.shape.height() as number)  + this.selRectGapSize)
@@ -61,13 +67,18 @@ export class Elem {
         this.group.add(this.selectionOutline);
 
         this.svg?.add(this.group);
+        // movable
         this.movable = new GeneralMovable(this.group);
+
+        // draggable
         this.setDraggable('GENERAL');
 
+        // event
         this.rect.on('click', () => this.startEditing());
         this.shape.on('click', () => this.toggleSelection())
 
         // TODO: extract in config
+        // constraint
         this.constraint = new Box(0, 0, 1080, 720);
     }
 
