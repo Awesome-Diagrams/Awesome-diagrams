@@ -1,7 +1,5 @@
 import { SVG, Svg } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
-import { ShapeType } from "../elem/ShapeType";
-import { ElemSerialized } from "../DiagramSerialized";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -48,7 +46,7 @@ export class Diagram {
         this.elems.push(elem)
     }
 
-    addElemByType(shapeType: ShapeType): Elem {
+    addDefaultElem(): Elem {
         const elem = new Elem(this.svg)
             .setConstraint(this.width, this.height)
             .setMovable('CONSTRAINT')

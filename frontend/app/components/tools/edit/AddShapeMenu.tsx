@@ -1,5 +1,4 @@
 import { Button } from "~/components/ui/button";
-import { SquarePlus } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -42,7 +41,7 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             // TOOD: add logger
             return;
         }
-        diagram.diagram.addElemByType(config.shapeType)
+        diagram.diagram.addDefaultElem()
     }, [diagram, config])
 
     return (<>
