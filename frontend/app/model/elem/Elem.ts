@@ -38,16 +38,17 @@ export class Elem {
         this.group = new G();
 
         // text element
-        this.textElement = new Text().plain('')
-                           .font({ fill: 'white', size: 16, anchor: 'middle' })
+        this.textElement = new Text()
+            .plain('')
+            .font({ fill: 'white', size: 16, anchor: 'middle' })
 
         // rect
         this.rect = new Rect()
-                    .width(100)
-                    .height(30)
-                    .fill('transparent')
-                    .stroke({ color: 'white', width: 1 })
-                    .opacity(0)
+            .width(100)
+            .height(30)
+            .fill('transparent')
+            .stroke({ color: 'white', width: 1 })
+            .opacity(0)
 
         // selection outline
         this.selectionOutline = new Rect()
@@ -172,18 +173,15 @@ export class Elem {
         return this.movable
     }
 
-    private configureShape() {
-        this.group.cx(this.shape.cx()).cy(this.shape.cy())
-    }
-
-    private configureSvg() {
-        this.svg?.add(this.group);
-        this.shape.on('click', () => this.toggleSelection())
+    private configureSelectionOutline() {
         this.selectionOutline
             .width((this.shape.width() as number) + this.selRectGapSize)
             .height((this.shape.height() as number)  + this.selRectGapSize)
-            .cx(this.group.cx())
-            .cy(this.group.cy())
+    }
+
+    private configureEvent() {
+        this.rect.on('click', () => this.startEditing());
+        this.shape.on('click', () => this.toggleSelection())
     }
 
     private configureGroup() {
@@ -200,6 +198,12 @@ export class Elem {
         this.group.add(this.selectionOutline)
 
         this.svg?.add(this.group)
+    }
+
+    private configureAll() {
+        this.configureGroup()
+        this.configureSelectionOutline()
+        this.configureEvent()
     }
 
     private toggleSelection() {
