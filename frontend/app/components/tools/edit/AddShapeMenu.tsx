@@ -42,7 +42,7 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             // TOOD: add logger
             return;
         }
-        diagram.diagram.addElem(config.shapeType)
+        diagram.diagram.addElemByType(config.shapeType)
     }, [diagram, config])
 
     return (<>

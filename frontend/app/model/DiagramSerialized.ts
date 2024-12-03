@@ -5,7 +5,7 @@ import { MovableType } from "~/model/elem/movable/MovableType";
 export type DiagramSerialized = {
     height: number;
     width: number;
-    shapes: ElemSerialized[]
+    elems: ElemSerialized[]
 }
 
 export type ElemSerialized = {

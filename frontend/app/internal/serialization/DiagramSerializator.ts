@@ -6,7 +6,7 @@ export const serializeDiagram = (diagram: Diagram): DiagramSerialized  => {
     const shapes: ElemSerialized[] = diagram.getElems().map(serializeElem)
 
     return ({
-        shapes: shapes,
+        elems: shapes,
         height: diagram.getHeight(),
         width: diagram.getWidth()
     })

@@ -3,7 +3,6 @@ import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";
 import { GeneralDraggable } from "./draggable/GeneralDraggable";
-import { ShapeType } from "./ShapeType";
 import { GeneralMovable } from "./movable/GeneralMovable";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
@@ -18,35 +17,18 @@ export class Elem {
     private isSelected: boolean = false;
 
     // svg
-    private svg: Svg;
-    private selectionOutline?: Rect; 
+    private svg?: Svg;
+    private selectionOutline: Rect; 
     private group: G;
     private shape: Shape;
     private textElement: Text;
     private rect: Rect;
     private constraint: Box;
 
-    constructor(shapeType: ShapeType, svg: Svg) {
+    constructor(svg?: Svg) {
 
         // TODO: add to config
-        switch (shapeType) {
-            case 'CIRCLE':
-                this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
-                break;
-            case 'OVAL':
-                this.shape = new Ellipse({ cx: 100, cy: 100, rx: 100, ry: 50 });
-                break;
-            case 'RECTANGLE':
-                this.shape = new Rect({ width: 140, height: 90, x: 100, y: 100 });
-                break;
-            case 'SQUARE':
-                this.shape = new Rect({ width: 90, height: 90, x: 100, y: 100 });
-                break;
-            case 'TRIANGLE':
-                // FIXME
-                this.shape = new Circle({ r: 50, cx: 100, cy: 100 })
-                break;
-        }
+        this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
 
         this.svg = svg;
 
@@ -58,7 +40,9 @@ export class Elem {
                            .cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.textElement);
 
-        this.rect = new Rect().width(100).height(30)
+        this.rect = new Rect()
+                    .width(100)
+                    .height(30)
                     .fill('transparent')
                     .stroke({ color: 'white', width: 1 })
                     .opacity(0)
@@ -76,7 +60,7 @@ export class Elem {
             .cy(this.group.cy());
         this.group.add(this.selectionOutline);
 
-        this.svg.add(this.group);
+        this.svg?.add(this.group);
         this.movable = new GeneralMovable(this.group);
         this.setDraggable('GENERAL');
 
@@ -91,8 +75,34 @@ export class Elem {
         this.movable.move(x, y);
     }
 
-    public setText(text: string) {
-        this.textElement.plain(text)
+    public setGroup(group: G): Elem {
+        this.group = group
+
+        this.configureGroup()
+
+        return this
+    }
+
+    public setShape(shape: Shape): Elem {
+        this.shape = shape
+
+        this.configureShape()
+
+        return this
+    }
+
+    public setSvg(svg: Svg): Elem {
+        this.svg = svg
+
+        this.configureSvg()
+
+        return this
+    }
+
+    public setText(textElem: Text): Elem {
+        this.textElement = textElem
+
+        return this
     }
 
     public setConstraint(width: number, height: number): Elem {
@@ -122,6 +132,7 @@ export class Elem {
         }
 
         this.draggable.init(this);
+
         return this;
     }
 
@@ -155,6 +166,29 @@ export class Elem {
 
     public getMovable() {
         return this.movable
+    }
+
+    private configureShape() {
+        this.group.cx(this.shape.cx()).cy(this.shape.cy())
+    }
+
+    private configureSvg() {
+        this.svg?.add(this.group);
+        this.shape.on('click', () => this.toggleSelection())
+        this.selectionOutline
+            .width((this.shape.width() as number) + this.selRectGapSize)
+            .height((this.shape.height() as number)  + this.selRectGapSize)
+            .cx(this.group.cx())
+            .cy(this.group.cy())
+    }
+
+    private configureGroup() {
+        this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
+        this.group.add(this.textElement);
+        this.group.add(this.rect);
+        this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
+        this.group.add(this.selectionOutline)
+        this.svg?.add(this.group)
     }
 
     private toggleSelection() {

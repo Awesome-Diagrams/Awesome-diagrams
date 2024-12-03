@@ -1,6 +1,7 @@
 import { SVG, Svg } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { ShapeType } from "../elem/ShapeType";
+import { ElemSerialized } from "../DiagramSerialized";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -36,15 +37,19 @@ export class Diagram {
     }
 
     getElems() {
-        return this
+        return this.elems
     }
 
     getSvg() {
         return this.svg
     }
 
-    addElem(shapeType: ShapeType): Elem {
-        const elem = new Elem(shapeType, this.svg)
+    addElem(elem: Elem) {
+        this.elems.push(elem)
+    }
+
+    addElemByType(shapeType: ShapeType): Elem {
+        const elem = new Elem(this.svg)
             .setConstraint(this.width, this.height)
             .setMovable('CONSTRAINT')
 
