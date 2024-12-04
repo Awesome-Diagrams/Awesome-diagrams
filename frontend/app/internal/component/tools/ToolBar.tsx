@@ -10,13 +10,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import {ShapeConfig, shapeConfigs} from "~/internal/svg/diagramShapes/SvgFigureConfigs"
+import { ShapeConfig, shapeConfigs } from "~/internal/svg/diagramShapes/SvgFigureConfigs";
+import { SelectionController } from "./SelectionController";
 
-interface DiagramProps {
+interface ToolBarProps {
     svgContainer: SvgContainerHandle | undefined;
+    selectionController: SelectionController | undefined;
 }
 
-export const ToolBar = ({ svgContainer }: DiagramProps) => {
+export const ToolBar = ({ svgContainer, selectionController }: ToolBarProps) => {
     return (
         <div className="outline rounded-md ml-10">
             <div className="flex w-20 flex-col justify-center gap-10">
@@ -29,7 +31,11 @@ export const ToolBar = ({ svgContainer }: DiagramProps) => {
                     <DropdownMenuContent className="w-56">
                         {shapeConfigs.map((config, idx) => (
                             <DropdownMenuItem key={idx}>
-                                <ShapeDropDownMenu config={config} svgContainer={svgContainer!} />
+                                <ShapeDropDownMenu
+                                    config={config}
+                                    svgContainer={svgContainer!}
+                                    selectionController={selectionController!}
+                                />
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuContent>
@@ -42,14 +48,14 @@ export const ToolBar = ({ svgContainer }: DiagramProps) => {
 interface ShapeDropDownMenuProps {
     config: ShapeConfig;
     svgContainer: SvgContainerHandle;
+    selectionController: SelectionController;
 }
 
-const ShapeDropDownMenu = ({config, svgContainer}: ShapeDropDownMenuProps) => {
-
+const ShapeDropDownMenu = ({ config, svgContainer, selectionController }: ShapeDropDownMenuProps) => {
     const clickHandler = updateSvg(svgContainer, () => {
         const constraint = new Box(0, 0, 1080, 720);
         const shape = config.createShape();
-        new UseCaseShape(shape, svgContainer.svg, constraint);
+        new UseCaseShape(shape, svgContainer.svg, constraint, selectionController);
     });
 
     return (<>
