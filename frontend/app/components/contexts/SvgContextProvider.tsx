@@ -25,6 +25,9 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
     }, [])
 
     const reset = useCallback((svg: Svg, div: HTMLDivElement) => {
+        if (div.childElementCount === 1 && div.children[0].tagName !== 'H1') {
+            div.removeChild(div.lastChild!)
+        }
         svg.addTo(div)
         setHandle({container: div, svg: svg})
     }, [])

@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { Button } from "~/components/ui/button"
 import {
     Dialog,
@@ -14,9 +15,15 @@ import { Label } from "~/components/ui/label"
 
 
 export const ImportDiagramCard = () => {
-  const handleImport = useCallback(() => {
+  const diagram = useDiagram()
 
-  }, [])
+  const handleImport = useCallback(() => {
+    if (!diagram?.diagram) {
+      // TODO: add logger
+      return
+    }
+
+  }, [diagram])
 
   return (
     <Dialog>
@@ -33,7 +40,7 @@ export const ImportDiagramCard = () => {
           <Label htmlFor="diagram">Diagram</Label>
           <Input id="diagram" type="file" accept=".json"/>
           <DialogFooter>
-            <Button type="submit" onClick={handleImport}>Save changes</Button>
+            <Button onClick={handleImport}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

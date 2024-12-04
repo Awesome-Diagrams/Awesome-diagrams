@@ -15,9 +15,9 @@ export const serializeDiagram = (diagram: Diagram): DiagramSerialized  => {
 export const serializeElem = (elem: Elem): ElemSerialized => {
     return ({
         draggable: elem.getDraggable()!.getType(),
-        shape: elem.getShape(),
-        textElement: elem.getTextElement(),
-        rect: elem.getRect(),
+        shape: elem.getShape().svg(),
+        textElement: elem.getTextElement().svg(),
+        rect: elem.getRect().svg(),
         movable: elem.getMovable().getType(),
         isSelected: elem.getIsSelected(),
         constraint: elem.getConstraint(),

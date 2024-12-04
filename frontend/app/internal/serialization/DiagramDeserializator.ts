@@ -1,4 +1,4 @@
-import { Svg } from "@svgdotjs/svg.js";
+import { Rect, SVG, Svg, Text } from "@svgdotjs/svg.js";
 import { Diagram } from "~/model/diagram/Diagram";
 import { DiagramSerialized, ElemSerialized } from "~/model/DiagramSerialized";
 import { Elem } from "~/model/elem/Elem";
@@ -17,10 +17,9 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
 
 export const deserializeElem = (elemSerialized: ElemSerialized, svg?: Svg): Elem => {
     var res = new Elem(svg)
-        .setShape(elemSerialized.shape)
-        .setGroup(elemSerialized.group)
-        .setRect(elemSerialized.rect)
-        .setText(elemSerialized.textElement)
+        .setShape(SVG(elemSerialized.shape))
+        .setRect(new Rect().svg(elemSerialized.rect))
+        .setText(new Text().svg(elemSerialized.textElement))
         .setConstraint(elemSerialized.constraint)
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)

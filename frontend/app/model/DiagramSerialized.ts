@@ -10,10 +10,9 @@ export type DiagramSerialized = {
 
 export type ElemSerialized = {
     draggable: DraggableType;
-    group: G;
-    shape: Shape;
-    textElement: Text;
-    rect: Rect;
+    shape: string;
+    textElement: string;
+    rect: string;
     movable: MovableType;
     isSelected: boolean;
     constraint: Box;

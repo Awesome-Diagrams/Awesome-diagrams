@@ -4,7 +4,8 @@ import { Diagram } from "~/model/diagram/Diagram";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
-    reset: () => Diagram
+    reset: () => Diagram;
+    set: (diagram: Diagram) => void;
 }
 
 const DiagramContext = createContext<DiagramContextType | undefined>(undefined);
@@ -28,9 +29,14 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
         return diagram
     }, [])
 
+    const set = useCallback((diagram: Diagram) => {
+        setDiagram(diagram)
+    }, [])
+
     return (
         <DiagramContext.Provider
             value={{
+                set: set,
                 diagram: diagram,
                 reset: reset,
             }}
