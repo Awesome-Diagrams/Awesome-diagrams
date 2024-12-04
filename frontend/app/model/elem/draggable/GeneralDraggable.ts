@@ -1,14 +1,12 @@
-import { G, Shape } from "@svgdotjs/svg.js";
 import { Draggable } from "./Draggable";
 import { DragHandler } from "~/internal/svg/svgDraggable/svg.draggable"
-import { Movable } from "../movable/Movable";
 import { Elem } from "../Elem";
 import { DraggableType } from "./DraggableType";
 
 export class GeneralDraggable implements Draggable {
     private isDraggable: boolean = false;
 
-    init(elem: Elem) {
+    configure(elem: Elem) {
         new DragHandler(elem.getShape()).init(true);
 
         const onDrag = (e: Event): void => {

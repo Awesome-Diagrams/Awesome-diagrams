@@ -82,6 +82,7 @@ export class Elem {
         return this
     }
 
+    // TODO: remove
     public setGroup(group: G): Elem {
         this.group = group
 
@@ -91,6 +92,9 @@ export class Elem {
     }
 
     public setShape(shape: Shape): Elem {
+        if (this.group.has(this.shape)) {
+            this.group.removeElement(this.shape)
+        }
         this.shape = shape
 
         this.configureAll()
@@ -140,7 +144,7 @@ export class Elem {
                 break;
         }
 
-        this.draggable.init(this);
+        this.draggable.configure(this);
 
         return this;
     }
@@ -193,17 +197,26 @@ export class Elem {
     }
 
     private configureGroup() {
+
         this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
-        this.group.add(this.shape)
+        if (!this.group.has(this.shape)) {
+            this.group.add(this.shape)
+        }
 
         this.textElement.cx(this.shape.cx()).cy(this.shape.cy())
-        this.group.add(this.textElement);
+        if (!this.group.has(this.textElement)) {
+            this.group.add(this.textElement);
+        }
 
         this.rect.cx(this.shape.cx()).cy(this.shape.cy())
-        this.group.add(this.rect);
+        if (!this.group.has(this.rect)) {
+            this.group.add(this.rect);
+        }
         
         this.selectionOutline.cx(this.group.cx()).cy(this.group.cy());
-        this.group.add(this.selectionOutline)
+        if (!this.group.has(this.selectionOutline)) {
+            this.group.add(this.selectionOutline)
+        }
 
         this.svg?.add(this.group)
     }
@@ -212,6 +225,7 @@ export class Elem {
         this.configureSelectionOutline()
         this.configureGroup()
         this.configureEvent()
+        this.draggable?.configure(this)
     }
 
     private toggleSelection() {

@@ -41,13 +41,14 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             // TOOD: add logger
             return;
         }
-        diagram.diagram.addDefaultElem()
+        const elem = diagram.diagram.addDefaultElem()
+        elem.setShape(config.createShape())
     }, [diagram, config])
 
     return (<>
        <button className="h-full w-full flex flex-row gap-1" onClick={clickHandler}>
             <config.icon className="mr-2 h-4 w-4" />
-            <div>{config.shapeType}</div>
+            <div>{config.name}</div>
         </button> 
     </>)
 }
