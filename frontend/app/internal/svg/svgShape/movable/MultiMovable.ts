@@ -1,14 +1,13 @@
 import { Movable } from "./Movable";
 import { UseCaseShape } from "../shapes/UseCaseShape";
 import { Box } from "@svgdotjs/svg.js";
-import { selectedShapes } from "../shapes/UseCaseShape";
+import { selectedShapes } from "~/internal/component/tools/SelectionController";
 
 export class MultiMovable implements Movable {
     private constraint: Box;
 
     constructor(constraint: Box, selRectGapSize : number = 0) {
         this.constraint = constraint;
-
         this.constraint = new Box({
             x: constraint.x - selRectGapSize / 2,
             y: constraint.y - selRectGapSize / 2,

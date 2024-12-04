@@ -1,10 +1,9 @@
 import { Svg, Text, Rect, G, Shape, Box } from "@svgdotjs/svg.js";
 import { Draggable } from "../draggable/Draggable";
 import { Movable } from "../movable/Movable";
+import { SelectionController } from "~/internal/component/tools/SelectionController";
 import { DeltaDraggable } from "../draggable/DeltaDraggable";
 import { MultiMovable } from "../movable/MultiMovable";
-
-export const selectedShapes: UseCaseShape[] = [];
 
 export class UseCaseShape {
     private selRectGapSize: number = 20;
@@ -19,7 +18,12 @@ export class UseCaseShape {
     private isSelected: boolean = false;
     private selectionOutline?: Rect;
 
-    constructor(shape: Shape, svg: Svg, constraint: Box) {
+    constructor(
+        shape: Shape,
+        svg: Svg,
+        constraint: Box,
+        private selectionController: SelectionController
+    ) {
         this.shape = shape;
         this.svg = svg;
 
@@ -47,9 +51,7 @@ export class UseCaseShape {
         this.updateTextAndRectPosition();
 
         this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', (e) => this.toggleSelection(e as MouseEvent));
-
-        this.addDeselectHandler(svg);
+        this.shape.on('click', (e) => this.toggleSelect(e as MouseEvent));
     }
 
     public getX(): number {
@@ -60,39 +62,13 @@ export class UseCaseShape {
         return this.group.y() as number;
     }
 
-    private toggleSelection(event: MouseEvent) {
+    private toggleSelect(event: MouseEvent): void {
         event.stopPropagation();
 
-        if (event.shiftKey) {
-            if (this.isSelected) {
-                this.deselect();
-                const index = selectedShapes.indexOf(this);
-                if (index > -1) selectedShapes.splice(index, 1);
-            } else {
-                this.select();
-                selectedShapes.push(this);
-            }
-        } else {
-            // Сбрасываем выделение остальных фигур
-            selectedShapes.forEach((shape) => shape.deselect());
-            selectedShapes.length = 0;
-
-            this.select();
-            selectedShapes.push(this);
-        }
-
-        console.log('Selected shapes:', selectedShapes.length);
+        this.selectionController.toggleShapeSelection(this, event.shiftKey);
     }
 
-    private handleDocumentClick = (event: MouseEvent) => {
-        if (!this.group.node.contains(event.target as Node)) {
-            this.selectionOutline?.hide();
-            this.draggable?.setDraggable(false);
-            document.removeEventListener('click', this.handleDocumentClick);
-        }
-    };
-
-    private select() {
+    public select(): void {
         if (!this.selectionOutline?.visible()) {
             this.selectionOutline?.show();
             this.draggable?.setDraggable(true);
@@ -100,7 +76,7 @@ export class UseCaseShape {
         }
     }
 
-    private deselect() {
+    public deselect(): void {
         this.selectionOutline?.hide();
         this.draggable?.setDraggable(false);
         this.isSelected = false;
@@ -154,15 +130,4 @@ export class UseCaseShape {
             }
         });
     }
-
-    private addDeselectHandler(svg: Svg) {
-        svg.on('click', (e: Event) => {
-            const target = e.target as HTMLElement;
-            if (selectedShapes.length > 0 && (!target || !target.closest('g'))) {
-                selectedShapes.forEach((shape) => shape.deselect());
-                selectedShapes.length = 0;
-            }
-        });
-    }
-
 }
