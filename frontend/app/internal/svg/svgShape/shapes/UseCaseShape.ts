@@ -1,21 +1,23 @@
-import { Svg, Text, Rect, G, Circle, Shape, Box } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box } from "@svgdotjs/svg.js";
 import { Draggable } from "../draggable/Draggable";
 import { Movable } from "../movable/Movable";
-import { ConstraintMovable } from "../movable/ConstraintMovable";
-import { GeneralDraggable } from "../draggable/GeneralDraggable";
+import { DeltaDraggable } from "../draggable/DeltaDraggable";
+import { MultiMovable } from "../movable/MultiMovable";
+
+export const selectedShapes: UseCaseShape[] = [];
 
 export class UseCaseShape {
-    private selRectGapSize : number = 20;
+    private selRectGapSize: number = 20;
 
     private draggable?: Draggable;
-    private group: G;
+    public group: G;
     private shape: Shape;
     private textElement: Text;
     private rect: Rect;
     private svg: Svg;
     private movable: Movable;
     private isSelected: boolean = false;
-    private selectionOutline?: Rect; 
+    private selectionOutline?: Rect;
 
     constructor(shape: Shape, svg: Svg, constraint: Box) {
         this.shape = shape;
@@ -68,6 +70,20 @@ export class UseCaseShape {
         }
     };
 
+    private select() {
+        if (!this.selectionOutline?.visible()) {
+            this.selectionOutline?.show();
+            this.draggable?.setDraggable(true);
+            this.isSelected = true;
+        }
+    }
+
+    private deselect() {
+        this.selectionOutline?.hide();
+        this.draggable?.setDraggable(false);
+        this.isSelected = false;
+    }
+
     public setDraggable(draggable: Draggable): UseCaseShape {
         this.draggable = draggable;
         this.draggable.init(this.group, this.movable);
@@ -107,4 +123,15 @@ export class UseCaseShape {
             }
         });
     }
+
+    private addDeselectHandler(svg: Svg) {
+        svg.on('click', (e: Event) => {
+            const target = e.target as HTMLElement;
+            if (selectedShapes.length > 0 && (!target || !target.closest('g'))) {
+                selectedShapes.forEach((shape) => shape.deselect());
+                selectedShapes.length = 0;
+            }
+        });
+    }
+
 }
