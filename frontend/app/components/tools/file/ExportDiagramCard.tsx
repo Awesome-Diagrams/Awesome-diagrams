@@ -13,6 +13,7 @@ import {
   } from "~/components/ui/dialog"
 import { deserializeDiagram } from "~/internal/serialization/DiagramDeserializator";
 import { serializeDiagram } from "~/internal/serialization/DiagramSerializator";
+import * as fs from "file-saver";
 
 
 export const ExportDiagramCard = () => {
@@ -25,12 +26,11 @@ export const ExportDiagramCard = () => {
       return;
     }
     // TODO: add writer to file
-    console.log(JSON.stringify(serializeDiagram(diagram.diagram)))
-    const s = serializeDiagram(diagram.diagram)
-    const newDiagram = deserializeDiagram(s)
-    // set new diagram for test
-    diagram.set(newDiagram)
-    svg?.reset(newDiagram.getSvg(), document.getElementById('svgContainer')! as HTMLDivElement)
+    var blob = new Blob(
+      [JSON.stringify(serializeDiagram(diagram.diagram))],
+      {type: "text/plain;charset=utf-8"},
+    );
+    fs.saveAs(blob, "diagram.json");
   }, [diagram])
 
   return (
