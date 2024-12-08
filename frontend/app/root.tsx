@@ -8,6 +8,10 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import { SvgContextProvider } from "./components/contexts/SvgContextProvider";
+import { DiagramContextProvider } from "./components/contexts/DiagramContextProvider";
+import { AppSidebar } from "./components/AppSidebar";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,7 +36,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <SvgContextProvider>
+          <DiagramContextProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              {children}
+           </SidebarProvider>
+          </DiagramContextProvider>
+        </SvgContextProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
