@@ -14,5 +14,5 @@ export default function Index() {
 
   useEffect(() => {
     navigate('/diagram')
-  }, [])
+  }, [navigate])
 }

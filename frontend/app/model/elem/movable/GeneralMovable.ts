@@ -1,4 +1,4 @@
-import { G, Shape } from "@svgdotjs/svg.js";
+import { G } from "@svgdotjs/svg.js";
 import { Movable } from "./Movable";
 import { MovableType } from "./MovableType";
 

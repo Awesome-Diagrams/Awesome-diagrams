@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
-import { useSvg } from "~/components/contexts/SvgContextProvider";
 import { Button } from "~/components/ui/button"
 import {
     Dialog,
@@ -11,22 +10,21 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "~/components/ui/dialog"
-import { deserializeDiagram } from "~/internal/serialization/DiagramDeserializator";
 import { serializeDiagram } from "~/internal/serialization/DiagramSerializator";
 import * as fs from "file-saver";
 
 
 export const ExportDiagramCard = () => {
   const diagram = useDiagram()
-  const svg = useSvg()
 
   const handleExport = useCallback(() => {
     if (!diagram?.diagram) {
       // TODO: add logger
       return;
     }
-    // TODO: add writer to file
-    var blob = new Blob(
+    
+
+    const blob = new Blob(
       [JSON.stringify(serializeDiagram(diagram.diagram))],
       {type: "text/plain;charset=utf-8"},
     );

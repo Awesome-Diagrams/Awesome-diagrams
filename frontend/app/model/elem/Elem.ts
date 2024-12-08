@@ -1,4 +1,4 @@
-import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box, Circle } from "@svgdotjs/svg.js";
 import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";

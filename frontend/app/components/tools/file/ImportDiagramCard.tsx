@@ -56,7 +56,7 @@ export const ImportDiagramCard = () => {
           </DialogHeader>
           <Label htmlFor="diagram-input">Diagram</Label>
           <Input id="diagram-input" type="file" accept=".json" onChange={handleFileChange} />
-          {file && <div className="text-black">File {file.name} will be imported</div>}
+          {file && <Label className="text-black">File {file.name} will be imported</Label>}
           <DialogFooter>
             <Button onClick={handleImport} type="submit">Save changes</Button>
           </DialogFooter>

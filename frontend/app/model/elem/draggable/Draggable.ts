@@ -1,5 +1,3 @@
-import { Shape } from "@svgdotjs/svg.js";
-import { Movable } from "../movable/Movable";
 import { Elem } from "../Elem";
 import { DraggableType } from "./DraggableType";
 

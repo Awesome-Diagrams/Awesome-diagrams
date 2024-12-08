@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Button } from "~/components/ui/button"
 import {
     Dialog,
@@ -17,9 +17,9 @@ export const CreateDiagramCard = () => {
   const diagram = useDiagram()
 
   const handleCreate= useCallback(() => {
-    var newDiagram = diagram!.reset()
+    const newDiagram = diagram!.reset()
     svg?.reset(newDiagram.getSvg(), document.getElementById('svgContainer')! as HTMLDivElement)
-  }, [svg])
+  }, [svg, diagram])
 
   return (
     <Dialog>

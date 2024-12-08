@@ -1,4 +1,3 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
  
 import {
   Sidebar,
@@ -7,7 +6,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem
 } from "~/components/ui/sidebar"
 import { AddShapeMenu } from "./tools/edit/AddShapeMenu"

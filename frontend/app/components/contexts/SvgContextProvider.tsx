@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect } from "react"
-import { SVG, Svg } from "@svgdotjs/svg.js";
+import { Svg } from "@svgdotjs/svg.js";
 import { useSvgContainer } from "~/internal/svg/hook/hook";
 
 type SvgContextType = {
@@ -22,7 +22,7 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
 
     useEffect(() => {
         setHandle(undefined)
-    }, [])
+    }, [setHandle])
 
     const reset = useCallback((svg: Svg, div: HTMLDivElement) => {
         if (div.childElementCount === 1 && div.children[0].tagName !== 'H1') {
@@ -30,7 +30,7 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
         }
         svg.addTo(div)
         setHandle({container: div, svg: svg})
-    }, [])
+    }, [setHandle])
 
     return (
         <SvgContext.Provider

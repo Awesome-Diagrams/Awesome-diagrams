@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useState } from "react"
-import { Svg } from "@svgdotjs/svg.js";
 import { Diagram } from "~/model/diagram/Diagram";
 
 type DiagramContextType = {
@@ -23,7 +22,7 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
     
 
     const reset = useCallback(() => {
-        var diagram = new Diagram()
+        const diagram = new Diagram()
         setDiagram(diagram)
         
         return diagram
