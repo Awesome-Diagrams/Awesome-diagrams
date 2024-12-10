@@ -12,9 +12,9 @@ export type SvgContainerHandle = {
 }
 
 export const updateSvg = (
-  container: SvgContainerHandle | undefined,
+  svg: Svg | undefined,
   effect: (svg: Svg) => void
-) => () => effect(container!.svg);
+) => () => effect(svg!);
 
 export const useSvg = (
   container: SvgContainerHandle | undefined,
