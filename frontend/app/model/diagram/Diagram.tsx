@@ -1,5 +1,6 @@
 import { SVG, Svg, Box } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
+import { SelectionController } from "~/internal/component/tools/SelectionController";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -9,9 +10,12 @@ export class Diagram {
 
     // svg
     private svg: Svg
-
+    private selectionController : SelectionController;
+    
+    
     constructor() {
-        this.svg = SVG().size('100%', '100%')
+        this.svg = SVG().size('100%', '100%');
+        this.selectionController = new SelectionController(this.svg);
     }
 
     setWidth(width: number): Diagram {
@@ -47,13 +51,13 @@ export class Diagram {
     }
 
     addDefaultElem(): Elem {
-        const elem = new Elem(this.svg)
+        const elem = new Elem(this.svg, this.selectionController)
             .setConstraint(new Box(0, 0, this.width, this.height))
-            .setMovable('CONSTRAINT')
+            .setMovable('MULTI');
 
-        this.elems.push(elem)
+        this.elems.push(elem);
 
-        return elem
+        return elem;
     }
 
     removeElem(idx: number){

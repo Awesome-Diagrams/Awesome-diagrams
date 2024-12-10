@@ -1,8 +1,8 @@
 import { Svg } from "@svgdotjs/svg.js";
-import { UseCaseShape } from "~/internal/svg/svgShape/shapes/UseCaseShape";
+import { Elem } from "~/model/elem/Elem";
 
 
-export const selectedShapes: UseCaseShape[] = [];
+export const selectedShapes: Elem[] = [];
 
 export class SelectionController {
     private svg: Svg;
@@ -15,12 +15,12 @@ export class SelectionController {
     }
 
     // Получить список выбранных фигур
-    public getSelectedShapes(): UseCaseShape[] {
+    public getSelectedShapes(): Elem[] {
         return selectedShapes;
     }
 
     // Добавить фигуру в выбор
-    public selectShape(shape: UseCaseShape): void {
+    public selectShape(shape: Elem): void {
         if (!selectedShapes.includes(shape)) {
             selectedShapes.push(shape);
             shape.select(); // Выделяем фигуру
@@ -28,7 +28,7 @@ export class SelectionController {
     }
 
     // Удалить фигуру из выбора
-    public deselectShape(shape: UseCaseShape): void {
+    public deselectShape(shape: Elem): void {
         const index = selectedShapes.indexOf(shape);
         if (index !== -1) {
             selectedShapes.splice(index, 1);
@@ -54,7 +54,7 @@ export class SelectionController {
     }
 
     // Обработка множественного выделения
-    public toggleShapeSelection(shape: UseCaseShape, shiftKey: boolean): void {
+    public toggleShapeSelection(shape: Elem, shiftKey: boolean): void {
         if (shiftKey) {
             // Если Shift зажат, переключаем состояние выделения фигуры
             if (selectedShapes.includes(shape)) {

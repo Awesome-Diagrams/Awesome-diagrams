@@ -1,7 +1,7 @@
 import { Movable } from "./Movable";
-import { UseCaseShape } from "../shapes/UseCaseShape";
-import { Box } from "@svgdotjs/svg.js";
+import { Box, G } from "@svgdotjs/svg.js";
 import { selectedShapes } from "~/internal/component/tools/SelectionController";
+import { MovableType } from "./MovableType";
 
 export class MultiMovable implements Movable {
     private constraint: Box;
@@ -23,7 +23,7 @@ export class MultiMovable implements Movable {
         let maxY = -Infinity;
 
         selectedShapes.forEach((shape) => {
-            const bbox = shape.group.bbox();
+            const bbox = shape.getGroup().bbox();
             minX = Math.min(minX, bbox.x);
             minY = Math.min(minY, bbox.y);
             maxX = Math.max(maxX, bbox.x2);
@@ -33,7 +33,7 @@ export class MultiMovable implements Movable {
         return { minX, minY, maxX, maxY };
     }
 
-    public move(dx: number, dy: number, x2?: number, y2?: number): void {
+    public move(dx: number, dy: number): void {
         const { minX, minY, maxX, maxY } = this.calculateBoundingBox();
 
         const newMinX = minX + dx;
@@ -51,7 +51,11 @@ export class MultiMovable implements Movable {
         selectedShapes.forEach((shape) => {
             const startX = shape.getX();
             const startY = shape.getY();
-            shape.group.move(startX + dx, startY + dy);
+            shape.getGroup().move(startX + dx, startY + dy);
         });
+    }
+
+    public getType(): MovableType {
+        return 'MULTI';
     }
 }
