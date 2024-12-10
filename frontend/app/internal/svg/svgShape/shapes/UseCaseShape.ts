@@ -1,23 +1,29 @@
-import { Svg, Text, Rect, G, Circle, Shape, Box } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box } from "@svgdotjs/svg.js";
 import { Draggable } from "../draggable/Draggable";
 import { Movable } from "../movable/Movable";
-import { ConstraintMovable } from "../movable/ConstraintMovable";
-import { GeneralDraggable } from "../draggable/GeneralDraggable";
+import { SelectionController } from "~/internal/component/tools/SelectionController";
+import { DeltaDraggable } from "../draggable/DeltaDraggable";
+import { MultiMovable } from "../movable/MultiMovable";
 
 export class UseCaseShape {
-    private selRectGapSize : number = 20;
+    private selRectGapSize: number = 20;
 
     private draggable?: Draggable;
-    private group: G;
+    public group: G;
     private shape: Shape;
     private textElement: Text;
     private rect: Rect;
     private svg: Svg;
     private movable: Movable;
     private isSelected: boolean = false;
-    private selectionOutline?: Rect; 
+    private selectionOutline?: Rect;
 
-    constructor(shape: Shape, svg: Svg, constraint: Box) {
+    constructor(
+        shape: Shape,
+        svg: Svg,
+        constraint: Box,
+        private selectionController: SelectionController
+    ) {
         this.shape = shape;
         this.svg = svg;
 
@@ -37,36 +43,47 @@ export class UseCaseShape {
 
         this.selectionOutline = new Rect()
             .width((this.shape.width() as number) + this.selRectGapSize)
-            .height((this.shape.height() as number)  + this.selRectGapSize)
+            .height((this.shape.height() as number) + this.selRectGapSize)
             .stroke({ color: 'gray', width: 1, dasharray: '4,4' })
             .fill('none')
             .hide().cx(this.group.cx()).cy(this.group.cy());
         this.group.add(this.selectionOutline);
 
         svg.add(this.group);
-        this.movable = new ConstraintMovable(this.group, constraint, this.selRectGapSize);
-        this.setDraggable(new GeneralDraggable());
+        this.movable = new MultiMovable(constraint, this.selRectGapSize);
+        this.setDraggable(new DeltaDraggable());
 
         this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', () => this.toggleSelection())
+        this.shape.on('click', (e) => this.toggleSelect(e as MouseEvent));
     }
 
-    private toggleSelection() {
+    public getX(): number {
+        return this.group.x() as number;
+    }
+
+    public getY(): number {
+        return this.group.y() as number;
+    }
+
+    private toggleSelect(event: MouseEvent): void {
+        event.stopPropagation();
+
+        this.selectionController.toggleShapeSelection(this, event.shiftKey);
+    }
+
+    public select(): void {
         if (!this.selectionOutline?.visible()) {
             this.selectionOutline?.show();
-            this.draggable?.setDraggable(true); 
-
-            document.addEventListener('click', this.handleDocumentClick);
+            this.draggable?.setDraggable(true);
+            this.isSelected = true;
         }
     }
 
-    private handleDocumentClick = (event: MouseEvent) => {
-        if (!this.group.node.contains(event.target as Node)) {
-            this.selectionOutline?.hide();
-            this.draggable?.setDraggable(false);
-            document.removeEventListener('click', this.handleDocumentClick);
-        }
-    };
+    public deselect(): void {
+        this.selectionOutline?.hide();
+        this.draggable?.setDraggable(false);
+        this.isSelected = false;
+    }
 
     public setDraggable(draggable: Draggable): UseCaseShape {
         this.draggable = draggable;
