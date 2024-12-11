@@ -1,5 +1,5 @@
-import { Rect, SVG, Svg, Text } from "@svgdotjs/svg.js";
 import { SelectionController } from "~/components/tools/SelectionController";
+import { Rect, SVG, Svg, Text, G } from "@svgdotjs/svg.js";
 import { Diagram } from "~/model/diagram/Diagram";
 import { ConnectorSerialized, DiagramSerialized, ElemSerialized } from "~/model/DiagramSerialized";
 import { Connector } from "~/model/elem/Connector";
@@ -11,7 +11,11 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
     res.setHeight(diagramSerialized.height)
     res.setWidth(diagramSerialized.width)
     diagramSerialized.elems.forEach(elem => 
-        res.addElem(deserializeElem(elem, res.getSelectionController(), res.getSvg()))
+        res.addElem(deserializeElem(elem, res.getSelectionController(), res.getGroup()));
+    )
+
+    diagramSerialized.connectors.forEach(connector =>
+        res.addConnector(deserializeConnector(connector, res.getElems(), res.getSvg()))
     )
 
     diagramSerialized.connectors.forEach(connector =>
@@ -21,10 +25,9 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
     return res
 }
 
-export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, svg?: Svg): Elem => {
-    const shape = SVG(elemSerialized.shape);
-    const res = new Elem(svg, selController)
-        .setShape(shape)
+export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
+    const res = new Elem(group, selController)
+        .setShape(SVG(elemSerialized.shape))
         .setRect(new Rect().svg(elemSerialized.rect))
         .setText(new Text().svg(elemSerialized.textElement))
         .setConstraint(elemSerialized.constraint)

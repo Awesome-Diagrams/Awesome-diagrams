@@ -20,7 +20,7 @@ export class Elem {
     private isSelected: boolean = false;
 
     // svg
-    private svg?: Svg;
+    private svgGroup: G;
     private selectionOutline: Rect; 
     private group: G;
     private shape: Shape;
@@ -28,14 +28,14 @@ export class Elem {
     private rect: Rect;
     private constraint: Box;
 
-    constructor(svg?: Svg, private selectionController?: SelectionController) {
+    constructor(svgGroup: G, private selectionController?: SelectionController) {
 
         // TODO: add to config
         // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
 
         // svg
-        this.svg = svg;
+        this.svgGroup = svgGroup;
 
         // group
         this.group = new G();
@@ -69,6 +69,7 @@ export class Elem {
         // draggable
         this.setDraggable('DELTA');
         
+        // TODO: fix it
         // configure
         // this.configureAll()
     }
@@ -133,14 +134,6 @@ export class Elem {
             this.group.removeElement(this.shape)
         }
         this.shape = shape
-
-        this.configureAll()
-
-        return this
-    }
-
-    public setSvg(svg: Svg): Elem {
-        this.svg = svg
 
         this.configureAll()
 
@@ -260,7 +253,7 @@ export class Elem {
             this.group.add(this.selectionOutline)
         }
 
-        this.svg?.add(this.group)
+        this.svgGroup.add(this.group);
     }
 
     private configureAll() {
