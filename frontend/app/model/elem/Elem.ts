@@ -141,7 +141,11 @@ export class Elem {
     }
 
     public setText(textElem: Text): Elem {
-        this.textElement = textElem
+        if (textElem.text() === '') {
+            this.textElement.plain(textElem.text());
+        } else {
+            this.textElement.text(textElem.text());
+        }
 
         this.configureAll()
 
