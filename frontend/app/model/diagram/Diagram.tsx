@@ -18,7 +18,6 @@ export class Diagram {
     private scale: number = 1;
     private selectionController : SelectionController;
     
-    
     constructor() {
         this.svg = SVG().size("100%", "100%");
 

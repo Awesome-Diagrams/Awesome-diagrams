@@ -11,7 +11,7 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
     res.setHeight(diagramSerialized.height)
     res.setWidth(diagramSerialized.width)
     diagramSerialized.elems.forEach(elem => 
-        res.addElem(deserializeElem(elem, res.getSelectionController(), res.getGroup()));
+        res.addElem(deserializeElem(elem, res.getSelectionController(), res.getGroup()))
     )
 
     diagramSerialized.connectors.forEach(connector =>
