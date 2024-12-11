@@ -70,7 +70,7 @@ export class Elem {
         this.setDraggable('DELTA');
         
         // configure
-        this.configureAll()
+        // this.configureAll()
     }
 
     public move(x: number, y: number) {
@@ -234,7 +234,6 @@ export class Elem {
     }
 
     private configureGroup() {
-
         this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
         if (!this.group.has(this.shape)) {
             this.group.add(this.shape)
