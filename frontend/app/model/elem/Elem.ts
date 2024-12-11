@@ -6,7 +6,7 @@ import { GeneralDraggable } from "./draggable/GeneralDraggable";
 import { GeneralMovable } from "./movable/GeneralMovable";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
-import { SelectionController } from "~/internal/component/tools/SelectionController";
+import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
 

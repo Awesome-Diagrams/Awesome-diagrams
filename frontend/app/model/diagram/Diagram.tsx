@@ -1,6 +1,6 @@
 import { SVG, Svg, Box } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
-import { SelectionController } from "~/internal/component/tools/SelectionController";
+import { SelectionController } from "~/components/tools/SelectionController";
 
 export class Diagram {
     private elems: Elem[] = []

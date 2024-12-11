@@ -1,6 +1,6 @@
 import { Movable } from "./Movable";
 import { Box, G } from "@svgdotjs/svg.js";
-import { selectedShapes } from "~/internal/component/tools/SelectionController";
+import { selectedShapes } from "~/components/tools/SelectionController";
 import { MovableType } from "./MovableType";
 
 export class MultiMovable implements Movable {
