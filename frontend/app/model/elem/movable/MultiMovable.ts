@@ -4,16 +4,17 @@ import { selectedShapes } from "~/components/tools/SelectionController";
 import { MovableType } from "./MovableType";
 
 export class MultiMovable implements Movable {
-    private constraint: Box;
+    private constraint?: Box;
 
-    constructor(constraint: Box, selRectGapSize : number = 0) {
-        this.constraint = constraint;
-        this.constraint = new Box({
-            x: constraint.x - selRectGapSize / 2,
-            y: constraint.y - selRectGapSize / 2,
-            width: constraint.width + selRectGapSize,
-            height: constraint.height + selRectGapSize
-        });
+    constructor(selRectGapSize : number = 0, constraint?: Box) {
+        this.constraint = constraint
+            ? new Box({
+                x: constraint.x - selRectGapSize / 2,
+                y: constraint.y - selRectGapSize / 2,
+                width: constraint.width + selRectGapSize,
+                height: constraint.height + selRectGapSize
+            })
+            : constraint;
     }
 
     private calculateBoundingBox() {
@@ -36,16 +37,18 @@ export class MultiMovable implements Movable {
     public move(dx: number, dy: number): void {
         const { minX, minY, maxX, maxY } = this.calculateBoundingBox();
 
-        const newMinX = minX + dx;
-        const newMinY = minY + dy;
-        const newMaxX = maxX + dx;
-        const newMaxY = maxY + dy;
+        if (this.constraint) {
+            const newMinX = minX + dx;
+            const newMinY = minY + dy;
+            const newMaxX = maxX + dx;
+            const newMaxY = maxY + dy;
 
-        const withinX = newMinX >= this.constraint.x && newMaxX <= this.constraint.x2;
-        const withinY = newMinY >= this.constraint.y && newMaxY <= this.constraint.y2;
+            const withinX = newMinX >= this.constraint.x && newMaxX <= this.constraint.x2;
+            const withinY = newMinY >= this.constraint.y && newMaxY <= this.constraint.y2;
 
-        if (!withinX || !withinY) {
-            return;
+            if (!withinX || !withinY) {
+                return;
+            }
         }
 
         selectedShapes.forEach((shape) => {

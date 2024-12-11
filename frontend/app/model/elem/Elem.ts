@@ -64,14 +64,14 @@ export class Elem {
         this.constraint = new Box(0, 0, 1080, 720);
 
         // movable
-        this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+        this.movable = new MultiMovable(this.selRectGapSize);
         
         // draggable
         this.setDraggable('DELTA');
         
         // TODO: fix it
         // configure
-        // this.configureAll()
+        this.configureAll()
     }
 
     public move(x: number, y: number) {
@@ -163,7 +163,7 @@ export class Elem {
                 this.movable = new GeneralMovable(this.group);
                 break;
             case 'MULTI':
-                this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+                this.movable = new MultiMovable(this.selRectGapSize);
                 break;
         }
 
