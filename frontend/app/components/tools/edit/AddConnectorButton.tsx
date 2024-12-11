@@ -23,7 +23,7 @@ export const AddConnectorButton = () => {
         const [elem1, elem2] = selectedElems;
 
         // Создаём коннектор между двумя выделенными элементами
-        diagram.diagram.addConnector(new Connector(elem1, elem2, diagram.diagram.getSvg()));
+        diagram.diagram.addConnector(new Connector(elem1, elem2, diagram.diagram.getGroup()));
     }, [diagram]);
 
     return (

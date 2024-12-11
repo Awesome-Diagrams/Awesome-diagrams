@@ -1,4 +1,4 @@
-import { SVG, Svg, Box } from "@svgdotjs/svg.js";
+import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
@@ -10,42 +10,51 @@ export class Diagram {
     private width: number = 1080
     private height: number = 720
 
-    // svg
-    private svg: Svg
+    // SVG и группа
+    private svg: Svg;
+    private group: G;
+
+    // Текущий масштаб группы
+    private scale: number = 1;
     private selectionController : SelectionController;
     
     
     constructor() {
-        this.svg = SVG().size('100%', '100%');
+        this.svg = SVG().size("100%", "100%");
+
+        // Создаём группу для элементов
+        this.group = this.svg.group();;
         this.selectionController = new SelectionController(this.svg);
     }
 
     setWidth(width: number): Diagram {
-        this.width = width
-
-        return this
+        this.width = width;
+        return this;
     }
 
     setHeight(height: number): Diagram {
-        this.height = height
-
-        return this
+        this.height = height;
+        return this;
     }
 
     getWidth(): number {
-        return this.width
+        return this.width;
     }
 
-    getHeight() {
-        return this.height
+    getHeight(): number {
+        return this.height;
     }
 
-    getElems() {
-        return this.elems
+    getElems(): Elem[] {
+        return this.elems;
     }
 
-    getSvg() {
-        return this.svg
+    getSvg(): Svg {
+        return this.svg;
+    }
+
+    getGroup(): G {
+        return this.group;
     }
 
     getSelectionController() {
@@ -54,7 +63,7 @@ export class Diagram {
 
     addConnector(connector: Connector) {
         this.connectors.push(connector);
-        this.svg.add(connector.getGroup())
+        this.group.add(connector.getGroup())
     }
 
     getTwoSelectedElems(): [Elem, Elem] | null {
@@ -62,11 +71,11 @@ export class Diagram {
     }
 
     addElem(elem: Elem) {
-        this.elems.push(elem)
+        this.elems.push(elem);
     }
 
     addDefaultElem(): Elem {
-        const elem = new Elem(this.svg, this.selectionController)
+        const elem = new Elem(this.group, this.selectionController)
             .setConstraint(new Box(0, 0, this.width, this.height))
             .setMovable('MULTI');
 
@@ -75,7 +84,12 @@ export class Diagram {
         return elem;
     }
 
-    removeElem(idx: number){
-        this.elems = this.elems.filter((_, index) => index !== idx)
+    removeElem(idx: number) {
+        this.elems = this.elems.filter((_, index) => index !== idx);
+    }
+
+    scaleGroup(factor: number) {
+        this.scale *= factor;
+        this.group.transform({ scale: this.scale });
     }
 }
