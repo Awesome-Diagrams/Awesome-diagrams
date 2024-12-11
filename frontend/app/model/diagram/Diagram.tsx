@@ -48,6 +48,10 @@ export class Diagram {
         return this.svg
     }
 
+    getSelectionController() {
+        return this.selectionController;
+    }
+
     addConnector(connector: Connector) {
         this.connectors.push(connector);
         this.svg.add(connector.getGroup())
