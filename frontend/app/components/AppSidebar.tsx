@@ -12,6 +12,7 @@ import { AddShapeMenu } from "./tools/edit/AddShapeMenu"
 import { CreateDiagramCard } from "./tools/file/CreateDiagramCard"
 import { ExportDiagramCard } from "./tools/file/ExportDiagramCard"
 import { ImportDiagramCard } from "./tools/file/ImportDiagramCard"
+import { ZoomControls } from "./tools/zoom/ZoomWorkspace"
  
 // Menu items.
 const items = [
@@ -31,6 +32,10 @@ const items = [
     title: "Import diagram",
     content: <ImportDiagramCard />,
   },
+  {
+    title: "scale",
+    content: <ZoomControls />,
+  }
 ]
  
 export function AppSidebar() {
