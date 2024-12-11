@@ -1,9 +1,11 @@
 import { SVG, Svg, Box } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { SelectionController } from "~/components/tools/SelectionController";
+import { Connector } from "../elem/Connector";
 
 export class Diagram {
     private elems: Elem[] = []
+    private connectors: Connector[] = []
     // TODO: extact to config
     private width: number = 1080
     private height: number = 720
@@ -44,6 +46,15 @@ export class Diagram {
 
     getSvg() {
         return this.svg
+    }
+
+    addConnector(connector: Connector) {
+        this.connectors.push(connector);
+        this.svg.add(connector.getGroup())
+    }
+
+    getTwoSelectedElems(): [Elem, Elem] | null {
+        return this.selectionController.getTwoSelectedShapes();
     }
 
     addElem(elem: Elem) {

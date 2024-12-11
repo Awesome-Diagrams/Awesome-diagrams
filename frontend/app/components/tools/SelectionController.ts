@@ -19,6 +19,13 @@ export class SelectionController {
         return selectedShapes;
     }
 
+    public getTwoSelectedShapes(): [Elem, Elem] | null {
+        if (selectedShapes.length === 2) {
+            return [selectedShapes[0], selectedShapes[1]];
+        }
+        return null;
+    }
+
     // Добавить фигуру в выбор
     public selectShape(shape: Elem): void {
         if (!selectedShapes.includes(shape)) {

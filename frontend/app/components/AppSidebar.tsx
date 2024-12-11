@@ -12,6 +12,7 @@ import { AddShapeMenu } from "./tools/edit/AddShapeMenu"
 import { CreateDiagramCard } from "./tools/file/CreateDiagramCard"
 import { ExportDiagramCard } from "./tools/file/ExportDiagramCard"
 import { ImportDiagramCard } from "./tools/file/ImportDiagramCard"
+import { AddConnectorButton } from "./tools/edit/AddConnectorButton"
  
 // Menu items.
 const items = [
@@ -22,6 +23,10 @@ const items = [
   {
     title: "Add shape",
     content: <AddShapeMenu />,
+  },
+  {
+    title: "Add connector",
+    content: <AddConnectorButton />,
   },
   {
     title: "Export diagram",
