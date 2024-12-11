@@ -71,7 +71,7 @@ export class Elem {
         
         // TODO: fix it
         // configure
-        this.configureAll()
+        // this.configureAll()
     }
 
     public move(x: number, y: number) {
