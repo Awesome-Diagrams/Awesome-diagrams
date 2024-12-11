@@ -9,6 +9,8 @@ export class Connector {
 
     constructor(elem1: Elem, elem2: Elem, groupSvg: G) {
         this.group = new G();
+        this.elem1 = elem1;
+        this.elem2 = elem2;
 
         const x1 = elem1.getGroup().cx() as number;
         const y1 = elem1.getGroup().cy() as number;
