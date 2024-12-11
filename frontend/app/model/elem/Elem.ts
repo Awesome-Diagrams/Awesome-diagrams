@@ -20,7 +20,6 @@ export class Elem {
     private isSelected: boolean = false;
 
     // svg
-    // private svg?: Svg;
     private svgGroup: G;
     private selectionOutline: Rect; 
     private group: G;
@@ -70,6 +69,7 @@ export class Elem {
         // draggable
         this.setDraggable('DELTA');
         
+        // TODO: fix it
         // configure
         // this.configureAll()
     }
@@ -133,14 +133,6 @@ export class Elem {
 
         return this
     }
-
-    // public setSvg(svg: Svg): Elem {
-    //     this.svg = svg
-
-    //     this.configureAll()
-
-    //     return this
-    // }
 
     public setText(textElem: Text): Elem {
         this.textElement = textElem
@@ -255,7 +247,6 @@ export class Elem {
             this.group.add(this.selectionOutline)
         }
 
-        // this.svg?.add(this.group)
         this.svgGroup.add(this.group);
     }
 
