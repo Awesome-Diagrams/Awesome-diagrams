@@ -1,2 +1,2 @@
 
-export type MovableType = 'GENERAL' | 'CONSTRAINT'
+export type MovableType = 'GENERAL' | 'CONSTRAINT' | 'MULTI'

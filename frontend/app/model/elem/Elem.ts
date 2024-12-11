@@ -6,6 +6,9 @@ import { GeneralDraggable } from "./draggable/GeneralDraggable";
 import { GeneralMovable } from "./movable/GeneralMovable";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
+import { SelectionController } from "~/components/tools/SelectionController";
+import { DeltaDraggable } from "./draggable/DeltaDraggable";
+import { MultiMovable } from "./movable/MultiMovable";
 
 export class Elem {
 
@@ -26,7 +29,7 @@ export class Elem {
     private rect: Rect;
     private constraint: Box;
 
-    constructor(svgGroup: G) {
+    constructor(svgGroup: G, private selectionController?: SelectionController) {
 
         // TODO: add to config
         // shape
@@ -58,18 +61,18 @@ export class Elem {
             .fill('none')
             .hide()
 
-        // movable
-        this.movable = new GeneralMovable(this.group);
-
-        // draggable
-        this.setDraggable('GENERAL');
-
         // TODO: extract in config
         // constraint
         this.constraint = new Box(0, 0, 1080, 720);
 
+        // movable
+        this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+        
+        // draggable
+        this.setDraggable('DELTA');
+        
         // configure
-        this.configureAll()
+        // this.configureAll()
     }
 
     public move(x: number, y: number) {
@@ -82,6 +85,34 @@ export class Elem {
         this.configureAll()
 
         return this
+    }
+
+    public getX(): number {
+        return this.group.x() as number;
+    }
+
+    public getY(): number {
+        return this.group.y() as number;
+    }
+
+    private toggleSelect(event: MouseEvent): void {
+        event.stopPropagation();
+
+        this.selectionController?.toggleShapeSelection(this, event.shiftKey);
+    }
+
+    public select(): void {
+        if (!this.selectionOutline?.visible()) {
+            this.selectionOutline?.show();
+            this.draggable?.setDraggable(true);
+            this.isSelected = true;
+        }
+    }
+
+    public deselect(): void {
+        this.selectionOutline?.hide();
+        this.draggable?.setDraggable(false);
+        this.isSelected = false;
     }
 
     // TODO: remove
@@ -134,6 +165,9 @@ export class Elem {
             case 'GENERAL':
                 this.movable = new GeneralMovable(this.group);
                 break;
+            case 'MULTI':
+                this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+                break;
         }
 
         return this;
@@ -143,6 +177,9 @@ export class Elem {
         switch (draggableType) {
             case 'GENERAL':
                 this.draggable = new GeneralDraggable();
+                break;
+            case 'DELTA':
+                this.draggable = new DeltaDraggable();
                 break;
         }
 
@@ -195,11 +232,10 @@ export class Elem {
 
     private configureEvent() {
         this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', () => this.toggleSelection())
+        this.shape.on('click', (e) => this.toggleSelect(e as MouseEvent))
     }
 
     private configureGroup() {
-
         this.group.cx(this.shape.cx()).cy(this.shape.cy()) 
         if (!this.group.has(this.shape)) {
             this.group.add(this.shape)
@@ -230,23 +266,6 @@ export class Elem {
         this.configureEvent()
         this.draggable?.configure(this)
     }
-
-    private toggleSelection() {
-        if (!this.selectionOutline?.visible()) {
-            this.selectionOutline?.show();
-            this.draggable?.setDraggable(true); 
-
-            document.addEventListener('click', this.handleDocumentClick);
-        }
-    }
-
-    private handleDocumentClick = (event: MouseEvent) => {
-        if (!this.group.node.contains(event.target as Node)) {
-            this.selectionOutline?.hide();
-            this.draggable?.setDraggable(false);
-            document.removeEventListener('click', this.handleDocumentClick);
-        }
-    };
 
     private startEditing() {
         const prevText = this.textElement.text();

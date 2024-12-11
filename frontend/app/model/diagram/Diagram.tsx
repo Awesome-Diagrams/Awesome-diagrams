@@ -1,10 +1,14 @@
 import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
+import { SelectionController } from "~/components/tools/SelectionController";
+import { Connector } from "../elem/Connector";
 
 export class Diagram {
-    private elems: Elem[] = [];
-    private width: number = 1080;
-    private height: number = 720;
+    private elems: Elem[] = []
+    private connectors: Connector[] = []
+    // TODO: extact to config
+    private width: number = 1080
+    private height: number = 720
 
     // SVG и группа
     private svg: Svg;
@@ -12,12 +16,15 @@ export class Diagram {
 
     // Текущий масштаб группы
     private scale: number = 1;
-
+    private selectionController : SelectionController;
+    
+    
     constructor() {
         this.svg = SVG().size("100%", "100%");
 
         // Создаём группу для элементов
-        this.group = this.svg.group();
+        this.group = this.svg.group();;
+        this.selectionController = new SelectionController(this.svg);
     }
 
     setWidth(width: number): Diagram {
@@ -50,15 +57,27 @@ export class Diagram {
         return this.group;
     }
 
+    getSelectionController() {
+        return this.selectionController;
+    }
+
+    addConnector(connector: Connector) {
+        this.connectors.push(connector);
+        this.svg.add(connector.getGroup())
+    }
+
+    getTwoSelectedElems(): [Elem, Elem] | null {
+        return this.selectionController.getTwoSelectedShapes();
+    }
+
     addElem(elem: Elem) {
         this.elems.push(elem);
     }
 
     addDefaultElem(): Elem {
-        // TODO make better
-        const elem = new Elem(this.group)
-            // .setConstraint(new Box(0, 0, this.width, this.height))
-            // .setMovable("CONSTRAINT");
+        const elem = new Elem(this.svg, this.selectionController)
+            .setConstraint(new Box(0, 0, this.width, this.height))
+            .setMovable('MULTI');
 
         this.elems.push(elem);
 

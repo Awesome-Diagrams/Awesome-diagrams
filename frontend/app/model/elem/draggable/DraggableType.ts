@@ -1,2 +1,2 @@
 
-export type DraggableType = 'GENERAL'
+export type DraggableType = 'GENERAL' | 'DELTA'
