@@ -44,6 +44,10 @@ export class Diagram {
         return this.elems
     }
 
+    getConnectors() {
+        return this.connectors;
+    }
+
     getSvg() {
         return this.svg
     }
