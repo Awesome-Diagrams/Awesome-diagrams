@@ -63,7 +63,7 @@ export class Diagram {
 
     addConnector(connector: Connector) {
         this.connectors.push(connector);
-        this.svg.add(connector.getGroup())
+        this.group.add(connector.getGroup())
     }
 
     getTwoSelectedElems(): [Elem, Elem] | null {
@@ -75,7 +75,7 @@ export class Diagram {
     }
 
     addDefaultElem(): Elem {
-        const elem = new Elem(this.svg, this.selectionController)
+        const elem = new Elem(this.group, this.selectionController)
             .setConstraint(new Box(0, 0, this.width, this.height))
             .setMovable('MULTI');
 

@@ -5,7 +5,7 @@ export class Connector {
     private group: G;
     private line: Line;
 
-    constructor(elem1: Elem, elem2: Elem, svg: Svg) {
+    constructor(elem1: Elem, elem2: Elem, groupSvg: G) {
         this.group = new G();
 
         const x1 = elem1.getGroup().cx() as number;
@@ -19,7 +19,7 @@ export class Connector {
 
         this.group.add(this.line);
 
-        svg.add(this.group);
+        groupSvg.add(this.group);
 
         elem1.getShape().on("dragmove", () => this.updateLine(elem1, elem2));
         elem2.getShape().on("dragmove", () => this.updateLine(elem1, elem2));

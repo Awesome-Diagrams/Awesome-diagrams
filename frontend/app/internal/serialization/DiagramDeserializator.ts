@@ -16,7 +16,7 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
     return res
 }
 
-export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group?: G): Elem => {
+export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
     const res = new Elem(group, selController)
         .setShape(SVG(elemSerialized.shape))
         .setRect(new Rect().svg(elemSerialized.rect))

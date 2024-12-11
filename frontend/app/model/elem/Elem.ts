@@ -36,7 +36,6 @@ export class Elem {
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
 
         // svg
-        // this.svg = svg;
         this.svgGroup = svgGroup;
 
         // group
