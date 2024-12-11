@@ -18,7 +18,6 @@ export class Diagram {
     private scale: number = 1;
     private selectionController : SelectionController;
     
-    
     constructor() {
         this.svg = SVG().size("100%", "100%");
 
@@ -47,6 +46,11 @@ export class Diagram {
 
     getElems(): Elem[] {
         return this.elems;
+    }
+
+
+    getConnectors() {
+        return this.connectors;
     }
 
     getSvg(): Svg {

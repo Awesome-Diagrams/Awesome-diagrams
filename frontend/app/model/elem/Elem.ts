@@ -78,6 +78,12 @@ export class Elem {
         this.movable.move(x, y);
     }
 
+    public setId(newId : string) : Elem { 
+        this.shape.id(newId);
+
+        return this;
+    }
+
     public setRect(rect: Rect): Elem {
         this.rect = rect
 

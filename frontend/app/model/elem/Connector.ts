@@ -4,9 +4,13 @@ import { Elem } from "./Elem";
 export class Connector {
     private group: G;
     private line: Line;
+    private elem1 : Elem;
+    private elem2 : Elem;
 
     constructor(elem1: Elem, elem2: Elem, groupSvg: G) {
         this.group = new G();
+        this.elem1 = elem1;
+        this.elem2 = elem2;
 
         const x1 = elem1.getGroup().cx() as number;
         const y1 = elem1.getGroup().cy() as number;
@@ -36,5 +40,13 @@ export class Connector {
 
     public getGroup(): G {
         return this.group;
+    }
+
+    public getElem1() : Elem {
+        return this.elem1;
+    }
+    
+    public getElem2() : Elem {
+        return this.elem2;
     }
 }
