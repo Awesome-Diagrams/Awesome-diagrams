@@ -1,4 +1,4 @@
-import { Box, Line } from "@svgdotjs/svg.js";
+import { Box } from "@svgdotjs/svg.js";
 import { DraggableType } from "~/model/elem/draggable/DraggableType";
 import { MovableType } from "~/model/elem/movable/MovableType";
 
@@ -11,13 +11,36 @@ export type DiagramSerialized = {
 
 export type ElemSerialized = {
     draggable: DraggableType;
-    shape: string;
-    textElement: string;
-    rect: string;
+    shape: ShapeSerialized;
+    textElement: TextSerialized;
+    rect: InvisRectSerialized;
     movable: MovableType;
-    isSelected: boolean;
     constraint: Box;
     shapeId : string;
+}
+
+export type ShapeSerialized = {
+    type: string;
+    x: number;
+    y: number;
+    cx: number;
+    cy: number;
+    height?: number;
+    width?: number;
+    rx?: number;
+    ry?: number;
+    r?: number;
+}
+
+export type TextSerialized = {
+    color: string;
+    font_size: number;
+    text: string;
+}
+
+export type InvisRectSerialized = {
+    width: number;
+    height: number;
 }
 
 export type ConnectorSerialized = {
