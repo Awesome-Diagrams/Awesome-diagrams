@@ -18,10 +18,6 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
         res.addConnector(deserializeConnector(connector, res.getElems(), res.getGroup()))
     )
 
-    diagramSerialized.connectors.forEach(connector =>
-        res.addConnector(deserializeConnector(connector, res.getElems(), res.getGroup()))
-    )
-
     return res
 }
 

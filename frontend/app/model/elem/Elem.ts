@@ -64,7 +64,7 @@ export class Elem {
         this.constraint = new Box(0, 0, 1080, 720);
 
         // movable
-        this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+        this.movable = new MultiMovable(this.selRectGapSize);
         
         // draggable
         this.setDraggable('DELTA');
@@ -141,7 +141,11 @@ export class Elem {
     }
 
     public setText(textElem: Text): Elem {
-        this.textElement = textElem
+        if (textElem.text() === '') {
+            this.textElement.plain(textElem.text());
+        } else {
+            this.textElement.text(textElem.text());
+        }
 
         this.configureAll()
 
@@ -163,7 +167,7 @@ export class Elem {
                 this.movable = new GeneralMovable(this.group);
                 break;
             case 'MULTI':
-                this.movable = new MultiMovable(this.constraint, this.selRectGapSize);
+                this.movable = new MultiMovable(this.selRectGapSize);
                 break;
         }
 
