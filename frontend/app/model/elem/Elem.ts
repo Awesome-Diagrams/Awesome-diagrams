@@ -181,12 +181,12 @@ export class Elem {
             return this;
     }
 
-    public setText(text: string, font_size: number, color: string): Elem {
+    public setText(text: string, fontSize: number, color: string): Elem {
         if (text.trim() === '') {
             this.textElement.plain(text);
         } else {
             this.textElement.text(text);
-            this.textElement.font({ fill: color, size: font_size, anchor: 'middle' });
+            this.textElement.font({ fill: color, size: fontSize, anchor: 'middle' });
         }
 
         this.configureAll()

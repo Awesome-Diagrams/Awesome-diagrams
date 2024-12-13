@@ -33,7 +33,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
         },
         textElement: {
             color: elem.getTextElement().font('fill'),
-            font_size: parseInt(elem.getTextElement().font('size')),
+            fontSize: parseInt(elem.getTextElement().font('size')),
             text: elem.getTextElement().text()
 
         },

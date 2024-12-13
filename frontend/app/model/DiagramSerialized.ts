@@ -34,7 +34,7 @@ export type ShapeSerialized = {
 
 export type TextSerialized = {
     color: string;
-    font_size: number;
+    fontSize: number;
     text: string;
 }
 
