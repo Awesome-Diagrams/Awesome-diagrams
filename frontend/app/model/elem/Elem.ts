@@ -1,4 +1,4 @@
-import { Svg, Text, Rect, G, Shape, Box, Circle } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse, SVG } from "@svgdotjs/svg.js";
 import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";
@@ -9,6 +9,7 @@ import { DraggableType } from "./draggable/DraggableType";
 import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
+import { ShapeSerialized } from "../DiagramSerialized";
 
 export class Elem {
 
@@ -33,7 +34,6 @@ export class Elem {
         // TODO: add to config
         // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
-
         // svg
         this.svgGroup = svgGroup;
 
@@ -140,11 +140,53 @@ export class Elem {
         return this
     }
 
-    public setText(textElem: Text): Elem {
-        if (textElem.text() === '') {
-            this.textElement.plain(textElem.text());
+    public setShapeFromScratch(shape: ShapeSerialized) : Elem {
+            if (this.group.has(this.shape)) {
+                this.group.removeElement(this.shape);
+            }
+        
+            switch (shape.type) {
+                case 'circle':
+                    if (shape.r !== undefined) {
+                        this.shape = new Circle({ r: shape.r, cx: shape.cx, cy: shape.cy });
+                    }
+                    break;
+                case 'rect':
+                    if (shape.width !== undefined && shape.height !== undefined) {
+                        this.shape = new Rect({ width: shape.width, height: shape.height, x: shape.x, y: shape.y })
+                    }
+                    break;
+                case 'ellipse':
+                    if (shape.rx !== undefined && shape.ry !== undefined) {
+                        this.shape = new Ellipse({ cx: shape.cx, cy: shape.cy, rx: shape.rx, ry: shape.ry })
+                    }
+                    break;
+                case 'polyline':
+                    const sideLength = 100;
+                    const heightTri = (Math.sqrt(3) / 2) * sideLength;
+                    const x = shape.x + sideLength / 2;
+                    const y = shape.y;
+
+                    const points = `${x},${y} ${x - sideLength / 2},${y + heightTri} ${x + sideLength / 2},${y + heightTri}`;
+                    const draw = SVG().addTo('body').size(300, 130);
+                    this.shape = draw.polyline(points) as Shape;
+
+                    break;
+                default:
+                    throw new Error(`Unsupported shape type: ${shape.type}`);
+            }
+    
+            this.configureAll();
+        
+            return this;
+    }
+
+    public setText(text: string, fontSize: number, color: string): Elem {
+        if (text.trim() === '') {
+            this.textElement.plain(text);
         } else {
-            this.textElement.text(textElem.text());
+            this.textElement.text(text);
+            this.textElement.font({ fill: color, size: fontSize, anchor: 'middle' });
         }
 
         this.configureAll()

@@ -23,9 +23,12 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
 
 export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
     const res = new Elem(group, selController)
-        .setShape(SVG(elemSerialized.shape))
-        .setRect(new Rect().svg(elemSerialized.rect))
-        .setText(new Text().svg(elemSerialized.textElement))
+        .setShapeFromScratch(elemSerialized.shape)
+        .setRect(new Rect().width(elemSerialized.rect.width)
+                           .height(elemSerialized.rect.height)
+                           .fill('transparent')
+                           .stroke({ color: 'white', width: 1 }).opacity(0))
+        .setText(elemSerialized.textElement.text, elemSerialized.textElement.fontSize, elemSerialized.textElement.color)
         .setConstraint(elemSerialized.constraint)
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
