@@ -28,7 +28,7 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                            .height(elemSerialized.rect.height)
                            .fill('transparent')
                            .stroke({ color: 'white', width: 1 }).opacity(0))
-        .setText(elemSerialized.textElement.text, elemSerialized.textElement.font_size, elemSerialized.textElement.color)
+        .setText(elemSerialized.textElement.text, elemSerialized.textElement.fontSize, elemSerialized.textElement.color)
         .setConstraint(elemSerialized.constraint)
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
