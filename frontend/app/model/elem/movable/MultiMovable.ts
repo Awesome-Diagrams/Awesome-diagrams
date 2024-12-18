@@ -35,9 +35,10 @@ export class MultiMovable implements Movable {
     }
 
     public move(dx: number, dy: number): void {
-        const { minX, minY, maxX, maxY } = this.calculateBoundingBox();
 
         if (this.constraint) {
+            const { minX, minY, maxX, maxY } = this.calculateBoundingBox();
+
             const newMinX = minX + dx;
             const newMinY = minY + dy;
             const newMaxX = maxX + dx;
@@ -55,6 +56,7 @@ export class MultiMovable implements Movable {
             const startX = shape.getX();
             const startY = shape.getY();
             shape.getGroup().move(startX + dx, startY + dy);
+            shape.trigger("move", shape.getGroup().cx(), shape.getGroup().cy());
         });
     }
 

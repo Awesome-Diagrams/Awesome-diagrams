@@ -12,6 +12,7 @@ import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized } from "../DiagramSerialized";
 
 export class Elem {
+    private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
 
     // TODO: extract in constants
     private selRectGapSize : number = 20;
@@ -75,6 +76,25 @@ export class Elem {
         // configure
         // this.configureAll()
     }
+
+
+    public on(event: string, listener: (...args: any[]) => void): void {
+        if (!this.eventListeners[event]) {
+            this.eventListeners[event] = [];
+        }
+        this.eventListeners[event].push(listener);
+    }
+
+
+    public off(event: string, listener: (...args: any[]) => void): void {
+        this.eventListeners[event] = (this.eventListeners[event] || []).filter((l) => l !== listener);
+    }
+
+
+    public trigger(event: string, ...args: any[]): void {
+        (this.eventListeners[event] || []).forEach((listener) => listener(...args));
+    }
+
 
     public move(x: number, y: number) {
         this.movable.move(x, y);
