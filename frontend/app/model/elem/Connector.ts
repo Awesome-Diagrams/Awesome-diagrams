@@ -25,18 +25,19 @@ export class Connector {
 
         groupSvg.add(this.group);
 
-        elem1.getShape().on("dragmove", () => this.updateLine(elem1, elem2));
-        elem2.getShape().on("dragmove", () => this.updateLine(elem1, elem2));
+        elem1.on("move", this.updateLineFromElem1);
+        elem2.on("move", this.updateLineFromElem2);
     }
 
-    private updateLine(elem1: Elem, elem2: Elem): void {
-        const x1 = elem1.getGroup().cx() as number;
-        const y1 = elem1.getGroup().cy() as number;
-        const x2 = elem2.getGroup().cx() as number;
-        const y2 = elem2.getGroup().cy() as number;
 
-        this.line.plot(x1, y1, x2, y2);
-    }
+    private updateLineFromElem1 = (x: number, y: number): void => {
+        this.line.plot(x, y, this.elem2.getGroup().cx() as number, this.elem2.getGroup().cy() as number);
+    };
+
+
+    private updateLineFromElem2 = (x: number, y: number): void => {
+        this.line.plot(this.elem1.getGroup().cx() as number, this.elem1.getGroup().cy() as number, x, y);
+    };
 
     public getGroup(): G {
         return this.group;
