@@ -30,6 +30,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             rx: elem.getShape().attr('rx'),
             ry: elem.getShape().attr('ry'),
             r: elem.getShape().attr('r'),
+            color: elem.getColor(),
         },
         textElement: {
             color: elem.getTextElement().font('fill'),

@@ -33,6 +33,7 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
         .setId(elemSerialized.shapeId)
+        .setColor(elemSerialized.shape.color)
 
     return res
 }
