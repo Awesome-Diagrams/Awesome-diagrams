@@ -28,12 +28,14 @@ export class Elem {
     private textElement: Text;
     private rect: Rect;
     private constraint: Box;
+    private color: string;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
-
+        this.color = "#000000";
         // TODO: add to config
         // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
+        this.shape.fill(this.color);
         // svg
         this.svgGroup = svgGroup;
 
@@ -127,6 +129,15 @@ export class Elem {
         this.configureAll()
 
         return this
+    }
+
+    public setColor(color: string): Elem{
+        this.shape.fill(color);
+        return this;
+    }
+
+    public getColor(): string{
+        return this.color;
     }
 
     public setShape(shape: Shape): Elem {

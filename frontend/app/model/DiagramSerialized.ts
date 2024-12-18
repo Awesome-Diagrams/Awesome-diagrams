@@ -30,6 +30,7 @@ export type ShapeSerialized = {
     rx?: number;
     ry?: number;
     r?: number;
+    color: string;
 }
 
 export type TextSerialized = {

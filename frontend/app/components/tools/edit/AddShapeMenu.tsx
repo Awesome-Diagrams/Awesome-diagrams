@@ -43,6 +43,7 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
         }
         const elem = diagram.diagram.addDefaultElem()
         elem.setShape(config.createShape())
+        elem.setColor("#000000")
     }, [diagram, config])
 
     return (<>
