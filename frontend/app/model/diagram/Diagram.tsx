@@ -67,7 +67,7 @@ export class Diagram {
 
     addConnector(connector: Connector) {
         this.connectors.push(connector);
-        this.group.add(connector.getGroup())
+        //this.group.children().splice(0, 0, (connector.getGroup()));
     }
 
     getTwoSelectedElems(): [Elem, Elem] | null {

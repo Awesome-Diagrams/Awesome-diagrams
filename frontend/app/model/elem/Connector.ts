@@ -33,7 +33,7 @@ export class Connector {
         this.group.add(this.line);
         
         groupSvg.add(this.group);
-
+        this.group.back();
 
         elem1.on("move", this.updateLineFromElem1);
         elem2.on("move", this.updateLineFromElem2);
