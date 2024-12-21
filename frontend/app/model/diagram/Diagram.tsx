@@ -1,6 +1,6 @@
 import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
-import { SelectionController } from "~/components/tools/SelectionController";
+import { selectedConnectors, SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
 
 export class Diagram {
@@ -99,7 +99,7 @@ export class Diagram {
 
     deleteSelectedElems() {
         const selectedElems = this.selectionController.getSelectedShapes();
-    
+        selectedConnectors.forEach((con) => con.remove());
 
         this.elems = this.elems.filter((elem) => {
             if (elem.getIsSelected()) {
