@@ -1,8 +1,10 @@
 import { Svg } from "@svgdotjs/svg.js";
+import { Connector } from "~/model/elem/Connector";
 import { Elem } from "~/model/elem/Elem";
 
 
 export const selectedShapes: Elem[] = [];
+export const selectedConnectors: Connector[] = [];
 
 export class SelectionController {
     private svg: Svg;
@@ -47,7 +49,7 @@ export class SelectionController {
     public clearSelection(): void {
         selectedShapes.forEach((shape) => shape.deselect());
         selectedShapes.length = 0;
-        console.log('Cleared selection');
+        selectedConnectors.forEach((con) => con.deselect());
     }
 
     // Обработчик клика по пустой области
