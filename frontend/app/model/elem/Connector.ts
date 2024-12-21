@@ -39,7 +39,7 @@ export class Connector {
         elem2.on("move", this.updateLineFromElem2);
 
         this.outerLine.on("click", (e) => {
-            e.stopPropagation(); // Предотвращаем всплытие
+            e.stopPropagation();
             this.toggleSelection();
         });
     }
@@ -57,10 +57,10 @@ export class Connector {
         this.isSelected = !this.isSelected;
 
         if (this.isSelected) {
-            this.line.stroke({ color: "red", width: 3 }); // Выделенный стиль
+            this.line.stroke({ color: "red", width: 3 });
             selectedConnectors.push(this);
         } else {
-            this.line.stroke({ color: "black", width: 2 }); // Обычный стиль
+            this.line.stroke({ color: "black", width: 2 });
             selectedConnectors.filter((con) => this !== con);
         }
     }
