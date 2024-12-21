@@ -75,6 +75,10 @@ export class Elem {
         // this.configureAll()
     }
 
+    public remove(): void {
+        this.group.remove();
+    }
+
 
     public on(event: string, listener: (...args: any[]) => void): void {
         if (!this.eventListeners[event]) {

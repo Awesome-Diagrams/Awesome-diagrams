@@ -29,6 +29,15 @@ export class Connector {
         elem2.on("move", this.updateLineFromElem2);
     }
 
+    public isConnectedTo(elem: Elem): boolean {
+        return this.elem1 === elem || this.elem2 === elem;
+    }
+
+
+    public remove() {
+        this.group.remove();
+    }
+
 
     private updateLineFromElem1 = (x: number, y: number): void => {
         this.line.plot(x, y, this.elem2.getGroup().cx() as number, this.elem2.getGroup().cy() as number);

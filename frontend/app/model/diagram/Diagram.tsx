@@ -96,4 +96,34 @@ export class Diagram {
         this.scale *= factor;
         this.group.transform({ scale: this.scale });
     }
+
+    deleteSelectedElems() {
+        const selectedElems = this.selectionController.getSelectedShapes();
+    
+
+        this.elems = this.elems.filter((elem) => {
+            if (elem.getIsSelected()) {
+                elem.remove();
+                return false;
+            }
+            return true;
+        });
+    
+
+        selectedElems.forEach((elem) => {
+            this.deleteConnectorsForElem(elem);
+        });
+    }
+    
+
+
+    private deleteConnectorsForElem(elem: Elem) {
+        this.connectors = this.connectors.filter((connector) => {
+            const isConnected = connector.isConnectedTo(elem);
+            if (isConnected) {
+                connector.remove();
+            }
+            return !isConnected;
+        });
+    }
 }
