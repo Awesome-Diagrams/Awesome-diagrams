@@ -1,6 +1,6 @@
 import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
-import { SelectionController } from "~/components/tools/SelectionController";
+import { selectedConnectors, selectedShapes, SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
 
 export class Diagram {
@@ -67,7 +67,6 @@ export class Diagram {
 
     addConnector(connector: Connector) {
         this.connectors.push(connector);
-        this.group.add(connector.getGroup())
     }
 
     getTwoSelectedElems(): [Elem, Elem] | null {
@@ -95,5 +94,34 @@ export class Diagram {
     scaleGroup(factor: number) {
         this.scale *= factor;
         this.group.transform({ scale: this.scale });
+    }
+
+    deleteSelectedElems() {
+        selectedConnectors.forEach((con) => con.remove());
+
+        this.elems = this.elems.filter((elem) => {
+            if (elem.getIsSelected()) {
+                elem.remove();
+                return false;
+            }
+            return true;
+        });
+    
+
+        selectedShapes.forEach((elem) => {
+            this.deleteConnectorsForElem(elem);
+        });
+    }
+    
+
+
+    private deleteConnectorsForElem(elem: Elem) {
+        this.connectors = this.connectors.filter((connector) => {
+            const isConnected = connector.isConnectedTo(elem);
+            if (isConnected) {
+                connector.remove();
+            }
+            return !isConnected;
+        });
     }
 }

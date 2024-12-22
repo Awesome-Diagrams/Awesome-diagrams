@@ -14,6 +14,7 @@ import { ExportDiagramCard } from "./tools/file/ExportDiagramCard"
 import { ImportDiagramCard } from "./tools/file/ImportDiagramCard"
 import { AddConnectorButton } from "./tools/edit/AddConnectorButton"
 import { ZoomControls } from "./tools/zoom/ZoomWorkspace"
+import { DeleteButton } from "./tools/edit/DeleteButton"
  
 // Menu items.
 const items = [
@@ -28,6 +29,10 @@ const items = [
   {
     title: "Add connector",
     content: <AddConnectorButton />,
+  },
+  {
+    title: "Delete",
+    content: <DeleteButton />
   },
   {
     title: "Export diagram",
