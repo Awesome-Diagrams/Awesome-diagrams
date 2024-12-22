@@ -3,7 +3,7 @@ import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useCallback } from "react";
 import { Connector } from "~/model/elem/Connector";
 import { ConnectorType } from "~/model/elem/ConnectorType";
-import { LucideTrendingUp, Minus } from "lucide-react";
+import { LucideProps, LucideTrendingUp, Minus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 
 const connectorConfigs: ConnectorConfig[] = [
