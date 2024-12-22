@@ -41,8 +41,10 @@ export class DeltaDraggable implements Draggable {
         });
     }
 
-    public setDraggable(isDraggable: boolean) {
+    public setDraggable(isDraggable: boolean): Draggable {
         this.isDraggable = isDraggable;
+
+        return this;
     }
 
     public getType(): DraggableType {

@@ -11,7 +11,9 @@ export class GeneralDraggable implements Draggable {
 
         const onDrag = (e: Event): void => {
             e.preventDefault();
+            console.log('here')
             if (!this.isDraggable) return;
+            console.log('here')
 
             const { box } = (e as any).detail;
             const { x, y } = box;
@@ -22,8 +24,10 @@ export class GeneralDraggable implements Draggable {
         elem.getShape().on('dragmove.namespace', onDrag);
     }
 
-    public setDraggable(isDraggable : boolean) {
+    public setDraggable(isDraggable : boolean): Draggable {
         this.isDraggable = isDraggable;
+
+        return this
     }
 
     public getType(): DraggableType {

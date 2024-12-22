@@ -80,11 +80,13 @@ export class Elem {
     }
 
 
-    public on(event: string, listener: (...args: any[]) => void): void {
+    public on(event: string, listener: (...args: any[]) => void): Elem {
         if (!this.eventListeners[event]) {
             this.eventListeners[event] = [];
         }
         this.eventListeners[event].push(listener);
+
+        return this;
     }
 
 
@@ -243,10 +245,10 @@ export class Elem {
     public setDraggable(draggableType: DraggableType): Elem {
         switch (draggableType) {
             case 'GENERAL':
-                this.draggable = new GeneralDraggable();
+                this.draggable = new GeneralDraggable()
                 break;
             case 'DELTA':
-                this.draggable = new DeltaDraggable();
+                this.draggable = new DeltaDraggable()
                 break;
         }
 
@@ -298,8 +300,11 @@ export class Elem {
     }
 
     private configureEvent() {
-        this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', (e) => this.toggleSelect(e as MouseEvent))
+        //this.rect.on('click', () => this.startEditing());
+        this.shape.on('click', (e) => {
+            console.log("11111")
+            this.toggleSelect(e as MouseEvent)
+        })
     }
 
     private configureGroup() {

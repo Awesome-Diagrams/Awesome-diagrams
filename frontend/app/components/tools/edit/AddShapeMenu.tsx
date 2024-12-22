@@ -9,7 +9,6 @@ import {ShapeConfig, shapeConfigs} from "~/internal/config/FigureConfigs"
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useCallback } from "react";
 
-
 export const AddShapeMenu = () => {
     return (
         <DropdownMenu>
