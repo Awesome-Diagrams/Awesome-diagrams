@@ -33,10 +33,26 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
         .setId(elemSerialized.shapeId)
-        .setColor(elemSerialized.shape.color)
+        .setCustomConfig(
+                {
+                stroke: {
+                    color: elemSerialized.customConfig.stroke_color,
+                    width: elemSerialized.customConfig.stroke_width,
+                    dasharray: elemSerialized.customConfig.stroke_dasharray,
+                },
+                fill: {
+                    color: elemSerialized.customConfig.fill_color,
+                    gradient: {
+                        enabled: elemSerialized.customConfig.gradient_enabled,
+                        secondColor: elemSerialized.customConfig.secondColor,
+                    },
+                },
+                opacity: elemSerialized.customConfig.opacity,
+            })
 
     return res
 }
+
 
 export const deserializeConnector = (conSerialized: ConnectorSerialized, elems : Elem[], group: G): Connector => {
     console.log("id1 = " + conSerialized.id1 + " id2 = " + conSerialized.id2);

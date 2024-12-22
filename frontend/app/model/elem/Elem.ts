@@ -10,6 +10,7 @@ import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized } from "../DiagramSerialized";
+import { CustomConfig } from "./customs/CustomConfig";
 
 export class Elem {
     private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
@@ -29,14 +30,23 @@ export class Elem {
     private textElement: Text;
     private rect: Rect;
     private constraint: Box;
-    private color: string;
+    private customConfig: CustomConfig;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
-        this.color = "#000000";
         // TODO: add to config
         // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
-        this.shape.fill(this.color);
+        this.customConfig = {
+            fill: {
+                color: "#000000",
+                gradient: {
+                    enabled: true,
+                    secondColor: "#ff8000",
+                },
+            },
+            opacity: 1,
+        };
+        this.applyConfig();
         // svg
         this.svgGroup = svgGroup;
 
@@ -155,13 +165,39 @@ export class Elem {
         return this
     }
 
-    public setColor(color: string): Elem{
-        this.shape.fill(color);
+    public setCustomConfig(customConfig: CustomConfig): Elem{
+        this.applyConfig()
         return this;
     }
 
-    public getColor(): string{
-        return this.color;
+    public getCustomConfig(): CustomConfig{
+        return this.customConfig;
+    }
+
+    public applyConfig(): Elem {
+        if (this.customConfig.stroke) {
+            const strokeOptions: any = {};
+            if (this.customConfig.stroke.color) {
+                strokeOptions.color = this.customConfig.stroke.color;
+            }
+            if (typeof this.customConfig.stroke.width === "number") {
+                strokeOptions.width = this.customConfig.stroke.width;
+            }
+            if (this.customConfig.stroke.dasharray) {
+                strokeOptions.dasharray = this.customConfig.stroke.dasharray;
+            }
+            this.shape.stroke(strokeOptions);
+        }
+        
+        if (this.customConfig.fill) {
+            this.shape.fill(this.customConfig.fill.color);
+            // todo gradient
+        }
+    
+        if (this.customConfig.opacity !== undefined) {
+            this.shape.opacity(this.customConfig.opacity);
+        }
+        return this;
     }
 
     public setShape(shape: Shape): Elem {
@@ -196,17 +232,22 @@ export class Elem {
                         this.shape = new Ellipse({ cx: shape.cx, cy: shape.cy, rx: shape.rx, ry: shape.ry })
                     }
                     break;
-                case 'polyline':
+                case 'polygon':
                     const sideLength = 100;
                     const heightTri = (Math.sqrt(3) / 2) * sideLength;
                     const x = shape.x + sideLength / 2;
                     const y = shape.y;
-
-                    const points = `${x},${y} ${x - sideLength / 2},${y + heightTri} ${x + sideLength / 2},${y + heightTri}`;
+                
+                    const points = [
+                        [x, y], 
+                        [x - sideLength / 2, y + heightTri], 
+                        [x + sideLength / 2, y + heightTri]
+                    ];
+                
                     const draw = SVG().addTo('body').size(300, 130);
-                    this.shape = draw.polyline(points) as Shape;
-
-                    break;
+                    this.shape = draw.polygon(points.map(point => point.join(',')).join(' ')) as Shape;
+                
+                    break;                
                 default:
                     throw new Error(`Unsupported shape type: ${shape.type}`);
             }

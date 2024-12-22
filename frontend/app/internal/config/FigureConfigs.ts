@@ -34,10 +34,17 @@ export const shapeConfigs: ShapeConfig[] = [
             const height = (Math.sqrt(3) / 2) * sideLength;
             const x = 100;
             const y = 100;
-            const points = `${x},${y} ${x - sideLength / 2},${y + height} ${x + sideLength / 2},${y + height}`;
+            const points = [
+                [x, y], 
+                [x - sideLength / 2, y + height], 
+                [x + sideLength / 2, y + height]
+            ];
+        
             const draw = SVG().addTo('body').size(300, 130);
-            return draw.polyline(points) as Shape;
+        
+            return draw.polygon(points.map(point => point.join(',')).join(' ')) as Shape;
         },
+        
         icon: Triangle,
         name: 'Triangle',
     },

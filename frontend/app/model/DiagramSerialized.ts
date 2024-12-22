@@ -17,6 +17,7 @@ export type ElemSerialized = {
     movable: MovableType;
     constraint: Box;
     shapeId : string;
+    customConfig : customsSerialized
 }
 
 export type ShapeSerialized = {
@@ -30,7 +31,16 @@ export type ShapeSerialized = {
     rx?: number;
     ry?: number;
     r?: number;
-    color: string;
+}
+
+export type customsSerialized = {
+    stroke_color: string;
+    stroke_width: number;
+    stroke_dasharray?: string;
+    fill_color: string;
+    gradient_enabled: boolean; 
+    secondColor: string;
+    opacity?: number;
 }
 
 export type TextSerialized = {
