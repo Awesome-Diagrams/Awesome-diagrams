@@ -132,7 +132,6 @@ export class Connector {
     }
 
     public setInternalPoints(points: Point[]): Connector {
-        console.log(points)
         if (points.length !== getInternalPointCount(this.connectorType)) {
             throw("illegal point size")
         }

@@ -300,11 +300,8 @@ export class Elem {
     }
 
     private configureEvent() {
-        //this.rect.on('click', () => this.startEditing());
-        this.shape.on('click', (e) => {
-            console.log("11111")
-            this.toggleSelect(e as MouseEvent)
-        })
+        this.rect.on('click', () => this.startEditing());
+        this.shape.on('click', (e) => this.toggleSelect(e as MouseEvent))
     }
 
     private configureGroup() {
