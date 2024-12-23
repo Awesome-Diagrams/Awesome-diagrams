@@ -1,12 +1,12 @@
 
-export type ConnectorType = 'single' | 'polyline'
+export type ConnectorType = 'straight' | 'polyline'
 
 export const getInternalPointCount = (connectorType: ConnectorType): number => {
 	switch(connectorType) {
 		case 'polyline': {
 			return 1;
 		}
-		case 'single': {
+		case 'straight': {
 			return 0;
 		}
 		default: {

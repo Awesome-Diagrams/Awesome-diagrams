@@ -13,8 +13,8 @@ const connectorConfigs: ConnectorConfig[] = [
         icon: LucideTrendingUp,
     },
     {
-        type: 'single',
-        name: 'Single',
+        type: 'straight',
+        name: 'Straight',
         icon: Minus,
     }
 ];

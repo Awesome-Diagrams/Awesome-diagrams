@@ -173,7 +173,7 @@ export class Connector {
 
                 break;
             }
-            case 'single': {
+            case 'straight': {
                 this.line.plot([[x1, y1], [x2, y2]]);
                 this.outerLine.plot([[x1, y1], [x2, y2]]);
 
