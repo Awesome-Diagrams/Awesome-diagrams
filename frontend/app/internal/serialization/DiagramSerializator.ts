@@ -51,5 +51,7 @@ export const serializeConnector = (connector: Connector) : ConnectorSerialized =
     return ({
         id1: connector.getElem1().getShape().id(),
         id2: connector.getElem2().getShape().id(),
+        connectorType: connector.getType(),
+        points: connector.getInternalPoints(),
     })
 }
