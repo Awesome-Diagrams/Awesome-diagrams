@@ -15,12 +15,17 @@ import { ImportDiagramCard } from "./tools/file/ImportDiagramCard"
 import { AddConnectorButton } from "./tools/edit/AddConnectorButton"
 import { ZoomControls } from "./tools/zoom/ZoomWorkspace"
 import { DeleteButton } from "./tools/edit/DeleteButton"
+import { SaveOnlineButton } from "./tools/file/SaveOnlineButton"
  
 // Menu items.
 const items = [
   {
     title: "Create new diagram",
     content: <CreateDiagramCard />,
+  },
+  {
+    title: "Save diagram online",
+    content: <SaveOnlineButton />,
   },
   {
     title: "Add shape",
