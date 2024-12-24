@@ -19,11 +19,12 @@ class DiagramService(
     }
 
     @Transactional(readOnly = true)
-    fun getDiagramById(id: Long): Diagram {
-        return diagramRepository.findById(id).orElseThrow {
-            throw IllegalArgumentException("Diagram with ID $id not found")
-        }
-    }
+    fun getDiagramById(id: Long): Diagram =
+        diagramRepository
+            .findById(id)
+            .orElseThrow {
+                throw IllegalArgumentException("Diagram with ID $id not found")
+            }
 
     @Transactional
     fun updateDiagram(
