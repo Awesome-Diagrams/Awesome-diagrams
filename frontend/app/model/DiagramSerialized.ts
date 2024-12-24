@@ -36,15 +36,11 @@ export type ShapeSerialized = {
     y: number;
     cx: number;
     cy: number;
-    height?: number;
-    width?: number;
+    height: number;
+    width: number;
     rx?: number;
     ry?: number;
     r?: number;
-    widthScale: number;
-    heightScale: number;
-    initWidth: number;
-    initHeight: number;
 }
 
 export type customsSerialized = {

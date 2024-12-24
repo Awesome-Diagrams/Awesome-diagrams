@@ -50,9 +50,8 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                 },
                 opacity: elemSerialized.customConfig.opacity,
             })
-    res.setInitSizes(elemSerialized.shape.initHeight, elemSerialized.shape.initWidth);
-    res.setScaleHeigth(elemSerialized.shape.heightScale);
-    res.setScaleWidth(elemSerialized.shape.widthScale);
+    res.setHeigth(elemSerialized.shape.height);
+    res.setWidth(elemSerialized.shape.width);
     return res
 }
 

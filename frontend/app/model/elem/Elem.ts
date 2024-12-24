@@ -33,10 +33,8 @@ export class Elem {
     private constraint: Box;
     private customConfig: CustomConfig;
     private shapetype: ShapeType;
-    private widthScale: number;
-    private heightScale: number;
-    private initWidth: number;
-    private initHeight: number;
+    private widthShape: number;
+    private heightShape: number;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
         // TODO: add to config
@@ -44,7 +42,7 @@ export class Elem {
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
         this.customConfig = {
             fill: {
-                color: "#000000",
+                color: "#00ff00",
                 gradient: {
                     enabled: true,
                     secondColor: "#ff8000",
@@ -90,10 +88,8 @@ export class Elem {
         this.setDraggable('DELTA');
 
         //scale
-        this.widthScale = 1;
-        this.heightScale = 1;
-        this.initHeight = this.shape.height() as number;
-        this.initWidth = this.shape.width() as number;
+        this.heightShape = this.shape.height() as number;
+        this.widthShape = this.shape.width() as number;
     
         // TODO: fix it
         // configure
@@ -180,45 +176,31 @@ export class Elem {
         return this
     }
 
-    public getinitWidth(): number{
-        return this.initWidth;
+    public getWidthShape(): number{
+        return this.widthShape;
     }
-    public getinitHeigth(): number{
-        return this.initHeight;
-    }
-
-    public setInitSizes(height: number, width: number): Elem{
-        this.initHeight = height;
-        this.initWidth = width;
-        return this;
+    public getHeigthShape(): number{
+        return this.heightShape;
     }
 
-    public getScaleWidth(): number{
-        return this.widthScale;
-    }
-    public getScaleHeigth(): number{
-        return this.heightScale;
-    }
-
-    public setScaleWidth(scale: number){
-        this.widthScale = scale;
+    public setWidth(width: number){
+        this.widthShape = width;
         if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
-            this.heightScale = scale;
+            this.heightShape = width;
         }
-        this.scaleShape();
+        this.configureShapeSize();
     }
-    public setScaleHeigth(scale: number){
-        this.heightScale = scale;
+    public setHeigth(height: number){
+        this.heightShape = height;
         if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
-            this.widthScale = scale;
+            this.widthShape = height;
         }
-        this.scaleShape();
+        this.configureShapeSize();
     }
 
-    private scaleShape(){
-        const newWidth = this.initWidth * this.getScaleWidth();
-        const newHeight = this.initHeight * this.getScaleHeigth();
-        this.shape.size(newWidth, newHeight);
+    private configureShapeSize(){
+        this.shape.size(this.widthShape, this.heightShape);
+
         this.configureSelectionOutline();
         this.configureGroup();
     }
@@ -273,9 +255,8 @@ export class Elem {
             this.group.removeElement(this.shape)
         }
         this.shape = shape
-        this.initHeight = this.shape.height() as number;
-        this.initWidth = this.shape.width() as number;
-
+        this.heightShape = this.shape.height() as number;
+        this.widthShape = this.shape.width() as number;
 
         this.configureAll()
 
@@ -329,8 +310,8 @@ export class Elem {
             }
     
             this.configureAll();
-            this.initHeight = this.shape.height() as number;
-            this.initWidth = this.shape.width() as number;
+            this.heightShape = this.shape.height() as number;
+            this.widthShape = this.shape.width() as number;
         
             return this;
     }

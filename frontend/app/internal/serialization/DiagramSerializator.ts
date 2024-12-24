@@ -2,7 +2,6 @@ import { Diagram } from "~/model/diagram/Diagram";
 import { ConnectorSerialized, DiagramSerialized, ElemSerialized} from "../../model/DiagramSerialized";
 import { Elem } from "~/model/elem/Elem";
 import { Connector } from "~/model/elem/Connector";
-import { Circle } from "@svgdotjs/svg.js";
 import { CustomConfig } from "~/model/elem/customs/CustomConfig";
 
 export const serializeDiagram = (diagram: Diagram): DiagramSerialized  => {
@@ -26,21 +25,16 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             y: elem.getShape().y() as number,
             cx: elem.getShape().cx(),
             cy: elem.getShape().cy(),
-            height: elem.getShape().attr('height'),
-            width: elem.getShape().attr('width'),
             rx: elem.getShape().attr('rx'),
             ry: elem.getShape().attr('ry'),
             r: elem.getShape().attr('r'),
-            widthScale: elem.getScaleWidth(),
-            heightScale: elem.getScaleHeigth(),
-            initWidth: elem.getinitWidth(),
-            initHeight: elem.getinitHeigth(),
+            width: elem.getWidthShape(),
+            height: elem.getHeigthShape(),
         },
         textElement: {
             color: elem.getTextElement().font('fill'),
             fontSize: parseInt(elem.getTextElement().font('size')),
             text: elem.getTextElement().text()
-
         },
         rect: {
             width: elem.getRect().width() as number,
