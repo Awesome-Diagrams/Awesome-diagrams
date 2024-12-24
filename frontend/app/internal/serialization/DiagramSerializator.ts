@@ -34,7 +34,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             widthScale: elem.getScaleWidth(),
             heightScale: elem.getScaleHeigth(),
             initWidth: elem.getinitWidth(),
-            initHeight: elem.getinitWidth(),
+            initHeight: elem.getinitHeigth(),
         },
         textElement: {
             color: elem.getTextElement().font('fill'),
