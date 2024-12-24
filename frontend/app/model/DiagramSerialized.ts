@@ -19,9 +19,16 @@ export type ElemSerialized = {
     movable: MovableType;
     constraint: Box;
     shapeId : string;
+    customConfig : customsSerialized
 }
 
-export type ShapeType = 'circle' | 'rect' | 'ellipse' | 'polyline';
+export enum ShapeType {
+    Circle = "circle",
+    Rect = "rect",
+    Ellipse = "ellipse",
+    Polyline = "polyline",
+    Square = "square",
+}
 
 export type ShapeSerialized = {
     type: ShapeType;
@@ -29,11 +36,21 @@ export type ShapeSerialized = {
     y: number;
     cx: number;
     cy: number;
-    height?: number;
-    width?: number;
+    height: number;
+    width: number;
     rx?: number;
     ry?: number;
     r?: number;
+}
+
+export type customsSerialized = {
+    stroke_color: string;
+    stroke_width: number;
+    stroke_dasharray?: string;
+    fill_color: string;
+    gradient_enabled: boolean; 
+    secondColor: string;
+    opacity?: number;
 }
 
 export type TextSerialized = {

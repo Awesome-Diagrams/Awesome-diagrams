@@ -24,6 +24,7 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
 export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
     const res = new Elem(group, selController)
         .setShapeFromScratch(elemSerialized.shape)
+        .setType(elemSerialized.shape.type)
         .setRect(new Rect().width(elemSerialized.rect.width)
                            .height(elemSerialized.rect.height)
                            .fill('transparent')
@@ -33,9 +34,27 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
         .setId(elemSerialized.shapeId)
-
+        .setCustomConfig(
+                {
+                stroke: {
+                    color: elemSerialized.customConfig.stroke_color,
+                    width: elemSerialized.customConfig.stroke_width,
+                    dasharray: elemSerialized.customConfig.stroke_dasharray,
+                },
+                fill: {
+                    color: elemSerialized.customConfig.fill_color,
+                    gradient: {
+                        enabled: elemSerialized.customConfig.gradient_enabled,
+                        secondColor: elemSerialized.customConfig.secondColor,
+                    },
+                },
+                opacity: elemSerialized.customConfig.opacity,
+            })
+    res.setHeigth(elemSerialized.shape.height);
+    res.setWidth(elemSerialized.shape.width);
     return res
 }
+
 
 export const deserializeConnector = (conSerialized: ConnectorSerialized, elems : Elem[], group: G): Connector => {
     console.log("id1 = " + conSerialized.id1 + " id2 = " + conSerialized.id2);

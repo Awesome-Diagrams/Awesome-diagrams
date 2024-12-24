@@ -10,6 +10,8 @@ import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized } from "../DiagramSerialized";
+import { CustomConfig } from "./customs/CustomConfig";
+import { ShapeType } from "../DiagramSerialized";
 
 export class Elem {
     private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
@@ -29,12 +31,27 @@ export class Elem {
     private textElement: Text;
     private rect: Rect;
     private constraint: Box;
+    private customConfig: CustomConfig;
+    private shapetype: ShapeType;
+    private widthShape: number;
+    private heightShape: number;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
-
         // TODO: add to config
         // shape
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
+        this.customConfig = {
+            fill: {
+                color: "#00ff00",
+                gradient: {
+                    enabled: true,
+                    secondColor: "#ff8000",
+                },
+            },
+            opacity: 1,
+        };
+        this.shapetype = ShapeType.Circle;
+        this.applyConfig();
         // svg
         this.svgGroup = svgGroup;
 
@@ -69,7 +86,11 @@ export class Elem {
         
         // draggable
         this.setDraggable('DELTA');
-        
+
+        //scale
+        this.heightShape = this.shape.height() as number;
+        this.widthShape = this.shape.width() as number;
+    
         // TODO: fix it
         // configure
         // this.configureAll()
@@ -155,11 +176,87 @@ export class Elem {
         return this
     }
 
+    public getWidthShape(): number{
+        return this.widthShape;
+    }
+    public getHeigthShape(): number{
+        return this.heightShape;
+    }
+
+    public setWidth(width: number){
+        this.widthShape = width;
+        if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
+            this.heightShape = width;
+        }
+        this.configureShapeSize();
+    }
+    public setHeigth(height: number){
+        this.heightShape = height;
+        if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
+            this.widthShape = height;
+        }
+        this.configureShapeSize();
+    }
+
+    private configureShapeSize(){
+        this.shape.size(this.widthShape, this.heightShape);
+
+        this.configureSelectionOutline();
+        this.configureGroup();
+    }
+
+    public setCustomConfig(customConfig: CustomConfig): Elem{
+        this.customConfig = customConfig
+        this.applyConfig()
+        return this;
+    }
+
+    public getCustomConfig(): CustomConfig{
+        return this.customConfig;
+    }
+
+    public applyConfig(): Elem {
+        if (this.customConfig.stroke) {
+            const strokeOptions: any = {};
+            if (this.customConfig.stroke.color) {
+                strokeOptions.color = this.customConfig.stroke.color;
+            }
+            if (typeof this.customConfig.stroke.width) {
+                strokeOptions.width = this.customConfig.stroke.width;
+            }
+            if (this.customConfig.stroke.dasharray) {
+                strokeOptions.dasharray = this.customConfig.stroke.dasharray;
+            }
+            this.shape.stroke(strokeOptions);
+        }
+        
+        if (this.customConfig.fill) {
+            this.shape.fill(this.customConfig.fill.color);
+            // todo gradient
+        }
+    
+        if (this.customConfig.opacity !== undefined) {
+            this.shape.opacity(this.customConfig.opacity);
+        }
+        return this;
+    }
+
+    public setType(type : ShapeType): Elem{
+        this.shapetype = type;
+        return this;
+    }
+
+    public getType(): ShapeType{
+        return this.shapetype;
+    }
+
     public setShape(shape: Shape): Elem {
         if (this.group.has(this.shape)) {
             this.group.removeElement(this.shape)
         }
         this.shape = shape
+        this.heightShape = this.shape.height() as number;
+        this.widthShape = this.shape.width() as number;
 
         this.configureAll()
 
@@ -182,6 +279,11 @@ export class Elem {
                         this.shape = new Rect({ width: shape.width, height: shape.height, x: shape.x, y: shape.y })
                     }
                     break;
+                case 'square':
+                    if (shape.width !== undefined && shape.height !== undefined) {
+                        this.shape = new Rect({ width: shape.width, height: shape.height, x: shape.x, y: shape.y })
+                    }
+                    break;
                 case 'ellipse':
                     if (shape.rx !== undefined && shape.ry !== undefined) {
                         this.shape = new Ellipse({ cx: shape.cx, cy: shape.cy, rx: shape.rx, ry: shape.ry })
@@ -192,17 +294,24 @@ export class Elem {
                     const heightTri = (Math.sqrt(3) / 2) * sideLength;
                     const x = shape.x + sideLength / 2;
                     const y = shape.y;
-
-                    const points = `${x},${y} ${x - sideLength / 2},${y + heightTri} ${x + sideLength / 2},${y + heightTri}`;
+                
+                    const points = [
+                        [x, y], 
+                        [x - sideLength / 2, y + heightTri], 
+                        [x + sideLength / 2, y + heightTri]
+                    ];
+                
                     const draw = SVG().addTo('body').size(300, 130);
-                    this.shape = draw.polyline(points) as Shape;
-
-                    break;
+                    this.shape = draw.polygon(points.map(point => point.join(',')).join(' ')) as Shape;
+                
+                    break;                
                 default:
                     throw new Error(`Unsupported shape type: ${shape.type}`);
             }
     
             this.configureAll();
+            this.heightShape = this.shape.height() as number;
+            this.widthShape = this.shape.width() as number;
         
             return this;
     }
