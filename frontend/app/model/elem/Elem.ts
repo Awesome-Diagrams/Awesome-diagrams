@@ -92,11 +92,13 @@ export class Elem {
     }
 
 
-    public on(event: string, listener: (...args: any[]) => void): void {
+    public on(event: string, listener: (...args: any[]) => void): Elem {
         if (!this.eventListeners[event]) {
             this.eventListeners[event] = [];
         }
         this.eventListeners[event].push(listener);
+
+        return this;
     }
 
 
@@ -295,10 +297,10 @@ export class Elem {
     public setDraggable(draggableType: DraggableType): Elem {
         switch (draggableType) {
             case 'GENERAL':
-                this.draggable = new GeneralDraggable();
+                this.draggable = new GeneralDraggable()
                 break;
             case 'DELTA':
-                this.draggable = new DeltaDraggable();
+                this.draggable = new DeltaDraggable()
                 break;
         }
 

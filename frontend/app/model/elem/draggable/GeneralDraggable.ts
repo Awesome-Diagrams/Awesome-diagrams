@@ -22,8 +22,10 @@ export class GeneralDraggable implements Draggable {
         elem.getShape().on('dragmove.namespace', onDrag);
     }
 
-    public setDraggable(isDraggable : boolean) {
+    public setDraggable(isDraggable : boolean): Draggable {
         this.isDraggable = isDraggable;
+
+        return this
     }
 
     public getType(): DraggableType {

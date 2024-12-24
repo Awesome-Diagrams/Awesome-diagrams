@@ -59,5 +59,7 @@ export const deserializeConnector = (conSerialized: ConnectorSerialized, elems :
     const elem1 : Elem = elems.find(elem => elem.getShape().id() === conSerialized.id1)!;
     const elem2 : Elem = elems.find(elem => elem.getShape().id() === conSerialized.id2)!;
 
-    return new Connector(elem1, elem2, group);
+    return new Connector(elem1, elem2, group)
+        .setType(conSerialized.connectorType)
+        .setInternalPoints(conSerialized.points);
 }

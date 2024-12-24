@@ -1,6 +1,8 @@
 import { Box } from "@svgdotjs/svg.js";
 import { DraggableType } from "~/model/elem/draggable/DraggableType";
 import { MovableType } from "~/model/elem/movable/MovableType";
+import { ConnectorType } from "./elem/ConnectorType";
+import { Point } from "./Point";
 
 export type DiagramSerialized = {
     height: number;
@@ -20,8 +22,10 @@ export type ElemSerialized = {
     customConfig : customsSerialized
 }
 
+export type ShapeType = 'circle' | 'rect' | 'ellipse' | 'polyline';
+
 export type ShapeSerialized = {
-    type: string;
+    type: ShapeType;
     x: number;
     y: number;
     cx: number;
@@ -56,6 +60,8 @@ export type InvisRectSerialized = {
 
 export type ConnectorSerialized = {
     id1: string,
-    id2: string
+    id2: string,
+    connectorType: ConnectorType,
+    points: Point[],
 }
 
