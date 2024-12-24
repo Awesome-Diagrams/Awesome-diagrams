@@ -21,7 +21,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
     return ({
         draggable: elem.getDraggable()!.getType(),
         shape: {
-            type: elem.getShape().type,
+            type: elem.getType(),
             x: elem.getShape().x() as number,
             y: elem.getShape().y() as number,
             cx: elem.getShape().cx(),

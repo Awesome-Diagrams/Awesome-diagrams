@@ -11,6 +11,7 @@ import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
+import { ShapeType } from "../DiagramSerialized";
 
 export class Elem {
     private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
@@ -31,6 +32,7 @@ export class Elem {
     private rect: Rect;
     private constraint: Box;
     private customConfig: CustomConfig;
+    private shapetype: ShapeType;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
         // TODO: add to config
@@ -46,6 +48,7 @@ export class Elem {
             },
             opacity: 1,
         };
+        this.shapetype = ShapeType.Circle;
         this.applyConfig();
         // svg
         this.svgGroup = svgGroup;
@@ -168,6 +171,7 @@ export class Elem {
     }
 
     public setCustomConfig(customConfig: CustomConfig): Elem{
+        this.customConfig = customConfig
         this.applyConfig()
         return this;
     }
@@ -182,7 +186,7 @@ export class Elem {
             if (this.customConfig.stroke.color) {
                 strokeOptions.color = this.customConfig.stroke.color;
             }
-            if (typeof this.customConfig.stroke.width === "number") {
+            if (typeof this.customConfig.stroke.width) {
                 strokeOptions.width = this.customConfig.stroke.width;
             }
             if (this.customConfig.stroke.dasharray) {
@@ -200,6 +204,15 @@ export class Elem {
             this.shape.opacity(this.customConfig.opacity);
         }
         return this;
+    }
+
+    public setType(type : ShapeType): Elem{
+        this.shapetype = type;
+        return this;
+    }
+
+    public getType(): ShapeType{
+        return this.shapetype;
     }
 
     public setShape(shape: Shape): Elem {

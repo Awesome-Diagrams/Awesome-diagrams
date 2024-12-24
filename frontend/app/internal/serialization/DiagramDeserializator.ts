@@ -24,6 +24,7 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
 export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
     const res = new Elem(group, selController)
         .setShapeFromScratch(elemSerialized.shape)
+        .setType(elemSerialized.shape.type)
         .setRect(new Rect().width(elemSerialized.rect.width)
                            .height(elemSerialized.rect.height)
                            .fill('transparent')

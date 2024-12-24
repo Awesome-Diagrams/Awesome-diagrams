@@ -22,7 +22,12 @@ export type ElemSerialized = {
     customConfig : customsSerialized
 }
 
-export type ShapeType = 'circle' | 'rect' | 'ellipse' | 'polyline';
+export enum ShapeType {
+    Circle = "circle",
+    Rect = "rect",
+    Ellipse = "ellipse",
+    Polyline = "polyline",
+}
 
 export type ShapeSerialized = {
     type: ShapeType;
