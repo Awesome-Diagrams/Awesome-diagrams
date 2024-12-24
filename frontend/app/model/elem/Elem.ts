@@ -9,7 +9,7 @@ import { DraggableType } from "./draggable/DraggableType";
 import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
-import { ShapeSerialized } from "../DiagramSerialized";
+import { ShapeSerialized, TextSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
 
@@ -35,6 +35,9 @@ export class Elem {
     private shapetype: ShapeType;
     private widthShape: number;
     private heightShape: number;
+    private color: string = "#000000";
+
+    private textInfo: TextSerialized;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
         // TODO: add to config
@@ -42,7 +45,7 @@ export class Elem {
         this.shape = new Circle({ r: 50, cx: 100, cy: 100 });
         this.customConfig = {
             fill: {
-                color: "#00ff00",
+                color: "#000000",
                 gradient: {
                     enabled: true,
                     secondColor: "#ff8000",
@@ -51,6 +54,12 @@ export class Elem {
             opacity: 1,
         };
         this.shapetype = ShapeType.Circle;
+        this.textInfo = {
+            text: "",
+            fontSize: 18,
+            color: "#000000",
+        };
+
         this.applyConfig();
         // svg
         this.svgGroup = svgGroup;
@@ -167,15 +176,6 @@ export class Elem {
         this.isSelected = false;
     }
 
-    // TODO: remove
-    public setGroup(group: G): Elem {
-        this.group = group
-
-        this.configureAll()
-
-        return this
-    }
-
     public getWidthShape(): number{
         return this.widthShape;
     }
@@ -196,6 +196,16 @@ export class Elem {
             this.widthShape = height;
         }
         this.configureShapeSize();
+    }
+
+    public setColor(color: string) {
+        this.color = color;
+
+        this.shape.fill(color);
+    }
+
+    public getColor() {
+        return this.color;
     }
 
     private configureShapeSize(){
@@ -316,15 +326,17 @@ export class Elem {
             return this;
     }
 
-    public setText(text: string, fontSize: number, color: string): Elem {
-        if (text.trim() === '') {
-            this.textElement.plain(text);
+    public setText(textInfo: TextSerialized): Elem {
+        this.textInfo = textInfo;
+
+        if (textInfo.text.trim() === '') {
+            this.textElement.plain(textInfo.text);
         } else {
-            this.textElement.text(text);
-            this.textElement.font({ fill: color, size: fontSize, anchor: 'middle' });
+            this.textElement.text(textInfo.text);
+            this.textElement.font({ fill: textInfo.color, size: textInfo.fontSize, anchor: 'middle' });
         }
 
-        this.configureAll()
+        //this.configureAll()
 
         return this
     }
@@ -382,8 +394,8 @@ export class Elem {
         return this.rect
     }
 
-    public getTextElement(): Text {
-        return this.textElement
+    public getText(): TextSerialized {
+        return this.textInfo
     }
 
     public getSelectionOutline() {

@@ -69,6 +69,13 @@ export class Diagram {
         this.connectors.push(connector);
     }
 
+    getSelectedElem(): Elem | null {
+        return (this.selectionController.getSelectedShapes().length === 1 
+            ? this.selectionController.getSelectedShapes()[0] 
+            : null
+        );
+    }
+
     getTwoSelectedElems(): [Elem, Elem] | null {
         return this.selectionController.getTwoSelectedShapes();
     }
