@@ -234,7 +234,7 @@ export class Elem {
                         this.shape = new Ellipse({ cx: shape.cx, cy: shape.cy, rx: shape.rx, ry: shape.ry })
                     }
                     break;
-                case 'polygon':
+                case 'polyline':
                     const sideLength = 100;
                     const heightTri = (Math.sqrt(3) / 2) * sideLength;
                     const x = shape.x + sideLength / 2;
