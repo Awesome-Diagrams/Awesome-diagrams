@@ -12,7 +12,7 @@ services:
       #      - .:/docker-entrypoint-initdb.d
       - diagrams_data:/var/lib/postgresql/data
     ports:
-      - "5432"
+      - "5432:5432"
     networks:
       - server_net
     restart: always
@@ -24,6 +24,10 @@ services:
 
   diagrams_server:
     container_name: diagrams_server
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     build:
       context: .
       dockerfile: Dockerfile
