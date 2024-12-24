@@ -33,6 +33,10 @@ export class Elem {
     private constraint: Box;
     private customConfig: CustomConfig;
     private shapetype: ShapeType;
+    private widthScale: number;
+    private heightScale: number;
+    private initWidth: number;
+    private initHeight: number;
 
     constructor(svgGroup: G, private selectionController?: SelectionController) {
         // TODO: add to config
@@ -84,7 +88,13 @@ export class Elem {
         
         // draggable
         this.setDraggable('DELTA');
-        
+
+        //scale
+        this.widthScale = 1;
+        this.heightScale = 1;
+        this.initHeight = this.shape.height() as number;
+        this.initWidth = this.shape.width() as number;
+    
         // TODO: fix it
         // configure
         // this.configureAll()
@@ -170,6 +180,49 @@ export class Elem {
         return this
     }
 
+    public getinitWidth(): number{
+        return this.initWidth;
+    }
+    public getinitHeigth(): number{
+        return this.initHeight;
+    }
+
+    public setInitSizes(height: number, width: number): Elem{
+        this.initHeight = height;
+        this.initWidth = width;
+        return this;
+    }
+
+    public getScaleWidth(): number{
+        return this.widthScale;
+    }
+    public getScaleHeigth(): number{
+        return this.heightScale;
+    }
+
+    public setScaleWidth(scale: number){
+        this.widthScale = scale;
+        if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
+            this.heightScale = scale;
+        }
+        this.scaleShape();
+    }
+    public setScaleHeigth(scale: number){
+        this.heightScale = scale;
+        if(this.shapetype == ShapeType.Circle || this.shapetype == ShapeType.Square){
+            this.widthScale = scale;
+        }
+        this.scaleShape();
+    }
+
+    private scaleShape(){
+        const newWidth = this.initWidth * this.getScaleWidth();
+        const newHeight = this.initHeight * this.getScaleHeigth();
+        this.shape.size(newWidth, newHeight);
+        this.configureSelectionOutline();
+        this.configureGroup();
+    }
+
     public setCustomConfig(customConfig: CustomConfig): Elem{
         this.customConfig = customConfig
         this.applyConfig()
@@ -220,6 +273,9 @@ export class Elem {
             this.group.removeElement(this.shape)
         }
         this.shape = shape
+        this.initHeight = this.shape.height() as number;
+        this.initWidth = this.shape.width() as number;
+
 
         this.configureAll()
 
@@ -238,6 +294,11 @@ export class Elem {
                     }
                     break;
                 case 'rect':
+                    if (shape.width !== undefined && shape.height !== undefined) {
+                        this.shape = new Rect({ width: shape.width, height: shape.height, x: shape.x, y: shape.y })
+                    }
+                    break;
+                case 'square':
                     if (shape.width !== undefined && shape.height !== undefined) {
                         this.shape = new Rect({ width: shape.width, height: shape.height, x: shape.x, y: shape.y })
                     }
@@ -268,6 +329,8 @@ export class Elem {
             }
     
             this.configureAll();
+            this.initHeight = this.shape.height() as number;
+            this.initWidth = this.shape.width() as number;
         
             return this;
     }

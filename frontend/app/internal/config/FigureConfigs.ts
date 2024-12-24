@@ -20,7 +20,7 @@ export const shapeConfigs: ShapeConfig[] = [
         createShape: () => new Rect({ width: 90, height: 90, x: 100, y: 100 }),
         icon: Square,
         name: 'Square',
-        type: ShapeType.Rect
+        type: ShapeType.Square
     },
     {
         createShape: () => new Rect({ width: 140, height: 90, x: 100, y: 100 }),
