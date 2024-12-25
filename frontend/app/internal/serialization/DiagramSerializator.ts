@@ -32,14 +32,15 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             height: elem.getHeigthShape(),
         },
         textElement: {
-            color: elem.getTextElement().font('fill'),
-            fontSize: parseInt(elem.getTextElement().font('size')),
-            text: elem.getTextElement().text()
+            color: elem.getText().color,
+            fontSize: elem.getText().fontSize,
+            text: elem.getText().text
         },
         rect: {
             width: elem.getRect().width() as number,
             height: elem.getRect().height() as number
         },
+        color: elem.getColor(),
         customConfig: serializeCustomConfig(elem.getCustomConfig()),
         movable: elem.getMovable().getType(),
         constraint: elem.getConstraint(),

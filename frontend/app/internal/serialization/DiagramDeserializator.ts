@@ -29,13 +29,13 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                            .height(elemSerialized.rect.height)
                            .fill('transparent')
                            .stroke({ color: 'white', width: 1 }).opacity(0))
-        .setText(elemSerialized.textElement.text, elemSerialized.textElement.fontSize, elemSerialized.textElement.color)
+        .setText({text: elemSerialized.textElement.text, fontSize: elemSerialized.textElement.fontSize, color: elemSerialized.textElement.color})
         .setConstraint(elemSerialized.constraint)
         .setMovable(elemSerialized.movable)
         .setDraggable(elemSerialized.draggable)
         .setId(elemSerialized.shapeId)
         .setCustomConfig(
-                {
+            {
                 stroke: {
                     color: elemSerialized.customConfig.stroke_color,
                     width: elemSerialized.customConfig.stroke_width,
@@ -50,6 +50,8 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                 },
                 opacity: elemSerialized.customConfig.opacity,
             })
+            .setColor(elemSerialized.color)
+            
     res.setHeigth(elemSerialized.shape.height);
     res.setWidth(elemSerialized.shape.width);
     return res

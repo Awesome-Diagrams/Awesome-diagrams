@@ -16,6 +16,7 @@ import { AddConnectorButton } from "./tools/edit/AddConnectorButton"
 import { ZoomControls } from "./tools/zoom/ZoomWorkspace"
 import { DeleteButton } from "./tools/edit/DeleteButton"
 import { SaveOnlineButton } from "./tools/file/SaveOnlineButton"
+import { EditElemDialog } from "./tools/edit/EditElemdDialog"
  
 // Menu items.
 const items = [
@@ -48,9 +49,13 @@ const items = [
     content: <ImportDiagramCard />,
   },
   {
+    title: "edit",
+    content: <EditElemDialog />,
+  },
+  {
     title: "scale",
     content: <ZoomControls />,
-  }
+  },
 ]
  
 export function AppSidebar() {
