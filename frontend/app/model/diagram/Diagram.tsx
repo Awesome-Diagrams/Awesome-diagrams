@@ -2,6 +2,7 @@ import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { selectedConnectors, selectedShapes, SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
+import { DiagramSchemaType } from "./DiagramSchemaType";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -17,9 +18,13 @@ export class Diagram {
     // Текущий масштаб группы
     private scale: number = 1;
     private selectionController : SelectionController;
+
+    private diagramTypeSchemaType: DiagramSchemaType;
     
-    constructor() {
+    constructor(diagramType: DiagramSchemaType) {
         this.svg = SVG().size("100%", "100%");
+
+        this.diagramTypeSchemaType = diagramType;
 
         // Создаём группу для элементов
         this.group = this.svg.group();;
@@ -63,6 +68,10 @@ export class Diagram {
 
     getSelectionController() {
         return this.selectionController;
+    }
+
+    public getDiagramType() {
+        return this.diagramTypeSchemaType;
     }
 
     addConnector(connector: Connector) {

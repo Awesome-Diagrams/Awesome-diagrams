@@ -1,9 +1,10 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { Diagram } from "~/model/diagram/Diagram";
+import { DiagramSchemaType } from "~/model/diagram/DiagramSchemaType";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
-    reset: () => Diagram;
+    reset: (diagramType: DiagramSchemaType) => Diagram;
     set: (diagram: Diagram) => void;
 }
 
@@ -21,8 +22,8 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
     const [diagram, setDiagram] = useState<Diagram>();
     
 
-    const reset = useCallback(() => {
-        const diagram = new Diagram()
+    const reset = useCallback((diagramType: DiagramSchemaType) => {
+        const diagram = new Diagram(diagramType)
         setDiagram(diagram)
         
         return diagram

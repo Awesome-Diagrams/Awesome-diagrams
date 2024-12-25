@@ -3,8 +3,10 @@ import { DraggableType } from "~/model/elem/draggable/DraggableType";
 import { MovableType } from "~/model/elem/movable/MovableType";
 import { ConnectorType } from "./elem/ConnectorType";
 import { Point } from "./Point";
+import { DiagramSchemaType } from "./diagram/DiagramSchemaType";
 
 export type DiagramSerialized = {
+    type: DiagramSchemaType;
     height: number;
     width: number;
     elems: ElemSerialized[];

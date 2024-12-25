@@ -6,7 +6,7 @@ import { Connector } from "~/model/elem/Connector";
 import { Elem } from "~/model/elem/Elem";
 
 export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagram => {
-    const res = new Diagram()
+    const res = new Diagram(diagramSerialized.type)
     
     res.setHeight(diagramSerialized.height)
     res.setWidth(diagramSerialized.width)

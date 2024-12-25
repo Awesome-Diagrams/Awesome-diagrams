@@ -7,9 +7,23 @@ import {
 } from "~/components/ui/dropdown-menu";
 import {ShapeConfig, shapeConfigs} from "~/internal/config/FigureConfigs"
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { getAvailableConnectorType, getAvailableShapeTypes } from "~/model/diagram/DiagramSchemaType";
+import { DiagramConfig } from "../file/CreateDiagramCard";
 
 export const AddShapeMenu = () => {
+    const diagram = useDiagram()!
+    const configs: ShapeConfig[] | undefined = useMemo(() => {
+        if (!diagram.diagram) {
+            return;
+        }
+        const type = diagram.diagram.getDiagramType();
+
+        return Array.from(shapeConfigs.filter((conf) => {
+            return getAvailableShapeTypes(type).find((it) => it === conf.type)
+        }));
+    }, [diagram]);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -18,7 +32,7 @@ export const AddShapeMenu = () => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                {shapeConfigs.map((config, idx) => (
+                {configs?.map((config, idx) => (
                     <DropdownMenuItem key={idx}>
                         <ShapeDropDownMenu config={config} />
                     </DropdownMenuItem>
