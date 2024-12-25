@@ -1,10 +1,11 @@
 import { Button } from "~/components/ui/button";
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Connector } from "~/model/elem/Connector";
 import { ConnectorType } from "~/model/elem/ConnectorType";
 import { LucideProps, LucideTrendingUp, Minus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
+import { getAvailableConnectorType } from "~/model/diagram/DiagramSchemaType";
 
 const connectorConfigs: ConnectorConfig[] = [
     {
@@ -20,6 +21,18 @@ const connectorConfigs: ConnectorConfig[] = [
 ];
 
 export const AddConnectorButton = () => {
+    const diagram = useDiagram()!
+    const configs: ConnectorConfig[] | undefined = useMemo(() => {
+        if (!diagram.diagram) {
+            return;
+        }
+        const type = diagram.diagram.getDiagramType();
+
+        return Array.from(connectorConfigs.filter((conf) => {
+            return getAvailableConnectorType(type).find((it) => it === conf.type)
+        }));
+    }, [diagram]);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -28,7 +41,7 @@ export const AddConnectorButton = () => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                {connectorConfigs.map((config, idx) => (
+                {configs?.map((config, idx) => (
                     <DropdownMenuItem key={idx}>
                         <ConnectorDropDownMenu config={config} />
                     </DropdownMenuItem>

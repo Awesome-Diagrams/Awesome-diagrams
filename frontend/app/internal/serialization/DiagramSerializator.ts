@@ -12,7 +12,8 @@ export const serializeDiagram = (diagram: Diagram): DiagramSerialized  => {
         elems: shapes,
         connectors: connectors,
         height: diagram.getHeight(),
-        width: diagram.getWidth()
+        width: diagram.getWidth(),
+        type: diagram.getDiagramType(),
     })
 }
 
