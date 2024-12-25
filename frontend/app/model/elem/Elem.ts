@@ -57,7 +57,7 @@ export class Elem {
         this.textInfo = {
             text: "",
             fontSize: 18,
-            color: "#000000",
+            color: "#ffffff",
         };
 
         this.applyConfig();
@@ -202,6 +202,7 @@ export class Elem {
         this.color = color;
 
         this.shape.fill(color);
+        return this;
     }
 
     public getColor() {

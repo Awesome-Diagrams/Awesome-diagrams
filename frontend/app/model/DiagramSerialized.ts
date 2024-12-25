@@ -14,6 +14,7 @@ export type DiagramSerialized = {
 export type ElemSerialized = {
     draggable: DraggableType;
     shape: ShapeSerialized;
+    color: string,
     textElement: TextSerialized;
     rect: InvisRectSerialized;
     movable: MovableType;

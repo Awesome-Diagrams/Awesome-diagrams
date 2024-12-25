@@ -35,7 +35,7 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
         .setDraggable(elemSerialized.draggable)
         .setId(elemSerialized.shapeId)
         .setCustomConfig(
-                {
+            {
                 stroke: {
                     color: elemSerialized.customConfig.stroke_color,
                     width: elemSerialized.customConfig.stroke_width,
@@ -50,6 +50,8 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                 },
                 opacity: elemSerialized.customConfig.opacity,
             })
+            .setColor(elemSerialized.color)
+            
     res.setHeigth(elemSerialized.shape.height);
     res.setWidth(elemSerialized.shape.width);
     return res

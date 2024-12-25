@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Elem } from "~/model/elem/Elem";
+import { Palette } from "lucide-react";
 
 
 const formSchema = z.object({
@@ -73,21 +74,28 @@ export const EditElemForm = ({ elem }: EditElemProps) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" id="uniqueFormId">
 
 			<FormField
-          control={form.control}
-          name="color"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Color</FormLabel>
-              <FormControl>
-                <Input placeholder="18" {...field} />
-              </FormControl>
-              <FormDescription>
-                Write color here.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        control={form.control}
+        name="color"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Color</FormLabel>
+            <FormControl>
+              {/* Используем input с type="color" */}
+              <input
+                type="color"
+                {...field}
+                value={field.value || "#000000"} // Устанавливаем начальный цвет
+                onChange={(e) => field.onChange(e.target.value)} // Обновляем значение
+                className="w-16 h-10 border rounded" // Стили для элемента
+              />
+            </FormControl>
+            <FormDescription>
+              Select a color for the figure.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
         <FormField
           control={form.control}
           name="text"
@@ -109,12 +117,19 @@ export const EditElemForm = ({ elem }: EditElemProps) => {
           name="textColor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Color</FormLabel>
+              <FormLabel>Text Color</FormLabel>
               <FormControl>
-                <Input placeholder="#000000" {...field} />
+                {/* Используем input с type="color" */}
+                <input
+                  type="color"
+                  {...field}
+                  value={field.value || "#000000"} // Устанавливаем начальный цвет
+                  onChange={(e) => field.onChange(e.target.value)} // Обновляем значение
+                  className="w-16 h-10 border rounded" // Стили для элемента
+                />
               </FormControl>
               <FormDescription>
-                Write color  of text here.
+                Select a color for the text.
               </FormDescription>
               <FormMessage />
             </FormItem>
