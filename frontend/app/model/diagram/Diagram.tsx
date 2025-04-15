@@ -3,6 +3,7 @@ import { Elem } from "../elem/Elem";
 import { selectedConnectors, selectedShapes, SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
 import { DiagramSchemaType } from "./DiagramSchemaType";
+import { ElemBuilder } from "../elem/ElemBuilder";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -94,9 +95,11 @@ export class Diagram {
     }
 
     addDefaultElem(): Elem {
-        const elem = new Elem(this.group, this.selectionController)
-            .setConstraint(new Box(0, 0, this.width, this.height))
-            .setMovable('MULTI');
+        const elembuilder = new ElemBuilder(this.group, this.selectionController);
+        const elem = elembuilder
+            .withConstraint(new Box(0, 0, this.width, this.height))
+            .withMovable('MULTI')
+            .build();
 
         this.elems.push(elem);
 

@@ -10,6 +10,8 @@ import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useCallback, useMemo } from "react";
 import { getAvailableConnectorType, getAvailableShapeTypes } from "~/model/diagram/DiagramSchemaType";
 import { DiagramConfig } from "../file/CreateDiagramCard";
+import { ElemBuilder } from "~/model/elem/ElemBuilder";
+import { G } from "@svgdotjs/svg.js";
 
 export const AddShapeMenu = () => {
     const diagram = useDiagram()!
@@ -54,10 +56,13 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             // TOOD: add logger
             return;
         }
-        const elem = diagram.diagram.addDefaultElem()
-        elem.setShape(config.createShape())
-        elem.applyConfig();
-        elem.setType(config.type)
+        const elembuilder = new ElemBuilder(new G());
+
+        const elem = elembuilder
+            .withBaseElem(diagram.diagram.addDefaultElem())
+            .withShape(config.createShape())
+            .withType(config.type)
+            .build();
     }, [diagram, config])
 
     return (<>
