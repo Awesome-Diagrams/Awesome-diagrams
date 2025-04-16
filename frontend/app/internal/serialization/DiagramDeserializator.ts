@@ -4,6 +4,7 @@ import { Diagram } from "~/model/diagram/Diagram";
 import { ConnectorSerialized, DiagramSerialized, ElemSerialized } from "~/model/DiagramSerialized";
 import { Connector } from "~/model/elem/Connector";
 import { Elem } from "~/model/elem/Elem";
+import { ElemBuilder } from "~/model/elem/ElemBuilder";
 
 export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagram => {
     const res = new Diagram(diagramSerialized.type)
@@ -22,19 +23,20 @@ export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagra
 }
 
 export const deserializeElem = (elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem => {
-    const res = new Elem(group, selController)
-        .setShapeFromScratch(elemSerialized.shape)
-        .setType(elemSerialized.shape.type)
-        .setRect(new Rect().width(elemSerialized.rect.width)
+    const elembuilder = new ElemBuilder(group, selController);
+    const res = elembuilder
+        .withShapeFromScratch(elemSerialized.shape)
+        .withType(elemSerialized.shape.type)
+        .withRect(new Rect().width(elemSerialized.rect.width)
                            .height(elemSerialized.rect.height)
                            .fill('transparent')
                            .stroke({ color: 'white', width: 1 }).opacity(0))
-        .setText({text: elemSerialized.textElement.text, fontSize: elemSerialized.textElement.fontSize, color: elemSerialized.textElement.color})
-        .setConstraint(elemSerialized.constraint)
-        .setMovable(elemSerialized.movable)
-        .setDraggable(elemSerialized.draggable)
-        .setId(elemSerialized.shapeId)
-        .setCustomConfig(
+        .withText({text: elemSerialized.textElement.text, fontSize: elemSerialized.textElement.fontSize, color: elemSerialized.textElement.color})
+        .withConstraint(elemSerialized.constraint)
+        .withMovable(elemSerialized.movable)
+        .withDraggable(elemSerialized.draggable)
+        .withId(elemSerialized.shapeId)
+        .withCustomConfig(
             {
                 stroke: {
                     color: elemSerialized.customConfig.stroke_color,
@@ -50,10 +52,11 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
                 },
                 opacity: elemSerialized.customConfig.opacity,
             })
-            .setColor(elemSerialized.color)
-            
-    res.setHeigth(elemSerialized.shape.height);
-    res.setWidth(elemSerialized.shape.width);
+        .withColor(elemSerialized.color)
+        .withHeight(elemSerialized.shape.height)
+        .withWidth(elemSerialized.shape.width)
+        .build();
+        
     return res
 }
 

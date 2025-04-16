@@ -102,7 +102,6 @@ export class Elem {
     
         // TODO: fix it
         // configure
-        // this.configureAll()
     }
 
     public remove(): void {
@@ -142,8 +141,6 @@ export class Elem {
 
     public setRect(rect: Rect): Elem {
         this.rect = rect
-
-        this.configureAll()
 
         return this
     }
@@ -269,8 +266,6 @@ export class Elem {
         this.heightShape = this.shape.height() as number;
         this.widthShape = this.shape.width() as number;
 
-        this.configureAll()
-
         return this
     }
 
@@ -320,7 +315,6 @@ export class Elem {
                     throw new Error(`Unsupported shape type: ${shape.type}`);
             }
     
-            this.configureAll();
             this.heightShape = this.shape.height() as number;
             this.widthShape = this.shape.width() as number;
         
@@ -337,7 +331,6 @@ export class Elem {
             this.textElement.font({ fill: textInfo.color, size: textInfo.fontSize, anchor: 'middle' });
         }
 
-        //this.configureAll()
 
         return this
     }
@@ -450,10 +443,11 @@ export class Elem {
         this.svgGroup.add(this.group);
     }
 
-    private configureAll() {
+    public configureAll() {
         this.configureSelectionOutline()
         this.configureGroup()
         this.configureEvent()
+        this.applyConfig()
         this.draggable?.configure(this)
     }
 
