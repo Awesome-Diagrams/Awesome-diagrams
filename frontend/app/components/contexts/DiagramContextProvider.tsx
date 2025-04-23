@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { Diagram } from "~/model/diagram/Diagram";
 import { DiagramSchemaType } from "~/model/diagram/DiagramSchemaType";
+import { DiagramSchemaAdapter } from "~/model/schema/DiagramSchemaAdapter";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
@@ -23,10 +24,11 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
     
 
     const reset = useCallback((diagramType: DiagramSchemaType) => {
-        const diagram = new Diagram(diagramType)
-        setDiagram(diagram)
-        
-        return diagram
+        const adapter = new DiagramSchemaAdapter(diagramType);
+        const schema = adapter.getCustomSchema();
+        const newDiagram = new Diagram(schema);
+        setDiagram(newDiagram);
+        return newDiagram;
     }, [])
 
     const set = useCallback((diagram: Diagram) => {
