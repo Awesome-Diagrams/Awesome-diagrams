@@ -26,10 +26,10 @@ export const AddConnectorButton = () => {
         if (!diagram.diagram) {
             return;
         }
-        const type = diagram.diagram.getDiagramType();
+        const schema = diagram.diagram.getSchema();
 
         return Array.from(connectorConfigs.filter((conf) => {
-            return getAvailableConnectorType(type).find((it) => it === conf.type)
+            return schema.getAvailableConnectorTypes().find((it) => it === conf.type)
         }));
     }, [diagram]);
 
