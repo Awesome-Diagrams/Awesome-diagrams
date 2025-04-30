@@ -1,7 +1,7 @@
 import { ShapeType } from "../DiagramSerialized";
 import { ConnectorType } from "../elem/ConnectorType";
 
-type ConnectionRule = {
+export type ConnectionRule = {
 	from: ShapeType[];
 	to: ShapeType[];
 	connector: ConnectorType;
