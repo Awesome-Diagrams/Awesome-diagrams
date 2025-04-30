@@ -38,7 +38,8 @@ export class CustomSchema {
 		to: ShapeType,
 		connector: ConnectorType
 	): boolean {
-		return this.connectionRules.some(rule =>
+		return this.connectionRules.length == 0 
+			|| this.connectionRules.some(rule =>
 			rule.connector === connector &&
 			rule.from.includes(from) &&
 			rule.to.includes(to)

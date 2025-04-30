@@ -78,7 +78,13 @@ const ConnectorDropDownMenu = ({config}: ConnectorDropDownMenuProps) => {
             return;
         }
 
+        const schema = diagram.diagram.getSchema();
         const [elem1, elem2] = selectedElems;
+
+        if (!schema.validateConnectionBetweenShapes(elem1.getType(), elem2.getType(), config.type)) {
+            alert("This connector violates current schema")
+            return
+        }
 
         // Создаём коннектор между двумя выделенными элементами
         diagram.diagram.addConnector(
