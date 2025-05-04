@@ -414,7 +414,8 @@ export class Elem {
         if (this.shapetype !== 'custom') {
             return undefined;
         }
-        return (this.shape as Path).plot().map((a) => a.toString()).join();
+        const path = (this.shape as Path).array().map((a) => a.flatMap((b) => b.toString()).join(" ")).join(" ");
+        return path;
     }
 
     private configureSelectionOutline() {
