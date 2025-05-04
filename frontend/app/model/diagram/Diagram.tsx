@@ -28,7 +28,7 @@ export class Diagram {
         this.diagramTypeSchemaType = diagramType;
 
         // Создаём группу для элементов
-        this.group = this.svg.group();;
+        this.group = this.svg.group();
         this.selectionController = new SelectionController(this.svg);
     }
 
@@ -131,9 +131,18 @@ export class Diagram {
             this.deleteConnectorsForElem(elem);
         });
     }
+
+    combineElements() {
+        console.log(selectedShapes.length)
+        if (selectedShapes.length !== 2) {
+            return;
+        }
+        const first = selectedShapes[0];
+        const second = selectedShapes[1];
+
+        first.combineElement(second);
+    }
     
-
-
     private deleteConnectorsForElem(elem: Elem) {
         this.connectors = this.connectors.filter((connector) => {
             const isConnected = connector.isConnectedTo(elem);

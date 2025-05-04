@@ -1,4 +1,4 @@
-import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse, SVG } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse, SVG, Path } from "@svgdotjs/svg.js";
 import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";
@@ -12,6 +12,7 @@ import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized, TextSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
+import SVGPathCommander, { ShapeTypes } from 'svg-path-commander';
 
 export class Elem {
     private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
@@ -449,6 +450,24 @@ export class Elem {
         this.configureEvent()
         this.applyConfig()
         this.draggable?.configure(this)
+    }
+
+    public combineElement(other: Elem) {
+        this.shapetype = ShapeType.Custom;
+
+        const thisPathElement =  SVGPathCommander.shapeToPath(this.shape.node as unknown as ShapeTypes) as SVGPathElement;
+        const otherPathElement = SVGPathCommander.shapeToPath(other.shape.node as unknown as ShapeTypes) as SVGPathElement;
+
+        const fill = this.shape.fill();
+        
+        // Combine using path.
+        thisPathElement.setAttribute('d', thisPathElement.getAttribute('d') + ' ' + otherPathElement.getAttribute('d'));
+
+        const newShape = SVG(thisPathElement);
+
+        this.setShape(newShape);
+        this.configureAll();
+        this.setColor(fill);
     }
 
     private startEditing() {
