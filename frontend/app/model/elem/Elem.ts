@@ -313,8 +313,7 @@ export class Elem {
                 
                     break;    
                 case 'custom':
-                    const drawPath = SVG();
-                    drawPath.path(shape.path!);
+                    this.shape = new Path().plot(shape.path!);
                     break;
             }
     
