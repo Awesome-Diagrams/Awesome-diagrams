@@ -455,8 +455,12 @@ export class Elem {
     public combineElement(other: Elem) {
         this.shapetype = ShapeType.Custom;
 
-        const thisPathElement =  SVGPathCommander.shapeToPath(this.shape.node as unknown as ShapeTypes) as SVGPathElement;
-        const otherPathElement = SVGPathCommander.shapeToPath(other.shape.node as unknown as ShapeTypes) as SVGPathElement;
+        const thisPathElement = this.shape.node.tagName === 'path'
+            ? this.shape.node as SVGPathElement
+            : SVGPathCommander.shapeToPath(this.shape.node as unknown as ShapeTypes) as SVGPathElement;
+        const otherPathElement = other.shape.node.tagName === 'path'
+            ? other.shape.node as SVGPathElement
+            : SVGPathCommander.shapeToPath(other.shape.node as unknown as ShapeTypes) as SVGPathElement;
 
         const fill = this.shape.fill();
         
