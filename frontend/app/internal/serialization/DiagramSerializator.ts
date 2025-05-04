@@ -31,6 +31,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             r: elem.getShape().attr('r'),
             width: elem.getWidthShape(),
             height: elem.getHeigthShape(),
+            path: elem.getType() === 'custom' ? elem.getPath() : undefined,
         },
         textElement: {
             color: elem.getText().color,

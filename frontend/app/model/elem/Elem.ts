@@ -311,9 +311,11 @@ export class Elem {
                     const draw = SVG().addTo('body').size(300, 130);
                     this.shape = draw.polygon(points.map(point => point.join(',')).join(' ')) as Shape;
                 
-                    break;                
-                default:
-                    throw new Error(`Unsupported shape type: ${shape.type}`);
+                    break;    
+                case 'custom':
+                    const drawPath = SVG();
+                    drawPath.path(shape.path!);
+                    break;
             }
     
             this.heightShape = this.shape.height() as number;
@@ -407,6 +409,13 @@ export class Elem {
 
     public getMovable() {
         return this.movable
+    }
+
+    public getPath(): string | undefined {
+        if (this.shapetype !== 'custom') {
+            return undefined;
+        }
+        return (this.shape as Path).plot().map((a) => a.toString()).join();
     }
 
     private configureSelectionOutline() {
