@@ -11,7 +11,6 @@ export const EditElemDialog = () => {
 
 	
 	const handleOpenChange = useCallback(() => {
-		console.log(elem);
 		if (elem) {
 			setElem(undefined);
 			return;

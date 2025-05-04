@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "svg-path-commander": "^2.1.10"
+  }
+}

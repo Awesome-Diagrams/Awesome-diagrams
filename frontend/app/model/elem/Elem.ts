@@ -1,4 +1,4 @@
-import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse, SVG } from "@svgdotjs/svg.js";
+import { Svg, Text, Rect, G, Shape, Box, Circle, Ellipse, SVG, Path } from "@svgdotjs/svg.js";
 import { Draggable } from "./draggable/Draggable";
 import { Movable } from "./movable/Movable";
 import { ConstraintMovable } from "./movable/ConstraintMovable";
@@ -12,6 +12,7 @@ import { MultiMovable } from "./movable/MultiMovable";
 import { ShapeSerialized, TextSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
+import SVGPathCommander, { ShapeTypes } from 'svg-path-commander';
 
 export class Elem {
     private eventListeners: { [event: string]: ((...args: any[]) => void)[] } = {};
@@ -310,9 +311,10 @@ export class Elem {
                     const draw = SVG().addTo('body').size(300, 130);
                     this.shape = draw.polygon(points.map(point => point.join(',')).join(' ')) as Shape;
                 
-                    break;                
-                default:
-                    throw new Error(`Unsupported shape type: ${shape.type}`);
+                    break;    
+                case 'custom':
+                    this.shape = new Path().plot(shape.path!);
+                    break;
             }
     
             this.heightShape = this.shape.height() as number;
@@ -408,6 +410,14 @@ export class Elem {
         return this.movable
     }
 
+    public getPath(): string | undefined {
+        if (this.shapetype !== 'custom') {
+            return undefined;
+        }
+        const path = (this.shape as Path).array().map((a) => a.flatMap((b) => b.toString()).join(" ")).join(" ");
+        return path;
+    }
+
     private configureSelectionOutline() {
         this.selectionOutline
             .width((this.shape.width() as number) + this.selRectGapSize)
@@ -449,6 +459,28 @@ export class Elem {
         this.configureEvent()
         this.applyConfig()
         this.draggable?.configure(this)
+    }
+
+    public combineElement(other: Elem) {
+        this.shapetype = ShapeType.Custom;
+
+        const thisPathElement = this.shape.node.tagName === 'path'
+            ? this.shape.node as SVGPathElement
+            : SVGPathCommander.shapeToPath(this.shape.node as unknown as ShapeTypes) as SVGPathElement;
+        const otherPathElement = other.shape.node.tagName === 'path'
+            ? other.shape.node as SVGPathElement
+            : SVGPathCommander.shapeToPath(other.shape.node as unknown as ShapeTypes) as SVGPathElement;
+
+        const fill = this.shape.fill();
+        
+        // Combine using path.
+        thisPathElement.setAttribute('d', thisPathElement.getAttribute('d') + ' ' + otherPathElement.getAttribute('d'));
+
+        const newShape = SVG(thisPathElement);
+
+        this.setShape(newShape);
+        this.configureAll();
+        this.setColor(fill);
     }
 
     private startEditing() {
