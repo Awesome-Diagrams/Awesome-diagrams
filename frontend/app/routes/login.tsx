@@ -5,7 +5,7 @@ import { Label } from "~/components/ui/label";
 import { json } from "@remix-run/node";
 
 export default function LoginPage() {
-  const actionData = useActionData(); // Для получения ошибок, если они есть
+  const actionData = useActionData();
 
   return (
     <div className="min-h-screen flex items-center justify-center w-full">
@@ -31,6 +31,17 @@ export default function LoginPage() {
 }
 
 
+export async function loader({ request }: { request: Request }) {
+
+  const cookie = request.headers.get("Cookie");
+  if (cookie?.includes("token=")) {
+    return redirect("/diagram");
+  }
+
+  return null;
+}
+
+
 export async function action({ request }: any) {
   const formData = new URLSearchParams(await request.text());
   const email = formData.get("email");
@@ -40,20 +51,27 @@ export async function action({ request }: any) {
     return json({ error: "Пожалуйста, заполните все поля." }, { status: 400 });
   }
 
-  // Отправляем запрос к серверу для логина
+
   const response = await fetch("http://localhost:8080/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ username: email, password }),
   });
 
   if (!response.ok) {
     const errorMessage = await response.text();
-    return json({ error: errorMessage || "Неверные данные для входа" }, { status: 400 });
+    return json({ error: errorMessage || "Неверные данные для входа" }, { status: response.status });
   }
 
+  const setCookieHeader = response.headers.get("set-cookie");
 
-  return redirect("/diagram");
+
+  return redirect("/diagram", {
+    headers: setCookieHeader
+      ? { "Set-Cookie": setCookieHeader }
+      : undefined,
+  });
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,6 +21,7 @@ class AuthController(
     private val userService: UserService,
     private val authenticationManager: AuthenticationManager,
     private val jwtUtil: JwtUtil,
+    private val passwordEncoder: PasswordEncoder,
 ) {
     @PostMapping("/register")
     fun register(

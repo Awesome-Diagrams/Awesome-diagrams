@@ -37,18 +37,20 @@ export default function RegisterPage() {
   );
 }
 
-// Добавляем action для обработки POST-запроса
+export async function loader() {
+  return json({});
+}
+
+
 export async function action({ request }: any) {
   const formData = new URLSearchParams(await request.text());
   const email = formData.get("email");
   const password = formData.get("password");
 
-  // Проверка на заполненность полей
   if (!email || !password) {
     return json({ error: "Пожалуйста, заполните все поля." }, { status: 400 });
   }
 
-  // Отправка запроса на бэкенд для регистрации
   const response = await fetch("http://localhost:8080/register", {
     method: "POST",
     headers: {
@@ -62,6 +64,6 @@ export async function action({ request }: any) {
     return json({ error: errorMessage || "Не удалось зарегистрировать аккаунт" }, { status: 400 });
   }
 
-  // Если регистрация успешна, перенаправляем на страницу логина или на нужную страницу
-  return redirect("/login"); // Здесь можно перенаправить на страницу входа
+
+  return redirect("/login");
 }

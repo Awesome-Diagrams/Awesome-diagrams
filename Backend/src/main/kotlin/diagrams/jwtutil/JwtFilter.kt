@@ -18,12 +18,18 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
+        val path = request.servletPath
+        if (path == "/login" || path == "/register") {
+            // Пропускаем фильтр для login и register
+            filterChain.doFilter(request, response)
+            return
+        }
+
         val token = extractToken(request)
 
         if (token != null && jwtUtil.validateToken(token)) {
             val username = jwtUtil.getUsernameFromToken(token)
 
-            // Получаем UserDetails
             val userDetails = userService.loadUserByUsername(username)
 
             val authentication =
