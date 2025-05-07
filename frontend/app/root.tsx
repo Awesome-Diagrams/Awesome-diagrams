@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import { useLocation } from "@remix-run/react";
 
 import "./tailwind.css";
 import { SvgContextProvider } from "./components/contexts/SvgContextProvider";
@@ -27,21 +28,26 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isDiagramRoute = location.pathname.startsWith("/diagram");
+
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="h-full min-h-screen bg-white dark:bg-gray-950 m-0 p-0">
         <SvgContextProvider>
           <DiagramContextProvider>
             <SidebarProvider>
-              <AppSidebar />
-              {children}
-           </SidebarProvider>
+              <div className="flex flex-row h-full min-h-screen w-full">
+                {isDiagramRoute && <AppSidebar />}
+                <div className="flex-1 overflow-auto">{children}</div>
+              </div>
+            </SidebarProvider>
           </DiagramContextProvider>
         </SvgContextProvider>
         <ScrollRestoration />
