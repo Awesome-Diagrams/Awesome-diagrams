@@ -18,6 +18,7 @@ import { DeleteButton } from "./tools/edit/DeleteButton"
 import { SaveOnlineButton } from "./tools/file/SaveOnlineButton"
 import { EditElemDialog } from "./tools/edit/EditElemdDialog"
 import { CombineButton } from "./tools/elem/CombineButton"
+import { ExcludeButton } from "./tools/elem/ExcludeButton"
  
 // Menu items.
 const items = [
@@ -56,6 +57,10 @@ const items = [
   {
     title: "combine",
     content: <CombineButton />
+  },
+  {
+    title: "exclude",
+    content: <ExcludeButton />
   },
   {
     title: "scale",

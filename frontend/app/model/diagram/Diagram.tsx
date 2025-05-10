@@ -133,7 +133,6 @@ export class Diagram {
     }
 
     combineElements() {
-        console.log(selectedShapes.length)
         if (selectedShapes.length !== 2) {
             return;
         }
@@ -141,6 +140,16 @@ export class Diagram {
         const second = selectedShapes[1];
 
         first.combineElement(second);
+    }
+
+    excludeElements() {
+        if (selectedShapes.length !== 2) {
+            return;
+        }
+        const first = selectedShapes[0];
+        const second = selectedShapes[1];
+
+        first.excludeElement(second);
     }
     
     private deleteConnectorsForElem(elem: Elem) {

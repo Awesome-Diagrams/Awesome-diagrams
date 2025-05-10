@@ -56,7 +56,7 @@ export class MultiMovable implements Movable {
             const startX = shape.getX();
             const startY = shape.getY();
             shape.getGroup().move(startX + dx, startY + dy);
-            shape.trigger("move", shape.getGroup().cx(), shape.getGroup().cy());
+            //shape.trigger("move", shape.getGroup().cx(), shape.getGroup().cy());
         });
     }
 

@@ -28,13 +28,16 @@ export class DeltaDraggable implements Draggable {
             elem.getMovable().move(dx, dy);
         };
 
+        elem.getShape().off('dragmove.namespace');
         elem.getShape().on('dragmove.namespace', onDrag);
 
+        elem.getShape().off('dragstart.namespace');
         elem.getShape().on('dragstart.namespace', (e: any) => {
             lastX = e.detail.box.x;
             lastY = e.detail.box.y;
         });
 
+        elem.getShape().off('dragend.namespace');
         elem.getShape().on('dragend.namespace', () => {
             lastX = 0;
             lastY = 0;
