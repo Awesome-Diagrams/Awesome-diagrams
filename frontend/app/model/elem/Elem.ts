@@ -142,8 +142,8 @@ export class Elem {
   }
 
   public move(x: number, y: number) {
-    console.log(this.getPath());
     this.movable.move(x, y);
+    console.log(this.getPath())
   }
 
   public setId(newId: string): Elem {
@@ -203,6 +203,7 @@ export class Elem {
     }
     this.configureShapeSize();
   }
+
   public setHeigth(height: number) {
     this.heightShape = height;
     if (
@@ -295,39 +296,31 @@ export class Elem {
 
     switch (shape.type) {
       case "circle":
-        if (shape.r !== undefined) {
-          this.shape = new Circle({ r: shape.r, cx: shape.cx, cy: shape.cy });
-        }
+        this.shape = new Circle({ r: shape.r, cx: shape.cx, cy: shape.cy });
         break;
       case "rect":
-        if (shape.width !== undefined && shape.height !== undefined) {
-          this.shape = new Rect({
-            width: shape.width,
-            height: shape.height,
-            x: shape.x,
-            y: shape.y,
-          });
-        }
+        this.shape = new Rect({
+          width: shape.width,
+          height: shape.height,
+          x: shape.x,
+          y: shape.y,
+        });
         break;
       case "square":
-        if (shape.width !== undefined && shape.height !== undefined) {
-          this.shape = new Rect({
-            width: shape.width,
-            height: shape.height,
-            x: shape.x,
-            y: shape.y,
-          });
-        }
+        this.shape = new Rect({
+          width: shape.width,
+          height: shape.height,
+          x: shape.x,
+          y: shape.y,
+        });
         break;
       case "ellipse":
-        if (shape.rx !== undefined && shape.ry !== undefined) {
-          this.shape = new Ellipse({
-            cx: shape.cx,
-            cy: shape.cy,
-            rx: shape.rx,
-            ry: shape.ry,
-          });
-        }
+        this.shape = new Ellipse({
+          cx: shape.cx,
+          cy: shape.cy,
+          rx: shape.rx,
+          ry: shape.ry,
+        });
         break;
       case "polyline":
         const sideLength = 100;
@@ -404,14 +397,12 @@ export class Elem {
   public setDraggable(draggableType: DraggableType): Elem {
     switch (draggableType) {
       case "GENERAL":
-        this.draggable = new GeneralDraggable();
+        this.draggable = new GeneralDraggable(this);
         break;
       case "DELTA":
-        this.draggable = new DeltaDraggable();
+        this.draggable = new DeltaDraggable(this);
         break;
     }
-
-    this.draggable.configure(this);
 
     return this;
   }
@@ -456,10 +447,7 @@ export class Elem {
     if (this.shapetype !== "custom") {
       return undefined;
     }
-    const path = (this.shape as Path)
-      .array()
-      .map((a) => a.flatMap((b) => b.toString()).join(" "))
-      .join(" ");
+    const path = (this.shape as Path).node.getAttribute('d')!;
     return path;
   }
 
@@ -487,7 +475,6 @@ export class Elem {
       this.group.add(this.textElement);
     }
 
-    //console.log(this.textElement.node.attributes.getNamedItem('x'), this.textElement.x(), this.group.x())
     this.rect.cx(this.shape.cx()).cy(this.shape.cy());
     if (!this.group.has(this.rect)) {
       this.group.add(this.rect);
@@ -506,7 +493,6 @@ export class Elem {
     this.configureGroup();
     this.configureEvent();
     this.applyConfig();
-    this.draggable?.configure(this);
   }
 
   public excludeElement(other: Elem) {
@@ -549,11 +535,6 @@ export class Elem {
     this.setShape(newShape);
     this.configureAll();
     this.setColor(fill);
-
-    this.setShape(newShape);
-    this.configureAll();
-    this.setColor(fill);
-    console.log('here')
   }
 
   public combineElement(other: Elem) {
@@ -591,13 +572,14 @@ export class Elem {
 
     thisPathElement.setAttribute("d", result.map(PathBool.pathToPathData)[0]);
 
-    // Combine using path.
-
     const newShape = SVG(thisPathElement);
 
     this.setShape(newShape);
     this.configureAll();
     this.setColor(fill);
+
+    console.log(this.getGroup());
+    console.log(this.getShape());
   }
 
   private startEditing() {
