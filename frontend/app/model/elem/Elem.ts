@@ -340,7 +340,7 @@ export class Elem {
         ) as Shape;
 
         break;
-      case "custom":
+      case "combined":
         this.shape = new Path().plot(shape.path!);
         break;
     }
@@ -444,7 +444,7 @@ export class Elem {
   }
 
   public getPath(): string | undefined {
-    if (this.shapetype !== "custom") {
+    if (this.shapetype !== "combined") {
       return undefined;
     }
     const path = (this.shape as Path).node.getAttribute('d')!;
@@ -496,7 +496,7 @@ export class Elem {
   }
 
   public excludeElement(other: Elem) {
-    this.shapetype = ShapeType.Custom;
+    this.shapetype = ShapeType.Combined;
 
     const thisPathElement =
       this.shape.node.tagName === "path"
@@ -538,7 +538,7 @@ export class Elem {
   }
 
   public combineElement(other: Elem) {
-    this.shapetype = ShapeType.Custom;
+    this.shapetype = ShapeType.Combined;
 
     const thisPathElement =
       this.shape.node.tagName === "path"
