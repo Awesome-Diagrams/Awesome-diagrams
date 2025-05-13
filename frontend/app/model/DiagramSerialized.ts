@@ -31,6 +31,7 @@ export enum ShapeType {
     Ellipse = "ellipse",
     Polyline = "polyline",
     Square = "square",
+    Combined = "combined",
 }
 
 export type ShapeSerialized = {
@@ -39,6 +40,7 @@ export type ShapeSerialized = {
     y: number;
     cx: number;
     cy: number;
+    path?: string;
     height: number;
     width: number;
     rx?: number;
