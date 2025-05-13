@@ -1,4 +1,3 @@
- 
 import {
   Sidebar,
   SidebarContent,
@@ -19,8 +18,18 @@ import { SaveOnlineButton } from "./tools/file/SaveOnlineButton"
 import { EditElemDialog } from "./tools/edit/EditElemdDialog"
 import { CombineButton } from "./tools/elem/CombineButton"
 import { ExcludeButton } from "./tools/elem/ExcludeButton"
- 
-// Menu items.
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu"
+import { Button } from "~/components/ui/button"
+import { Form, redirect, useFetcher } from "@remix-run/react"
+import { useUser } from "~/hooks/useUser"
+import { useEffect } from "react"
+
 const items = [
   {
     title: "Create new diagram",
@@ -67,11 +76,31 @@ const items = [
     content: <ZoomControls />,
   },
 ]
- 
+
 export function AppSidebar() {
+  const username = useUser()
   return (
     <Sidebar>
       <SidebarContent>
+        {/* User info + logout */}
+        <div className="p-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-full justify-start">
+                {username ?? "Гость"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => {
+                  window.location.href = "/logout"
+                }}>
+                  Выйти
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Main menu */}
         <SidebarGroup>
           <SidebarGroupLabel>Awesome diagram</SidebarGroupLabel>
           <SidebarGroupContent>
