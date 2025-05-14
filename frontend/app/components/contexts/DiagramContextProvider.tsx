@@ -5,7 +5,7 @@ import { DiagramSchemaAdapter } from "~/model/schema/DiagramSchemaAdapter";
 
 type DiagramContextType = {
     diagram: Diagram | undefined;
-    reset: (diagramType: DiagramSchemaType) => Diagram;
+    reset: (diagramType: DiagramSchemaType, jsonData?: string) => Diagram;
     set: (diagram: Diagram) => void;
 }
 
@@ -21,19 +21,26 @@ export interface DiagramContextProviderProps {
 
 export const DiagramContextProvider = ({ children }: DiagramContextProviderProps) => {
     const [diagram, setDiagram] = useState<Diagram>();
-    
 
-    const reset = useCallback((diagramType: DiagramSchemaType) => {
-        const adapter = new DiagramSchemaAdapter(diagramType);
-        const schema = adapter.getCustomSchema();
-        const newDiagram = new Diagram(schema);
+    const reset = useCallback((diagramType: DiagramSchemaType, jsonData?: string) => {
+        let newDiagram: Diagram;
+
+        if (diagramType === "custom" && jsonData) {
+            const schema = JSON.parse(jsonData);
+            newDiagram = new Diagram(schema);
+        } else {
+            const adapter = new DiagramSchemaAdapter(diagramType);
+            const schema = adapter.getCustomSchema();
+            newDiagram = new Diagram(schema);
+        }
+
         setDiagram(newDiagram);
         return newDiagram;
-    }, [])
+    }, []);
 
     const set = useCallback((diagram: Diagram) => {
-        setDiagram(diagram)
-    }, [])
+        setDiagram(diagram);
+    }, []);
 
     return (
         <DiagramContext.Provider

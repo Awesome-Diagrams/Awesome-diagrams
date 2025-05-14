@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/db.changelog.01-initial.sql
   - include:
       file: db/changelog/db.changelog.02-create-users-table.sql
+  - include:
+      file: db/changelog/db.changelog.03-customschema-table.sql

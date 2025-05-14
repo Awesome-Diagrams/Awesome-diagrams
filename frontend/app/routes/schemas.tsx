@@ -7,18 +7,55 @@ import { ShapeType } from "~/model/DiagramSerialized";
 import { ConnectorType } from "~/model/elem/ConnectorType";
 import { RulesEditor } from "~/components/schema/RulesEditor";
 import { Card } from "~/components/ui/card";
+import { useUser } from "~/hooks/useUser";
 
 export default function SchemasPage() {
   const [name, setName] = useState("");
   const [shapes, setShapes] = useState<ShapeType[]>([]);
   const [connectors, setConnectors] = useState<ConnectorType[]>([]);
   const [rules, setRules] = useState<ConnectionRule[]>([]);
+  const user = useUser();
 
-  const handleExport = () => {
-    const schema = new CustomSchema(name, shapes, connectors, rules);
-    const json = schema.toJSON();
-    console.log("Exported Schema:", json);
-    alert("Схема экспортирована в консоль как JSON");
+  const handleExport = async () => {
+    if (user) {
+      alert("Не удалось получить пользователя");
+      return;
+    }
+
+    try {
+      const resId = await fetch(`/idByUsername?username=${user}`);
+      const data = await resId.json();
+      const ownerId = data.id;
+
+      if (!ownerId) {
+        alert("Не удалось получить ID пользователя");
+        return;
+      }
+
+      const schema = new CustomSchema(name, shapes, connectors, rules);
+      const jsonData = schema.toJSON();
+
+      const response = await fetch("/schemas/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          data: jsonData,
+          ownerId: ownerId,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Схема успешно сохранена!");
+      } else {
+        alert("Ошибка при сохранении схемы");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Произошла ошибка при сохранении");
+    }
   };
 
   return (
@@ -40,7 +77,7 @@ export default function SchemasPage() {
       </div>
 
       <div className="mt-6">
-        <Button onClick={handleExport}>Экспортировать как JSON</Button>
+        <Button onClick={handleExport}>Сохранить схему</Button>
       </div>
     </div>
   );
