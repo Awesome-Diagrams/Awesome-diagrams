@@ -55,7 +55,7 @@ export const CreateDiagramCard = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         {diagramConfig.map((config, idx) => (
-          <DropdownMenuItem key={idx} asChild>
+          <DropdownMenuItem key={idx}>
             <ShapeDropDownMenu config={config} />
           </DropdownMenuItem>
         ))}
@@ -76,34 +76,36 @@ const ShapeDropDownMenu = ({ config }: DiagramDropDownMenuProps) => {
   const [loaded, setLoaded] = useState(false);
 
   const fetchSchemas = async () => {
-    if (user || loaded) return;
+    if (!user || loaded) return;
 
-    try {
-      const resId = await fetch(`/idByUsername?username=${user}`);
-      const { id } = await resId.json();
-      if (!id) return;
+    const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
+      credentials: "include",
+    });
+    const { id } = await resId.json();
+    if (!id) return;
 
-      const resSchemas = await fetch(`/schemas/user/${id}`);
-      const data = await resSchemas.json();
-      setSchemas(data);
-      setLoaded(true);
-    } catch (err) {
-      console.error("Failed to fetch custom schemas:", err);
-    }
+    const resSchemas = await fetch(`http://localhost:8080/schemas/user/${id}`, {
+      credentials: "include",
+    });
+    const data = await resSchemas.json();
+    setSchemas(data);
+    setLoaded(true);
   };
 
   const handleCreate = useCallback(() => {
     if (config.type !== "custom") {
-      const newDiagram = diagram!.reset(config.type);
-      svg?.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
+      const newDiagram = diagram.reset(config.type);
+      svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
     }
   }, [svg, diagram]);
 
   if (config.type === "custom") {
     return (
-      <DropdownMenu>
+      <DropdownMenu onOpenChange={(open) => {
+        if (open) fetchSchemas();
+      }}>
         <DropdownMenuTrigger asChild>
-          <button className="h-full w-full flex flex-row gap-1" onClick={fetchSchemas}>
+          <button className="h-full w-full flex flex-row gap-1">
             <config.icon className="mr-2 h-4 w-4" />
             <div>{config.name}</div>
           </button>
@@ -112,12 +114,12 @@ const ShapeDropDownMenu = ({ config }: DiagramDropDownMenuProps) => {
           {schemas.length === 0 ? (
             <DropdownMenuItem disabled>No schemas found</DropdownMenuItem>
           ) : (
-            schemas.map(schema => (
+            schemas.map((schema) => (
               <DropdownMenuItem
                 key={schema.id}
                 onClick={() => {
-                  const newDiagram = diagram!.reset(config.type, schema.diagramData);
-                  svg?.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
+                  const newDiagram = diagram.reset(config.type, schema.diagramData);
+                  svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
                 }}
               >
                 {schema.name}

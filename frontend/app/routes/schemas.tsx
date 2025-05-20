@@ -17,13 +17,15 @@ export default function SchemasPage() {
   const user = useUser();
 
   const handleExport = async () => {
-    if (user) {
+    if (!user) {
       alert("Не удалось получить пользователя");
       return;
     }
 
     try {
-      const resId = await fetch(`/idByUsername?username=${user}`);
+      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
+        credentials: "include",
+      });
       const data = await resId.json();
       const ownerId = data.id;
 
@@ -35,7 +37,8 @@ export default function SchemasPage() {
       const schema = new CustomSchema(name, shapes, connectors, rules);
       const jsonData = schema.toJSON();
 
-      const response = await fetch("/schemas/save", {
+      const response = await fetch("http://localhost:8080/schemas/save", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,6 +53,7 @@ export default function SchemasPage() {
       if (response.ok) {
         alert("Схема успешно сохранена!");
       } else {
+        console.log(response)
         alert("Ошибка при сохранении схемы");
       }
     } catch (err) {

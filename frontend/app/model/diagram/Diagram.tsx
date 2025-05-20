@@ -26,6 +26,8 @@ export class Diagram {
         this.svg = SVG().size("100%", "100%");
 
         this.schema = diagramSchema;
+        console.log("schema is", this.schema);
+        console.log("typeof getAvailableConnectorTypes:", typeof this.schema.getAvailableConnectorTypes());
 
         // Создаём группу для элементов
         this.group = this.svg.group();;

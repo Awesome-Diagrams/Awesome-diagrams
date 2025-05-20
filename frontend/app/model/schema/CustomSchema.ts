@@ -57,11 +57,22 @@ export class CustomSchema {
 
 	static fromJSON(json: string): CustomSchema {
 		const data = JSON.parse(json);
+
+		// Преобразуем строки в enum'ы
+		const availableShapes = data.availableShapes.map((s: string) => s as ShapeType);
+		const availableConnectors = data.availableConnectors.map((c: string) => c as ConnectorType);
+
+		const connectionRules = data.connectionRules.map((rule: any) => ({
+			from: rule.from.map((f: string) => f as ShapeType),
+			to: rule.to.map((t: string) => t as ShapeType),
+			connector: rule.connector as ConnectorType
+		}));
+
 		return new CustomSchema(
 			data.name,
-			data.availableShapes,
-			data.availableConnectors,
-			data.connectionRules
+			availableShapes,
+			availableConnectors,
+			connectionRules
 		);
 	}
 }

@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { Diagram } from "~/model/diagram/Diagram";
 import { DiagramSchemaType } from "~/model/diagram/DiagramSchemaType";
+import { CustomSchema } from "~/model/schema/CustomSchema";
 import { DiagramSchemaAdapter } from "~/model/schema/DiagramSchemaAdapter";
 
 type DiagramContextType = {
@@ -26,7 +27,7 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
         let newDiagram: Diagram;
 
         if (diagramType === "custom" && jsonData) {
-            const schema = JSON.parse(jsonData);
+            const schema = CustomSchema.fromJSON(jsonData);
             newDiagram = new Diagram(schema);
         } else {
             const adapter = new DiagramSchemaAdapter(diagramType);
