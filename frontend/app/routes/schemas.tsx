@@ -8,6 +8,7 @@ import { ConnectorType } from "~/model/elem/ConnectorType";
 import { RulesEditor } from "~/components/schema/RulesEditor";
 import { Card } from "~/components/ui/card";
 import { useUser } from "~/hooks/useUser";
+import { useNavigate } from "@remix-run/react";
 
 export default function SchemasPage() {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ export default function SchemasPage() {
   const [connectors, setConnectors] = useState<ConnectorType[]>([]);
   const [rules, setRules] = useState<ConnectionRule[]>([]);
   const user = useUser();
+  const navigate = useNavigate()
 
   const handleExport = async () => {
     if (!user) {
@@ -52,6 +54,7 @@ export default function SchemasPage() {
 
       if (response.ok) {
         alert("Схема успешно сохранена!");
+        navigate(`/diagram`)
       } else {
         console.log(response)
         alert("Ошибка при сохранении схемы");
