@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -84,5 +85,11 @@ class AuthController(
 
         response.addHeader("Set-Cookie", expiredCookie.toString())
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/idByUsername")
+    fun idByUsername(username: String): Map<String, Long?> {
+        val user = userService.findByUsername(username)
+        return mapOf("id" to user?.id)
     }
 }

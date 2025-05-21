@@ -2,8 +2,8 @@ import { SVG, Svg, Box, G } from "@svgdotjs/svg.js";
 import { Elem } from "../elem/Elem";
 import { selectedConnectors, selectedShapes, SelectionController } from "~/components/tools/SelectionController";
 import { Connector } from "../elem/Connector";
-import { DiagramSchemaType } from "./DiagramSchemaType";
 import { ElemBuilder } from "../elem/ElemBuilder";
+import { CustomSchema } from "../schema/CustomSchema";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -20,12 +20,12 @@ export class Diagram {
     private scale: number = 1;
     private selectionController : SelectionController;
 
-    private diagramTypeSchemaType: DiagramSchemaType;
+    private schema: CustomSchema;
     
-    constructor(diagramType: DiagramSchemaType) {
+    constructor(diagramSchema: CustomSchema) {
         this.svg = SVG().size("100%", "100%");
 
-        this.diagramTypeSchemaType = diagramType;
+        this.schema = diagramSchema;
 
         // Создаём группу для элементов
         this.group = this.svg.group();
@@ -71,8 +71,8 @@ export class Diagram {
         return this.selectionController;
     }
 
-    public getDiagramType() {
-        return this.diagramTypeSchemaType;
+    public getSchema() {
+        return this.schema;
     }
 
     addConnector(connector: Connector) {
