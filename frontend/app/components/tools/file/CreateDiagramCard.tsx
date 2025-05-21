@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useSvg } from "~/components/contexts/SvgContextProvider";
@@ -55,7 +55,7 @@ export const CreateDiagramCard = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         {diagramConfig.map((config, idx) => (
-          <DropdownMenuItem key={idx}>
+          <DropdownMenuItem key={idx} asChild>
             <ShapeDropDownMenu config={config} />
           </DropdownMenuItem>
         ))}
@@ -68,73 +68,73 @@ interface DiagramDropDownMenuProps {
   config: DiagramConfig;
 }
 
-const ShapeDropDownMenu = ({ config }: DiagramDropDownMenuProps) => {
-  const diagram = useDiagram()!;
-  const svg = useSvg()!;
-  const user = useUser();
-  const [schemas, setSchemas] = useState<CustomSchema[]>([]);
-  const [loaded, setLoaded] = useState(false);
+const ShapeDropDownMenu = forwardRef<HTMLButtonElement, DiagramDropDownMenuProps>(
+  ({ config }, ref) => {
+    const diagram = useDiagram()!;
+    const svg = useSvg()!;
+    const user = useUser();
+    const [schemas, setSchemas] = useState<CustomSchema[]>([]);
+    const [loaded, setLoaded] = useState(false);
 
-  const fetchSchemas = async () => {
-    if (!user || loaded) return;
+    const fetchSchemas = async () => {
+      if (!user || loaded) return;
 
-    const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
-      credentials: "include",
-    });
-    const { id } = await resId.json();
-    if (!id) return;
+      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
+        credentials: "include",
+      });
+      const { id } = await resId.json();
+      if (!id) return;
 
-    const resSchemas = await fetch(`http://localhost:8080/schemas/user/${id}`, {
-      credentials: "include",
-    });
-    const data = await resSchemas.json();
-    setSchemas(data);
-    setLoaded(true);
-  };
+      const resSchemas = await fetch(`http://localhost:8080/schemas/user/${id}`, {
+        credentials: "include",
+      });
+      const data = await resSchemas.json();
+      setSchemas(data);
+      setLoaded(true);
+    };
 
-  const handleCreate = useCallback(() => {
-    if (config.type !== "custom") {
-      const newDiagram = diagram.reset(config.type);
-      svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
+    const handleCreate = useCallback(() => {
+      if (config.type !== "custom") {
+        const newDiagram = diagram.reset(config.type);
+        svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
+      }
+    }, [svg, diagram]);
+
+    if (config.type === "custom") {
+      return (
+        <DropdownMenu onOpenChange={(open) => open && fetchSchemas()}>
+          <DropdownMenuTrigger asChild>
+            <button ref={ref} className="h-full w-full flex flex-row gap-1">
+              <config.icon className="mr-2 h-4 w-4" />
+              <div>{config.name}</div>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64">
+            {schemas.length === 0 ? (
+              <DropdownMenuItem disabled>No schemas found</DropdownMenuItem>
+            ) : (
+              schemas.map((schema) => (
+                <DropdownMenuItem
+                  key={schema.id}
+                  onClick={() => {
+                    const newDiagram = diagram.reset(config.type, schema.diagramData);
+                    svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
+                  }}
+                >
+                  {schema.name}
+                </DropdownMenuItem>
+              ))
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     }
-  }, [svg, diagram]);
 
-  if (config.type === "custom") {
     return (
-      <DropdownMenu onOpenChange={(open) => {
-        if (open) fetchSchemas();
-      }}>
-        <DropdownMenuTrigger asChild>
-          <button className="h-full w-full flex flex-row gap-1">
-            <config.icon className="mr-2 h-4 w-4" />
-            <div>{config.name}</div>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-64">
-          {schemas.length === 0 ? (
-            <DropdownMenuItem disabled>No schemas found</DropdownMenuItem>
-          ) : (
-            schemas.map((schema) => (
-              <DropdownMenuItem
-                key={schema.id}
-                onClick={() => {
-                  const newDiagram = diagram.reset(config.type, schema.diagramData);
-                  svg.reset(newDiagram.getSvg(), document.getElementById("svgContainer")! as HTMLDivElement);
-                }}
-              >
-                {schema.name}
-              </DropdownMenuItem>
-            ))
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <button ref={ref} className="h-full w-full flex flex-row gap-1" onClick={handleCreate}>
+        <config.icon className="mr-2 h-4 w-4" />
+        <div>{config.name}</div>
+      </button>
     );
   }
-
-  return (
-    <button className="h-full w-full flex flex-row gap-1" onClick={handleCreate}>
-      <config.icon className="mr-2 h-4 w-4" />
-      <div>{config.name}</div>
-    </button>
-  );
-};
+);
