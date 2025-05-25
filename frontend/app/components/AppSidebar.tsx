@@ -78,7 +78,7 @@ const items = [
 ]
 
 export function AppSidebar() {
-  const username = useUser()
+  const username = useUser()?.username
   return (
     <Sidebar>
       <SidebarContent>
@@ -91,6 +91,9 @@ export function AppSidebar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => {window.location.href = "/diagram/mine"}}>
+                  My diagrams
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {
                   window.location.href = "/logout"
                 }}>

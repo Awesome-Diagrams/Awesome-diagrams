@@ -9,14 +9,19 @@ import { useSvg } from "~/components/contexts/SvgContextProvider";
 import { Diagram } from "~/model/diagram/Diagram";
 
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
     const { diagramId } = params;
 
-
-    const response = await fetch(`http://localhost:8080/diagrams/${diagramId}`);
+    const response = await fetch(`http://localhost:8080/diagrams/by-id/${diagramId}`, {
+    credentials: "include", // ← ОБЯЗАТЕЛЬНО
+    headers: {
+      cookie: request.headers.get("cookie") || "", // ← для SSR
+    },
+  });
 
     if (!response.ok) {
-        throw new Response("Diagram not found", { status: 404 });
+        console.log(response)
+        throw new Response("Diagram not found", { status: response.status });
     }
 
     const diagram = await response.json();

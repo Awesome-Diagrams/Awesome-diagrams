@@ -20,9 +20,11 @@ data class Diagram(
     @Column(name = "diagram_data", columnDefinition = "jsonb", nullable = false)
     @ColumnTransformer(write = "?::jsonb")
     var diagramData: String,
+    @Column(name = "owner_id")
+    var ownerId: Long? = null,
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    constructor() : this(0, "", "", LocalDateTime.now())
-    constructor(name: String, diagramData: String) : this(0, name, diagramData, LocalDateTime.now())
+    constructor() : this(0, "", "", null, LocalDateTime.now())
+    constructor(name: String, diagramData: String, ownerId: Long) : this(0, name, diagramData, ownerId, LocalDateTime.now())
 }
