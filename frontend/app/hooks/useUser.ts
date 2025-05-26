@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function useUser() {
-  const [username, setUsername] = useState<string | null>(null);
+  const [user, setUser] = useState<{ id: number; username: string } | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:8080/me", {
@@ -10,12 +10,12 @@ export function useUser() {
       .then(async (res) => {
         if (!res.ok) return;
         const data = await res.json();
-        setUsername(data.username);
+        setUser({ id: data.id, username: data.username });
       })
       .catch(() => {
-        setUsername(null);
+        setUser(null);
       });
   }, []);
 
-  return username;
+  return user;
 }

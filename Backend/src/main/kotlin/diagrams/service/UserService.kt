@@ -30,6 +30,10 @@ class UserService(
         return userRepository.findByUsername(username).orElse(null)
     }
 
+    fun findById(id: Long): User {
+        return userRepository.findById(id).orElse(null)
+    }
+
     override fun loadUserByUsername(username: String): UserDetails {
         return userRepository.findByUsername(username)
             .map { user ->

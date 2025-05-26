@@ -28,9 +28,9 @@ class AuthController(
         @RequestBody request: RegisterRequest,
         response: HttpServletResponse,
     ): ResponseEntity<String> {
-        userService.createUser(request.username, request.password)
+        val user = userService.createUser(request.username, request.password)
 
-        val token = jwtUtil.generateToken(request.username)
+        val token = jwtUtil.generateToken(user.id, request.username)
         val cookie =
             ResponseCookie.from("token", token)
                 .httpOnly(true)
@@ -54,7 +54,7 @@ class AuthController(
             UsernamePasswordAuthenticationToken(request.username, request.password),
         )
         val user = userService.findByUsername(request.username)!!
-        val token = jwtUtil.generateToken(user.username)
+        val token = jwtUtil.generateToken(user.id, user.username)
 
         // Устанавливаем cookie
         val cookie =
