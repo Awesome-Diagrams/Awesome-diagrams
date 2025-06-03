@@ -32,6 +32,9 @@ export enum ShapeType {
     Polyline = "polyline",
     Square = "square",
     Combined = "combined",
+    UMLClass = 'uml_class',
+    UMLInterface = 'uml_interface',
+    UMLActor = 'uml_actor',
 }
 
 export type ShapeSerialized = {

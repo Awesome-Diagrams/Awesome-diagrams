@@ -1,5 +1,14 @@
-import { Ellipse, Rect, Shape, SVG, Circle } from "@svgdotjs/svg.js";
-import { CircleIcon, Square, RectangleHorizontal, Triangle, LucideProps, Unlink2 } from "lucide-react";
+import { Ellipse, Rect, Shape, SVG, Circle, G, Line, Text} from "@svgdotjs/svg.js";
+import { 
+    CircleIcon, 
+    Square, 
+    RectangleHorizontal, 
+    Triangle, LucideProps, 
+    Unlink2,
+    SquareCode,    // для UMLInterface
+    Contact,       // для UMLActor
+    PanelTop       // для UMLClass
+} from "lucide-react";
 import { ShapeType } from "~/model/DiagramSerialized";
 
 export type ShapeConfig = {
@@ -54,5 +63,33 @@ export const shapeConfigs: ShapeConfig[] = [
         icon: Triangle,
         name: 'Triangle',
         type: ShapeType.Polyline
+    },
+    {
+        createShape: () => {
+            const width = 140;
+            const height = 100;
+            const group = new G();
+            
+            // Основной прямоугольник
+            const rect = new Rect({ width, height, x: 30, y: 30 })
+                .fill('#ffffff')
+                .stroke({ color: '#000000', width: 2 });
+            
+            // Разделительные линии
+            const divider1 = new Rect({ width, height: 2, x: 30, y: 60 })
+                .fill('#000000');
+                
+            const divider2 = new Rect({ width, height: 2, x: 30, y: 90 })
+                .fill('#000000');
+            
+            group.add(rect);
+            group.add(divider1);
+            group.add(divider2);
+            
+            return group as unknown as Shape;
+        },
+        icon: PanelTop,
+        name: 'UML Class',
+        type: ShapeType.UMLClass
     },
 ];

@@ -343,6 +343,17 @@ export class Elem {
       case "combined":
         this.shape = new Path().plot(shape.path!);
         break;
+      case "uml_class":
+          this.shape = this.createUMLClass(shape);
+          break;
+          
+      // case ShapeType.UMLInterface:
+      //     this.shape = this.createUMLInterface(shape);
+      //     break;
+          
+      // case ShapeType.UMLActor:
+      //     this.shape = this.createUMLActor(shape);
+      //     break;
     }
 
     this.heightShape = this.shape.height() as number;
@@ -351,22 +362,114 @@ export class Elem {
     return this;
   }
 
-  public setText(textInfo: TextSerialized): Elem {
-    this.textInfo = textInfo;
+  private createUMLClass(shape: ShapeSerialized): Shape {
+    const width = shape.width || 120;
+    const height = shape.height || 80;
+    
+    // Создаем группу для всех частей класса
+    const classGroup = new G();
+    
+    // Основной прямоугольник класса
+    const classRect = new Rect()
+        .width(width)
+        .height(height)
+        .fill('#ffffff')
+        .stroke({ color: '#000000', width: 2 });
+    
+    // Разделительная линия для имени класса
+    const divider = new Rect()
+        .width(width)
+        .height(30)
+        .y(height / 3)
+        .fill('#f0f0f0')
+        .stroke({ color: '#000000', width: 1 });
+    
+    // Вторая разделительная линия
+    const divider2 = new Rect()
+        .width(width)
+        .height(30)
+        .y(height / 3 * 2)
+        .fill('#f0f0f0')
+        .stroke({ color: '#000000', width: 1 });
+    
+    // Добавляем все элементы в группу
+    classGroup.add(classRect);
+    classGroup.add(divider);
+    classGroup.add(divider2);
+    
+    // Позиционируем группу
+    classGroup.move(shape.x || 0, shape.y || 0);
+    
+    return classGroup as unknown as Shape;
+}
 
-    if (textInfo.text.trim() === "") {
-      this.textElement.plain(textInfo.text);
-    } else {
-      this.textElement.text(textInfo.text);
-      this.textElement.font({
-        fill: textInfo.color,
-        size: textInfo.fontSize,
-        anchor: "middle",
-      });
-    }
+public setText(textInfo: TextSerialized): Elem {
+  this.textInfo = textInfo;
 
-    return this;
+  // Удаляем старые текстовые элементы если это UML-фигура
+  if ([ShapeType.UMLClass, ShapeType.UMLInterface, ShapeType.UMLActor].includes(this.shapetype)) {
+      this.group.find('text').forEach(text => text.remove());
   }
+
+  if (this.shapetype === ShapeType.UMLClass) {
+      this.addUMLClassText(textInfo);
+  } 
+  // else if (this.shapetype === ShapeType.UMLInterface) {
+  //     this.addUMLInterfaceText(textInfo);
+  // }
+  // else if (this.shapetype === ShapeType.UMLActor) {
+  //     this.addUMLActorText(textInfo);
+  // }
+  else {
+      if (textInfo.text.trim() === "") {
+          this.textElement.plain(textInfo.text);
+      } else {
+          this.textElement.text(textInfo.text);
+          this.textElement.font({
+              fill: textInfo.color,
+              size: textInfo.fontSize,
+              anchor: "middle",
+          });
+      }
+  }
+
+  return this;
+}
+
+private addUMLClassText(textInfo: TextSerialized) {
+  const width = this.shape.width() as number;
+  const height = this.shape.height() as number;
+  textInfo = {
+    text: "Person\n+name: string\n+age: number\n+greet()\n+setName()",
+    fontSize: 12,
+    color: "#000000"
+}
+  // Разделяем текст на строки (класс, атрибуты, методы)
+  const [className, ...rest] = textInfo.text.split('\n');
+  const attributes = rest.filter((_, i) => i < rest.length / 2);
+  const methods = rest.filter((_, i) => i >= rest.length / 2);
+
+  // Добавляем имя класса
+  new Text()
+      .text(className || 'Class Name')
+      .font({ size: textInfo.fontSize, anchor: 'middle', fill: textInfo.color })
+      .center(width / 2, height / 6)
+      .addTo(this.group);
+
+  // Добавляем атрибуты
+  new Text()
+      .text(attributes.join('\n') || '+ attributes')
+      .font({ size: textInfo.fontSize - 2, anchor: 'start', fill: textInfo.color })
+      .move(10, height / 3 + 10)
+      .addTo(this.group);
+
+  // Добавляем методы
+  new Text()
+      .text(methods.join('\n') || '+ methods()')
+      .font({ size: textInfo.fontSize - 2, anchor: 'start', fill: textInfo.color })
+      .move(10, height / 3 * 2 + 10)
+      .addTo(this.group);
+}
 
   public setConstraint(box: Box): Elem {
     this.constraint = box;
