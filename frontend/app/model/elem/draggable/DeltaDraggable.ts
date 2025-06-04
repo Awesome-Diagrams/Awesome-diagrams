@@ -1,4 +1,4 @@
-import { G, Shape } from "@svgdotjs/svg.js";
+import { G } from "@svgdotjs/svg.js";
 import { Draggable } from "./Draggable";
 import { DragHandler } from "~/internal/svg/svgDraggable/svg.draggable";
 import { Elem } from "../Elem";
@@ -7,8 +7,8 @@ import { DraggableType } from "./DraggableType";
 export class DeltaDraggable implements Draggable {
     private isDraggable: boolean = false;
 
-    configure(elem: Elem) {
-        new DragHandler(elem.getShape()).init(true);
+    constructor(elem: Elem) {
+        new DragHandler(elem.getGroup()).init(true);
 
         let lastX = 0;
         let lastY = 0;
@@ -25,17 +25,20 @@ export class DeltaDraggable implements Draggable {
             lastX = box.x;
             lastY = box.y;
 
-            elem.getMovable().move(dx, dy);
+            elem.move(dx, dy);
         };
 
-        elem.getShape().on('dragmove.namespace', onDrag);
+        elem.getGroup().off('dragmove.namespace');
+        elem.getGroup().on('dragmove.namespace', onDrag);
 
-        elem.getShape().on('dragstart.namespace', (e: any) => {
+        elem.getGroup().off('dragstart.namespace');
+        elem.getGroup().on('dragstart.namespace', (e: any) => {
             lastX = e.detail.box.x;
             lastY = e.detail.box.y;
         });
 
-        elem.getShape().on('dragend.namespace', () => {
+        elem.getGroup().off('dragend.namespace');
+        elem.getGroup().on('dragend.namespace', () => {
             lastX = 0;
             lastY = 0;
         });

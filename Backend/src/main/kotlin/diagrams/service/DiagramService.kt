@@ -13,8 +13,9 @@ class DiagramService(
     fun saveDiagram(
         name: String,
         data: String,
+        ownerId: Long,
     ): Diagram {
-        val diagram = Diagram(name = name, diagramData = data)
+        val diagram = Diagram(name = name, diagramData = data, ownerId = ownerId)
         return diagramRepository.save(diagram)
     }
 
@@ -39,5 +40,10 @@ class DiagramService(
         diagram.name = name
         diagram.diagramData = data
         return diagramRepository.save(diagram)
+    }
+
+    @Transactional
+    fun getDiagramsByOwnerId(id: Long): List<Diagram> {
+        return diagramRepository.findAllByOwnerId(id)
     }
 }

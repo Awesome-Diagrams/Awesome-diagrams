@@ -11,9 +11,13 @@ class JwtUtil(
     @Value("\${jwt.secret}") private val secret: String,
     @Value("\${jwt.expiration}") private val expiration: Long,
 ) {
-    fun generateToken(username: String): String {
+    fun generateToken(
+        userId: Long,
+        username: String,
+    ): String {
         return JWT.create()
             .withSubject(username)
+            .withClaim("userId", userId)
             .withExpiresAt(Date(System.currentTimeMillis() + expiration))
             .sign(Algorithm.HMAC256(secret))
     }
@@ -25,6 +29,10 @@ class JwtUtil(
         } catch (e: Exception) {
             return false
         }
+    }
+
+    fun getUserIdFromToken(token: String): Long {
+        return JWT.require(Algorithm.HMAC256(secret)).build().verify(token).getClaim("userId").asLong()
     }
 
     fun getUsernameFromToken(token: String): String {

@@ -16,6 +16,8 @@ import { ZoomControls } from "./tools/zoom/ZoomWorkspace"
 import { DeleteButton } from "./tools/edit/DeleteButton"
 import { SaveOnlineButton } from "./tools/file/SaveOnlineButton"
 import { EditElemDialog } from "./tools/edit/EditElemdDialog"
+import { CombineButton } from "./tools/elem/CombineButton"
+import { ExcludeButton } from "./tools/elem/ExcludeButton"
 
 import {
   DropdownMenu,
@@ -67,13 +69,21 @@ const items = [
     content: <EditElemDialog />,
   },
   {
+    title: "combine",
+    content: <CombineButton />
+  },
+  {
+    title: "exclude",
+    content: <ExcludeButton />
+  },
+  {
     title: "scale",
     content: <ZoomControls />,
   },
 ]
 
 export function AppSidebar() {
-  const username = useUser()
+  const username = useUser()?.username
   return (
     <Sidebar>
       <SidebarContent>
@@ -86,6 +96,9 @@ export function AppSidebar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => {window.location.href = "/diagram/mine"}}>
+                  My diagrams
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {
                   window.location.href = "/logout"
                 }}>

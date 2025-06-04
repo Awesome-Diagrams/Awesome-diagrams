@@ -6,7 +6,7 @@ import { DraggableType } from "./DraggableType";
 export class GeneralDraggable implements Draggable {
     private isDraggable: boolean = false;
 
-    configure(elem: Elem) {
+    constructor(elem: Elem) {
         new DragHandler(elem.getShape()).init(true);
 
         const onDrag = (e: Event): void => {
@@ -19,7 +19,8 @@ export class GeneralDraggable implements Draggable {
             elem.move(x, y);
         }
 
-        elem.getShape().on('dragmove.namespace', onDrag);
+        elem.getGroup().off('dragmove.namespace');
+        elem.getGroup().on('dragmove.namespace', onDrag);
     }
 
     public setDraggable(isDraggable : boolean): Draggable {
