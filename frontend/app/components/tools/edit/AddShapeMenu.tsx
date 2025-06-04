@@ -19,10 +19,10 @@ export const AddShapeMenu = () => {
         if (!diagram.diagram) {
             return;
         }
-        const type = diagram.diagram.getDiagramType();
+        const schema = diagram.diagram.getSchema();
 
         return Array.from(shapeConfigs.filter((conf) => {
-            return getAvailableShapeTypes(type).find((it) => it === conf.type)
+            return schema.getAvailableShapeTypes().find((it) => it === conf.type)
         }));
     }, [diagram]);
 

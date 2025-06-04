@@ -1,7 +1,7 @@
 import { ShapeType } from "../DiagramSerialized";
 import { ConnectorType } from "../elem/ConnectorType";
 
-export type DiagramSchemaType = "free" | "block";
+export type DiagramSchemaType = "free" | "block" | "custom";
 
 export const getAvailableShapeTypes = (type: DiagramSchemaType): ShapeType[] => {
 	switch (type) {
