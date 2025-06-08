@@ -30,6 +30,7 @@ import { Form, redirect, useFetcher } from "@remix-run/react"
 import { useUser } from "~/hooks/useUser"
 import { useEffect } from "react"
 import { CreateCustomSchemaButton } from "./tools/schema/CreateCustomSchemaButton"
+import { SaveCombinedShapeButton } from "./tools/shape/SaveCombinedShape"
 
 const items = [
   {
@@ -80,6 +81,10 @@ const items = [
     title: "scale",
     content: <ZoomControls />,
   },
+  {
+    title: "save combined shape",
+    content: <SaveCombinedShapeButton />
+  }
 ]
 
 export function AppSidebar() {
