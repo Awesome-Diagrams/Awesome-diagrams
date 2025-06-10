@@ -91,6 +91,7 @@ export class Diagram {
     }
 
     addElem(elem: Elem) {
+        console.log(elem)
         this.elems.push(elem);
     }
 

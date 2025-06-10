@@ -31,6 +31,8 @@ import { useUser } from "~/hooks/useUser"
 import { useEffect } from "react"
 import { CreateCustomSchemaButton } from "./tools/schema/CreateCustomSchemaButton"
 import { SaveCombinedShapeButton } from "./tools/shape/SaveCombinedShape"
+import { Content } from "@radix-ui/react-dialog"
+import { AddCombinedShapeButton } from "./tools/shape/AddCombinedShape"
 
 const items = [
   {
@@ -84,6 +86,10 @@ const items = [
   {
     title: "save combined shape",
     content: <SaveCombinedShapeButton />
+  },
+  {
+    title: "load combined shape",
+    content: <AddCombinedShapeButton />
   }
 ]
 

@@ -7,10 +7,12 @@ import { LucideProps, LucideTrendingUp, Minus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 import { Elem } from "~/model/elem/Elem";
 import { useUser } from "~/hooks/useUser";
+import { deserializeElem } from "~/internal/serialization/DiagramDeserializator";
+import { ElemSerialized } from "~/model/DiagramSerialized";
 
 type ElemWithName = {
 	name: string;
-	elem: Elem;
+	combinedShape: string;
 }
 
 export const AddCombinedShapeButton = () => {
@@ -21,12 +23,16 @@ export const AddCombinedShapeButton = () => {
 			if (!user) {
 				return;
 			}
-
-			fetch(`localhost:8080/combined-shape/user/${user.id}`)
-				.then((data) => {
-					console.log(data);
-				})
-		}, []);
+            const fun = async() => {
+                const data = await (await fetch(`http://localhost:8080/combined-shape/user/${user.id}`,
+                    {
+                        credentials: "include",
+                    }
+                )).json();
+                setElems(data);
+            }
+            fun();
+		}, [user]);
 
     return (
         <DropdownMenu>
@@ -46,12 +52,6 @@ export const AddCombinedShapeButton = () => {
     );
 };
 
-export interface ConnectorConfig {
-    type: ConnectorType;
-    name: string;
-    icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
-}
-
 interface ConnectorDropDownMenuProps {
   elem: ElemWithName;
 }
@@ -61,14 +61,11 @@ const CombinedShapeDropDownMenu = ({elem}: ConnectorDropDownMenuProps) => {
 
     const handleAddShape = useCallback(() => {
         if (!diagram?.diagram) {
-            // TODO: Add proper logger
             console.warn("No diagram available");
             return;
         }
 
-
-        // Создаём коннектор между двумя выделенными элементами
-        diagram.diagram.addElem(elem.elem);
+        diagram.diagram.addElem(deserializeElem(JSON.parse(elem.combinedShape) as ElemSerialized, diagram.diagram.getSelectionController(), diagram.diagram.getGroup()))
     }, [diagram.diagram]);
 
     return (<>

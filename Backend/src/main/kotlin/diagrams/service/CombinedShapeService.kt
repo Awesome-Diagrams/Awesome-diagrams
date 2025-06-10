@@ -1,7 +1,6 @@
 package diagrams.service
 
 import diagrams.entity.CombinedShape
-import diagrams.entity.CustomSchema
 import diagrams.repository.CombinedShapeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
