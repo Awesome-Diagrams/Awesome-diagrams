@@ -5,11 +5,14 @@ import { useNavigate } from "@remix-run/react";
 import { useUser } from "~/hooks/useUser";
 import { serializeElem } from "~/internal/serialization/DiagramSerializator";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useSvg } from "~/components/contexts/SvgContextProvider";
 
 export const SaveCombinedShapeButton = () => {
     const diagram = useDiagram();
+    const svg = useSvg();
     const selectedShapes = diagram?.diagram?.getSelectionController().getSelectedShapes();
     const user = useUser();
+    const navigate = useNavigate();
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [shapeName, setShapeName] = useState("Combined shape");
@@ -46,6 +49,9 @@ export const SaveCombinedShapeButton = () => {
             await response.json();
 
             console.log("Shape успешно сохранён");
+            diagram?.clear();
+            svg?.clear();
+            navigate("/");
         } catch (error) {
             console.error("Ошибка при сохранении shape:", error);
         }

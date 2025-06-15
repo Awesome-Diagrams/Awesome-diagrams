@@ -8,6 +8,7 @@ type DiagramContextType = {
     diagram: Diagram | undefined;
     reset: (diagramType: DiagramSchemaType, jsonData?: string) => Diagram;
     set: (diagram: Diagram) => void;
+    clear: () => void;
 }
 
 const DiagramContext = createContext<DiagramContextType | undefined>(undefined);
@@ -21,7 +22,7 @@ export interface DiagramContextProviderProps {
 }
 
 export const DiagramContextProvider = ({ children }: DiagramContextProviderProps) => {
-    const [diagram, setDiagram] = useState<Diagram>();
+    const [diagram, setDiagram] = useState<Diagram | undefined>();
 
     const reset = useCallback((diagramType: DiagramSchemaType, jsonData?: string) => {
         let newDiagram: Diagram;
@@ -43,12 +44,15 @@ export const DiagramContextProvider = ({ children }: DiagramContextProviderProps
         setDiagram(diagram);
     }, []);
 
+    const clear = useCallback(() => setDiagram(undefined), []);
+
     return (
         <DiagramContext.Provider
             value={{
                 set: set,
                 diagram: diagram,
                 reset: reset,
+                clear: clear,
             }}
         >
             {children}
