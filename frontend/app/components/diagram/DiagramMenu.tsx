@@ -1,7 +1,11 @@
 import { useDiagram } from "../contexts/DiagramContextProvider"
 import { useSvg } from "../contexts/SvgContextProvider"
 
-export const DiagramMenu = () => {
+type DiagramMenuProps = {
+    printTitle?: boolean;
+}
+
+export const DiagramMenu = ({ printTitle }: DiagramMenuProps) => {
     const {svg} = useSvg()!;
     const {diagram} = useDiagram()!;
 
@@ -15,7 +19,7 @@ export const DiagramMenu = () => {
                     width: diagram?.getWidth()
                 }}
             >
-                {!svg && (
+                {!svg && printTitle && (
                     <h1 className="flex justify-center p-4">
                         Загрузите или создайте диаграмму
                     </h1>

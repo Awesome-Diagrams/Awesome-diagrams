@@ -13,6 +13,7 @@ import { SvgContextProvider } from "./components/contexts/SvgContextProvider";
 import { DiagramContextProvider } from "./components/contexts/DiagramContextProvider";
 import { AppSidebar } from "./components/AppSidebar";
 import { SidebarProvider } from "./components/ui/sidebar";
+import { CombinedShapeSidebar } from "./components/CombinedShapeSidebar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,6 +31,7 @@ export const links: LinksFunction = () => [
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isDiagramRoute = location.pathname.startsWith("/diagram");
+  const isCombinedShapeRoute = location.pathname.startsWith("/combinedshape");
 
   return (
     <html lang="en" className="h-full">
@@ -44,6 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <DiagramContextProvider>
             <SidebarProvider>
               <div className="flex flex-row h-full min-h-screen w-full">
+                {isCombinedShapeRoute && <CombinedShapeSidebar />}
                 {isDiagramRoute && <AppSidebar />}
                 <div className="flex-1 overflow-auto">{children}</div>
               </div>

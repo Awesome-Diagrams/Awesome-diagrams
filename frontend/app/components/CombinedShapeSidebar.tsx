@@ -27,65 +27,32 @@ import {
 } from "~/components/ui/dropdown-menu"
 import { Button } from "~/components/ui/button"
 import { useUser } from "~/hooks/useUser"
-import { CreateCustomSchemaButton } from "./tools/schema/CreateCustomSchemaButton"
 import { SaveCombinedShapeButton } from "./tools/shape/SaveCombinedShape"
-import { AddCombinedShapeButton } from "./tools/shape/AddCombinedShape"
-import { CreateCombinedShapeButton } from "./tools/shape/CreateCombinedShape"
 
 const items = [
   {
-    title: "Create new diagram",
-    content: <CreateDiagramCard />,
-  },
-  {
-    title: "Create custom schema",
-    content: <CreateCustomSchemaButton />,
-  },
-  {
-    title: "Save diagram online",
-    content: <SaveOnlineButton />,
-  },
-  {
     title: "Add shape",
     content: <AddShapeMenu />,
-  },
-  {
-    title: "Add connector",
-    content: <AddConnectorButton />,
-  },
-  {
-    title: "Delete",
-    content: <DeleteButton />
-  },
-  {
-    title: "Export diagram",
-    content: <ExportDiagramCard />,
-  },
-  {
-    title: "Import diagram",
-    content: <ImportDiagramCard />,
   },
   {
     title: "edit",
     content: <EditElemDialog />,
   },
   {
-    title: "scale",
-    content: <ZoomControls />,
+    title: "combine",
+    content: <CombineButton />
   },
   {
-    title: "create combined shape",
-    content: <CreateCombinedShapeButton />,
-    allowLogin: true,
+    title: "exclude",
+    content: <ExcludeButton />
   },
   {
-    title: "load combined shape",
-    content: <AddCombinedShapeButton />,
-    allowLogin: true,
-  }
+    title: "save combined shape",
+    content: <SaveCombinedShapeButton />
+  },
 ]
 
-export function AppSidebar() {
+export function CombinedShapeSidebar() {
   const username = useUser()?.username
   return (
     <Sidebar>
@@ -116,7 +83,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Awesome diagram</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.filter((item) => username || !item.allowLogin).map((item) => (
+              {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <div key={item.title}>
                     {item.content}
