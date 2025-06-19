@@ -51,6 +51,7 @@ export class Elem {
   private widthShape: number;
   private heightShape: number;
   private color: string = "#000000";
+  private umlData: UMLClassData;
 
   private textInfo: TextSerialized;
 
@@ -114,6 +115,14 @@ export class Elem {
     //scale
     this.heightShape = this.shape.height() as number;
     this.widthShape = this.shape.width() as number;
+    this.umlData = {
+          className: 'classname',
+          attributes: [
+          ],
+          methods: [
+              '+ methods(): void',
+          ],
+    }
 
     // TODO: fix it
     // configure
@@ -395,10 +404,22 @@ export class Elem {
 
   //---------------------------------------------
 
+  public getUMLClassData() {
+    return {
+      className: this.umlData?.className || "",
+      attributes: this.umlData?.attributes || [],
+      methods: this.umlData?.methods || []
+    };
+  }
+
   public setUMLClassData(data: UMLClassData): void {
     if (this.shapetype !== ShapeType.UMLClass) return;
 
     const group = this.shape as G;
+
+    // Сохраняем текущую позицию группы перед изменениями
+    const originalX = group.x();
+    const originalY = group.y();
     
     group.find('text').forEach(t => t.remove());
     group.find('rect').forEach(t => t.remove());
@@ -461,7 +482,7 @@ export class Elem {
         new Text()
             .text(attr)
             .attr({
-                'font-size': textSize - 2,
+                'font-size': textSize,
                 x: xPadding,
                 y: headerHeight + yPadding + index * lineHeight,
                 'dominant-baseline': 'hanging'
@@ -482,8 +503,14 @@ export class Elem {
             .addTo(group);
     });
 
-    // this.configureSelectionOutline();
-    // this.configureGroup()
+    // Восстанавливаем оригинальную позицию
+    group.move(originalX, originalY);
+
+    this.configureSelectionOutline();
+    this.configureGroup();
+
+    // Сохраняем новые данные
+    this.umlData = data;
   }
 // --------------
 // uml interface
@@ -510,9 +537,21 @@ export class Elem {
     return classGroup as unknown as Shape;
   }
 
+  public getUMLInterfaceData() {
+    return {
+      className: this.umlData?.className || "",
+      attributes: [],
+      methods: this.umlData?.methods || []
+    };
+  }
+
   public setUMLInterfaceData(data: UMLClassData): void {
     if (this.shapetype !== ShapeType.UMLInterface) return;
     const group = this.shape as G;
+
+    // Сохраняем текущую позицию группы перед изменениями
+    const originalX = group.x();
+    const originalY = group.y();
     
     group.find('text').forEach(t => t.remove());
     group.find('rect').forEach(t => t.remove());
@@ -573,8 +612,14 @@ export class Elem {
             .addTo(group);
     });
 
-    // this.configureSelectionOutline();
-    // this.configureGroup()
+    // Восстанавливаем оригинальную позицию
+    group.move(originalX, originalY);
+
+    this.configureSelectionOutline();
+    this.configureGroup();
+
+    // Сохраняем новые данные
+    this.umlData = data;
   }
 
 // uml actor 
@@ -632,44 +677,8 @@ private createUMLActor(shape: ShapeSerialized): Shape {
 
   public setText(textInfo: TextSerialized): Elem {
     this.textInfo = textInfo;
-    if (this.shapetype === "uml_class") {
-      this.setUMLClassData({
-          className: 'Person',
-          attributes: [
-              '- name: string',
-              '- age: number',
-              // '- email: string'
-          ],
-          methods: [
-              '+ save(): boolean',
-              '+ sendEmail(): void',
-              '+ save(): boolean',
-              '+ save(): boolean',
-          ],
-          config: {
-              textSize: 12,
-              headerColor: '#f0f0f0'
-          }
-      });
-      console.log('yes');
-    }
-    else if (this.shapetype === "uml_interface") {
-      this.setUMLInterfaceData({
-          className: 'Person',
-          attributes: [
-          ],
-          methods: [
-              '+ save(): boolean',
-              '+ sendEmail(): void',
-              '+ save(): boolean',
-              '+ save(): boolean',
-          ],
-          config: {
-              textSize: 12,
-              headerColor: '#f0f0f0'
-          }
-      });
-      console.log('yes');
+    if (this.shapetype === "uml_class" || this.shapetype === "uml_interface") {
+      return this;
     }
     else if (textInfo.text.trim() === "") {
       this.textElement.plain(textInfo.text);
@@ -932,14 +941,8 @@ private createUMLActor(shape: ShapeSerialized): Shape {
     });
   }
 }
-interface UMLClassData {
+export interface UMLClassData {
     className: string;
     attributes: string[];
     methods: string[];
-    config?: {
-        width?: number;
-        headerColor?: string;
-        textSize?: number;
-        // ... другие настройки
-    };
 }
