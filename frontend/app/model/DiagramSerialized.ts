@@ -22,7 +22,8 @@ export type ElemSerialized = {
     movable: MovableType;
     constraint: Box;
     shapeId : string;
-    customConfig : customsSerialized
+    customConfig : customsSerialized;
+    umlData : UMLClassData;
 }
 
 export enum ShapeType {
@@ -79,3 +80,8 @@ export type ConnectorSerialized = {
     points: Point[],
 }
 
+export type UMLClassData = {
+    className: string;
+    attributes: string[];
+    methods: string[];
+}

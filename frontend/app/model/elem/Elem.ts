@@ -26,6 +26,7 @@ import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
 import SVGPathCommander, { ShapeTypes } from "svg-path-commander";
 import * as PathBool from "path-bool";
+import { UMLClassData } from "../DiagramSerialized";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -206,6 +207,12 @@ export class Elem {
   public setWidth(width: number) {
     this.widthShape = width;
     if (
+      this.shapetype === ShapeType.UMLClass ||
+      this.shapetype === ShapeType.UMLInterface
+    ) {
+      return ;
+    }
+    else if (
       this.shapetype === ShapeType.Circle ||
       this.shapetype === ShapeType.Square
     ) {
@@ -217,6 +224,12 @@ export class Elem {
   public setHeigth(height: number) {
     this.heightShape = height;
     if (
+      this.shapetype === ShapeType.UMLClass ||
+      this.shapetype === ShapeType.UMLInterface
+    ) {
+      return ;
+    }
+    else if (
       this.shapetype === ShapeType.Circle ||
       this.shapetype === ShapeType.Square
     ) {
@@ -354,7 +367,13 @@ export class Elem {
         this.shape = new Path().plot(shape.path!);
         break;
       case "uml_class":
+        const originalX = shape.x;
+        const originalY = shape.y;
         this.shape = this.createUMLClass(shape);
+        console.log(shape.x, shape.y)
+
+        const group = this.shape as G;
+        group.move(originalX, originalY);
         break;
           
       case ShapeType.UMLInterface:
@@ -940,9 +959,4 @@ private createUMLActor(shape: ShapeSerialized): Shape {
       }
     });
   }
-}
-export interface UMLClassData {
-    className: string;
-    attributes: string[];
-    methods: string[];
 }
