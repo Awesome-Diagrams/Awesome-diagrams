@@ -1,5 +1,14 @@
-import { Ellipse, Rect, Shape, SVG, Circle } from "@svgdotjs/svg.js";
-import { CircleIcon, Square, RectangleHorizontal, Triangle, LucideProps, Unlink2 } from "lucide-react";
+import { Ellipse, Rect, Shape, SVG, Circle, G, Line, Text} from "@svgdotjs/svg.js";
+import { 
+    CircleIcon, 
+    Square, 
+    RectangleHorizontal, 
+    Triangle, LucideProps, 
+    Unlink2,
+    SquareCode,    // для UMLInterface
+    Contact,       // для UMLActor
+    PanelTop       // для UMLClass
+} from "lucide-react";
 import { ShapeType } from "~/model/DiagramSerialized";
 
 export type ShapeConfig = {
@@ -55,4 +64,109 @@ export const shapeConfigs: ShapeConfig[] = [
         name: 'Triangle',
         type: ShapeType.Polyline
     },
+    {
+        createShape: () => {
+            const width = 140;
+            const height = 100;
+            const group = new G();
+            
+            // Основной прямоугольник
+            const rect = new Rect({ width, height, x: 30, y: 30 })
+                .fill('#ffffff')
+                .stroke({ color: '#000000', width: 2 });
+            
+            // Разделительные линии
+            const divider1 = new Rect({ width, height: 2, x: 30, y: 60 })
+                .fill('#000000');
+                
+            const divider2 = new Rect({ width, height: 2, x: 30, y: 90 })
+                .fill('#000000');
+            
+            group.add(rect);
+            group.add(divider1);
+            group.add(divider2);
+            
+            return group as unknown as Shape;
+        },
+        icon: PanelTop,
+        name: 'UML Class',
+        type: ShapeType.UMLClass
+    },
+    {
+        createShape: () => {
+            const width = 140;
+            const height = 100;
+            const group = new G();
+            
+            // Основной прямоугольник
+            const rect = new Rect({ width, height, x: 30, y: 30 })
+                .fill('#ffffff')
+                .stroke({ color: '#000000', width: 2 });
+            
+            // Разделительные линии
+            const divider1 = new Rect({ width, height: 2, x: 30, y: 60 })
+                .fill('#000000');
+                
+            
+            group.add(rect);
+            group.add(divider1);
+            
+            return group as unknown as Shape;
+        },
+        icon: SquareCode,
+        name: 'UML Interface',
+        type: ShapeType.UMLInterface
+    },
+    {
+    createShape: () => {
+        const size = 100; // Размер актора
+        const group = new G();
+        
+        // Голова (круг)
+        new Circle({ r: size * 0.2, cx: size/2, cy: size * 0.25 })
+            .fill('#ffffff')
+            .stroke({ color: '#000000', width: 2 })
+            .addTo(group);
+        
+        // Тело (линия)
+        new Line()
+            .plot([
+                [size/2, size * 0.45], 
+                [size/2, size * 0.7]
+            ])
+            .stroke({ color: '#000000', width: 2 })
+            .addTo(group);
+        
+        // Руки (линия)
+        new Line()
+            .plot([
+                [size * 0.2, size * 0.5], 
+                [size * 0.8, size * 0.5]
+            ])
+            .stroke({ color: '#000000', width: 2 })
+            .addTo(group);
+        
+        // Ноги (линии)
+        new Line()
+            .plot([
+                [size/2, size * 0.7], 
+                [size * 0.3, size * 0.9]
+            ])
+            .stroke({ color: '#000000', width: 2 })
+            .addTo(group);
+            
+        new Line()
+            .plot([
+                [size/2, size * 0.7], 
+                [size * 0.7, size * 0.9]
+            ])
+            .stroke({ color: '#000000', width: 2 })
+            .addTo(group);
+        
+        return group as unknown as Shape;
+    },
+    icon: Contact,
+    name: 'UML Actor',
+    type: ShapeType.UMLActor
+}
 ];

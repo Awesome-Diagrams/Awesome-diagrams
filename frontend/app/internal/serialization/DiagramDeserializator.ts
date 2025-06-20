@@ -55,6 +55,7 @@ export const deserializeElem = (elemSerialized: ElemSerialized, selController : 
         .withColor(elemSerialized.color)
         .withHeight(elemSerialized.shape.height)
         .withWidth(elemSerialized.shape.width)
+        .withUmlData(elemSerialized.umlData, elemSerialized.shape.type)
         .build();
         
     return res

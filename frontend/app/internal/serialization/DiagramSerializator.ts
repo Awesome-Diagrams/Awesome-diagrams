@@ -47,6 +47,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
         movable: elem.getMovable().getType(),
         constraint: elem.getConstraint(),
         shapeId: elem.getShape().id(),
+        umlData: elem.getUMLClassData(),
     })
 }
 
