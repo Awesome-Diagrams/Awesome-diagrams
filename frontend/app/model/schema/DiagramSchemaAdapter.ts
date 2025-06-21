@@ -31,7 +31,14 @@ export class DiagramSchemaAdapter {
                 return new CustomSchema(
                     "free",
                     Object.values(ShapeType),
-                    ["polyline", "straight"],
+                    ["polyline", "straight", "aggregation", "association", "composition", "dependency", "inheritance"],
+                    []
+                );
+            case "uml-class":
+                return new CustomSchema(
+                    "uml-class",
+                    [ShapeType.Ellipse, ShapeType.UMLActor, ShapeType.UMLClass, ShapeType.UMLInterface],
+                    ["aggregation", "association", "composition", "dependency", "inheritance"],
                     []
                 );
             default:

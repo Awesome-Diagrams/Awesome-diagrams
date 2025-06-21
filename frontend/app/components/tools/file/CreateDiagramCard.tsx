@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useSvg } from "~/components/contexts/SvgContextProvider";
 import { DiagramSchemaType } from "~/model/diagram/DiagramSchemaType";
-import { LucideProps, RectangleHorizontalIcon, CuboidIcon, TvIcon } from "lucide-react";
+import { LucideProps, RectangleHorizontalIcon, CuboidIcon, TvIcon, PanelTop } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 import { useUser } from "~/hooks/useUser";
 
@@ -29,6 +29,11 @@ const diagramConfig: DiagramConfig[] = [
     name: "Block schema mode",
     icon: CuboidIcon,
     type: "block",
+  },
+  {
+    name: "Uml-class schema mode",
+    icon: PanelTop,
+    type: "uml-class",
   },
   {
     name: "My custom schemas",
