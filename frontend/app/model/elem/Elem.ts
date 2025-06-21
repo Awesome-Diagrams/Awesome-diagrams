@@ -27,6 +27,7 @@ import { ShapeType } from "../DiagramSerialized";
 import SVGPathCommander, { ShapeTypes } from "svg-path-commander";
 import * as PathBool from "path-bool";
 import { UMLClassData } from "../DiagramSerialized";
+import { Point } from "../Point";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -562,6 +563,43 @@ export class Elem {
       attributes: [],
       methods: this.umlData?.methods || []
     };
+  }
+
+// Получаем центр элемента
+  public getCenter(): { x: number, y: number } {
+      return {
+          x: this.getGroup().cx() as number,
+          y: this.getGroup().cy() as number
+      };
+  }
+
+  // Получаем границы элемента (bounding box)
+  public getBBox(): {
+      x: number,
+      y: number,
+      width: number,
+      height: number
+  } {
+      const node = this.getGroup().node as SVGGraphicsElement;
+      const bbox = node.getBBox();
+      return {
+          x: bbox.x,
+          y: bbox.y,
+          width: bbox.width,
+          height: bbox.height
+      };
+  }
+
+// Получаем точку на стороне элемента
+  public getSidePoint(side: 'top'|'right'|'bottom'|'left'): { x: number, y: number } {
+      const bbox = this.getBBox();
+      switch(side) {
+          case 'top': return { x: bbox.x + bbox.width/2, y: bbox.y };
+          case 'right': return { x: bbox.x + bbox.width, y: bbox.y + bbox.height/2 };
+          case 'bottom': return { x: bbox.x + bbox.width/2, y: bbox.y + bbox.height };
+          case 'left': return { x: bbox.x, y: bbox.y + bbox.height/2 };
+          default: return { x: bbox.x, y: bbox.y };
+      }
   }
 
   public setUMLInterfaceData(data: UMLClassData): void {

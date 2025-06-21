@@ -1,7 +1,7 @@
 import { ShapeType } from "../DiagramSerialized";
 import { ConnectorType } from "../elem/ConnectorType";
 
-export type DiagramSchemaType = "free" | "block";
+export type DiagramSchemaType = 'block' | 'free' | 'uml-class';
 
 export const getAvailableShapeTypes = (type: DiagramSchemaType): ShapeType[] => {
 	switch (type) {
@@ -11,6 +11,14 @@ export const getAvailableShapeTypes = (type: DiagramSchemaType): ShapeType[] => 
 		case 'free': {
 			return Object.values(ShapeType)
 		}
+		case 'uml-class': {
+            return [
+				ShapeType.Ellipse,
+				ShapeType.UMLActor,
+				ShapeType.UMLClass,
+				ShapeType.UMLInterface
+			];
+        }
 		default: {
 			throw "Not suppot type of diagram";
 		}
@@ -18,15 +26,32 @@ export const getAvailableShapeTypes = (type: DiagramSchemaType): ShapeType[] => 
 }
 
 export const getAvailableConnectorType = (type: DiagramSchemaType): ConnectorType[] => {
-	switch (type) {
-		case 'block': {
-			return ["polyline"];
-		}
-		case 'free': {
-			return ["polyline", "straight"];
-		}
-		default: {
-			throw "Not suppot type of diagram";
-		}
-	}
+    switch (type) {
+        case 'block': {
+            return ["polyline"];
+        }
+        case 'free': {
+            return [
+                "polyline",
+                "straight",
+                "inheritance",
+                "aggregation",
+                "composition",
+                "association",
+                "dependency"
+            ];
+        }
+        case 'uml-class': {
+            return [
+                "inheritance",
+                "aggregation",
+                "composition",
+                "association",
+                "dependency"
+            ];
+        }
+        default: {
+            throw new Error(`Unsupported type of diagram: ${type}`);
+        }
+    }
 }
