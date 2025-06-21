@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/db.changelog.02-create-users-table.sql
   - include:
       file: db/changelog/db.changelog.03-add-ownerids-diagram.sql
+  - include:
+      file: db/changelog/db.changelog.04-customschema-table.sql

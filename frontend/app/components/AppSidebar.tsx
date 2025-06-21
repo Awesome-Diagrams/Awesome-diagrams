@@ -29,11 +29,16 @@ import { Button } from "~/components/ui/button"
 import { Form, redirect, useFetcher } from "@remix-run/react"
 import { useUser } from "~/hooks/useUser"
 import { useEffect } from "react"
+import { CreateCustomSchemaButton } from "./tools/schema/CreateCustomSchemaButton"
 
 const items = [
   {
     title: "Create new diagram",
     content: <CreateDiagramCard />,
+  },
+  {
+    title: "Create custom schema",
+    content: <CreateCustomSchemaButton />,
   },
   {
     title: "Save diagram online",
