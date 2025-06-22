@@ -1,5 +1,5 @@
 import { Diagram } from "~/model/diagram/Diagram";
-import { ConnectorSerialized, DiagramSerialized, ElemSerialized} from "../../model/DiagramSerialized";
+import { ConnectorSerialized, DiagramSerialized, ElemSerialized, ShapeType} from "../../model/DiagramSerialized";
 import { Elem } from "~/model/elem/Elem";
 import { Connector } from "~/model/elem/Connector";
 import { CustomConfig } from "~/model/elem/customs/CustomConfig";
@@ -22,8 +22,8 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
         draggable: elem.getDraggable()!.getType(),
         shape: {
             type: elem.getType(),
-            x: elem.getShape().x() as number,
-            y: elem.getShape().y() as number,
+            x: elem.getType() === ShapeType.Line ? elem.getX1() : elem.getShape().x() as number,
+            y: elem.getType() === ShapeType.Line ? elem.getY1() : elem.getShape().x() as number,
             cx: elem.getShape().cx(),
             cy: elem.getShape().cy(),
             rx: elem.getShape().attr('rx'),
@@ -32,6 +32,8 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             width: elem.getWidthShape(),
             height: elem.getHeigthShape(),
             path: elem.getPath(),
+            x2: elem.getType() === ShapeType.Line ? elem.getX2() : undefined,
+            y2: elem.getType() === ShapeType.Line ? elem.getY2() : undefined,
         },
         textElement: {
             color: elem.getText().color,

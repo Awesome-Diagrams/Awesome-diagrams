@@ -1,5 +1,5 @@
-import { Ellipse, Rect, Shape, SVG, Circle } from "@svgdotjs/svg.js";
-import { CircleIcon, Square, RectangleHorizontal, Triangle, LucideProps, Unlink2 } from "lucide-react";
+import { Ellipse, Rect, Shape, SVG, Circle, Line } from "@svgdotjs/svg.js";
+import { CircleIcon, Square, RectangleHorizontal, Triangle, LucideProps, Unlink2, Minus } from "lucide-react";
 import { ShapeType } from "~/model/DiagramSerialized";
 
 export type ShapeConfig = {
@@ -33,6 +33,15 @@ export const shapeConfigs: ShapeConfig[] = [
         icon: Unlink2,
         name: 'Ellipse',
         type: ShapeType.Ellipse
+    },
+    {
+        createShape: () => {
+            const draw = SVG().addTo('body').size(300, 130);
+            return draw.line(50, 50, 150, 150).stroke({ width: 2, color: '#000' });
+        },
+        icon: Minus,
+        name: 'Line',
+        type: ShapeType.Line,
     },
     {
         createShape: () => {
