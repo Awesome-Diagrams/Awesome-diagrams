@@ -2,7 +2,7 @@ import { Box, G, Rect, Shape } from "@svgdotjs/svg.js";
 import { Elem } from "./Elem";
 import { SelectionController } from "~/components/tools/SelectionController";
 import { CustomConfig } from "./customs/CustomConfig";
-import { ShapeSerialized, ShapeType, TextSerialized } from "../DiagramSerialized";
+import { ShapeSerialized, ShapeType, TextSerialized, UMLClassData } from "../DiagramSerialized";
 import { MovableType } from "./movable/MovableType";
 import { DraggableType } from "./draggable/DraggableType";
 
@@ -80,6 +80,15 @@ export class ElemBuilder {
 
     withWidth(width: number) : ElemBuilder {
         this.elem.setWidth(width);
+        return this;
+    }
+
+    withUmlData(data: UMLClassData, type: ShapeType) : ElemBuilder {
+        if (type === ShapeType.UMLClass) {
+            this.elem.setUMLClassData(data);
+        } else if(type === ShapeType.UMLInterface){
+            this.elem.setUMLInterfaceData(data);
+        }
         return this;
     }
 
