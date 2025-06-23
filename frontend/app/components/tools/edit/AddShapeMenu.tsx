@@ -62,6 +62,7 @@ const ShapeDropDownMenu = ({config}: ShapeDropDownMenuProps) => {
             .withBaseElem(diagram.diagram.addDefaultElem())
             .withShape(config.createShape())
             .withType(config.type)
+            .withConfig(config.config)
             .build();
     }, [diagram, config])
 

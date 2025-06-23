@@ -156,7 +156,6 @@ export class Elem {
 
   public move(x: number, y: number) {
     this.movable.move(x, y);
-    console.log(this.getPath())
   }
 
   public setId(newId: string): Elem {
@@ -377,7 +376,6 @@ export class Elem {
         const originalX = shape.x;
         const originalY = shape.y;
         this.shape = this.createUMLClass(shape);
-        console.log(shape.x, shape.y)
 
         const group = this.shape as G;
         group.move(originalX, originalY);
@@ -953,11 +951,8 @@ private createUMLActor(shape: ShapeSerialized): Shape {
     const otherPathBool = new paper.Path(
       shapeToPath(other.shape)
     );
-    console.error(shapeToPath(this.shape));
-    console.error(shapeToPath(other.shape));
 
     const result = pathBool.unite(otherPathBool).exportSVG({ asString: false }) as SVGElement;
-    console.error(result.getAttribute('d'));
 
     const newShape = SVG(result);
 
