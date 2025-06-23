@@ -43,6 +43,12 @@ export class ElemBuilder {
         return this;
     }
 
+    withConfig(config?: CustomConfig): ElemBuilder {
+        if (!config) return this;
+        this.elem.setCustomConfig(config);
+        return this;
+    }
+
     withShape(shape: Shape): ElemBuilder {
         this.elem.setShape(shape);
         return this;

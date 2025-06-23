@@ -5,6 +5,7 @@ import { useSvgContainer } from "~/internal/svg/hook/hook";
 type SvgContextType = {
     reset: (svg: Svg, div: HTMLDivElement) => void
     svg: Svg | undefined
+    clear: () => void;
 }
 
 const SvgContext = createContext<SvgContextType | undefined>(undefined);
@@ -32,11 +33,14 @@ export const SvgContextProvider = ({ children }: SvgContextProviderProps) => {
         setHandle({container: div, svg: svg})
     }, [setHandle])
 
+    const clear = useCallback(() => setHandle(undefined), []);
+
     return (
         <SvgContext.Provider
             value={{
                 reset: reset,
                 svg: svgContainer?.svg,
+                clear: clear,
             }}
         >
             {children}

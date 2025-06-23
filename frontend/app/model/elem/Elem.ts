@@ -25,9 +25,11 @@ import { ShapeSerialized, TextSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
 import SVGPathCommander, { ShapeTypes } from "svg-path-commander";
-import * as PathBool from "path-bool";
+import paper from 'paper';
+import { shapeToPath } from "~/internal/svg/path/utils";
 import { UMLClassData } from "../DiagramSerialized";
 import { Point } from "../Point";
+import { Group } from "paper/dist/paper-core";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -155,7 +157,6 @@ export class Elem {
 
   public move(x: number, y: number) {
     this.movable.move(x, y);
-    console.log(this.getPath())
   }
 
   public setId(newId: string): Elem {
@@ -251,7 +252,9 @@ export class Elem {
   }
 
   private configureShapeSize() {
-    this.shape.size(this.widthShape, this.heightShape);
+    if (this.shape.type !== ShapeType.Line) {
+      this.shape.size(this.widthShape, this.heightShape);
+    }
 
     this.configureSelectionOutline();
     this.configureGroup();
@@ -330,6 +333,9 @@ export class Elem {
           y: shape.y,
         });
         break;
+      case "line":
+        this.shape = new Line({ x1: shape.x, y1: shape.y, x2: shape.x2, y2: shape.y2 });
+        break;
       case "square":
         this.shape = new Rect({
           width: shape.width,
@@ -367,11 +373,13 @@ export class Elem {
       case "combined":
         this.shape = new Path().plot(shape.path!);
         break;
+      case "grouped":
+        this.shape = SVG(shape.group!);
+        break;
       case "uml_class":
         const originalX = shape.x;
         const originalY = shape.y;
         this.shape = this.createUMLClass(shape);
-        console.log(shape.x, shape.y)
 
         const group = this.shape as G;
         group.move(originalX, originalY);
@@ -833,6 +841,42 @@ private createUMLActor(shape: ShapeSerialized): Shape {
     return path;
   }
 
+  public getX1() {
+    if (this.shapetype !== ShapeType.Line) {
+      throw new Error();
+    }
+    return (this.shape as Line).plot()[0][0];
+  }
+  
+  public getY1() {
+    if (this.shapetype !== ShapeType.Line) {
+      throw new Error();
+    }
+    return (this.shape as Line).plot()[0][1];  
+  }
+
+  public getX2() {
+    if (this.shapetype !== ShapeType.Line) {
+      throw new Error();
+    }
+    return (this.shape as Line).plot()[1][0];
+  }
+  
+  public getY2() {
+    if (this.shapetype !== ShapeType.Line) {
+      throw new Error();
+    }
+    return (this.shape as Line).plot()[1][1];
+  }
+
+  public setPoints(x1: number, y1: number, x2: number, y2: number) {
+    if (this.shapetype !== ShapeType.Line) {
+      throw new Error();
+    } 
+    (this.shape as Line).plot([[x1, y1], [x2, y2]]);
+    this.configureShapeSize();
+  }
+
   private configureSelectionOutline() {
     this.selectionOutline
       .width((this.shape.width() as number) + this.selRectGapSize)
@@ -879,89 +923,59 @@ private createUMLActor(shape: ShapeSerialized): Shape {
 
   public excludeElement(other: Elem) {
     this.shapetype = ShapeType.Combined;
-
-    const thisPathElement =
-      this.shape.node.tagName === "path"
-        ? (this.shape.node as SVGPathElement)
-        : (SVGPathCommander.shapeToPath(
-            this.shape.node as unknown as ShapeTypes
-          ) as SVGPathElement);
-    const otherPathElement =
-      other.shape.node.tagName === "path"
-        ? (other.shape.node as SVGPathElement)
-        : (SVGPathCommander.shapeToPath(
-            other.shape.node as unknown as ShapeTypes
-          ) as SVGPathElement);
+    paper.setup(new paper.Size(400, 400));
 
     const fill = this.shape.fill();
 
-    const pathBool = PathBool.pathFromPathData(
-      thisPathElement.getAttribute("d")!
+    const pathBool = new paper.Path(
+      shapeToPath(this.shape)
     );
-    const otherPathBool = PathBool.pathFromPathData(
-      otherPathElement.getAttribute("d")!
-    );
-
-    const result = PathBool.pathBoolean(
-      pathBool,
-      PathBool.FillRule.NonZero,
-      otherPathBool,
-      PathBool.FillRule.NonZero,
-      PathBool.PathBooleanOperation.Difference
+    const otherPathBool = new paper.Path(
+      shapeToPath(other.shape)
     );
 
-    thisPathElement.setAttribute("d", result.map(PathBool.pathToPathData)[0]);
+    const result = pathBool.subtract(otherPathBool).exportSVG({ asString: false }) as SVGElement;
 
-    const newShape = SVG(thisPathElement);
+    const newShape = SVG(result);
 
     this.setShape(newShape);
     this.configureAll();
     this.setColor(fill);
   }
 
+  public groupElement(other: Elem) {
+    this.shapetype = ShapeType.Grouped;
+
+    const oldShape = this.shape;
+    const newShape = new G();
+
+    newShape.add(oldShape);
+    newShape.add(other.shape);
+
+    this.setShape(newShape);
+    this.configureAll();
+  }
+
   public combineElement(other: Elem) {
     this.shapetype = ShapeType.Combined;
-
-    const thisPathElement =
-      this.shape.node.tagName === "path"
-        ? (this.shape.node as SVGPathElement)
-        : (SVGPathCommander.shapeToPath(
-            this.shape.node as unknown as ShapeTypes
-          ) as SVGPathElement);
-    const otherPathElement =
-      other.shape.node.tagName === "path"
-        ? (other.shape.node as SVGPathElement)
-        : (SVGPathCommander.shapeToPath(
-            other.shape.node as unknown as ShapeTypes
-          ) as SVGPathElement);
+    paper.setup(new paper.Size(400, 400));
 
     const fill = this.shape.fill();
 
-    const pathBool = PathBool.pathFromPathData(
-      thisPathElement.getAttribute("d")!
+    const pathBool = new paper.Path(
+      shapeToPath(this.shape)
     );
-    const otherPathBool = PathBool.pathFromPathData(
-      otherPathElement.getAttribute("d")!
-    );
-
-    const result = PathBool.pathBoolean(
-      pathBool,
-      PathBool.FillRule.NonZero,
-      otherPathBool,
-      PathBool.FillRule.NonZero,
-      PathBool.PathBooleanOperation.Union
+    const otherPathBool = new paper.Path(
+      shapeToPath(other.shape)
     );
 
-    thisPathElement.setAttribute("d", result.map(PathBool.pathToPathData)[0]);
+    const result = pathBool.unite(otherPathBool).exportSVG({ asString: false }) as SVGElement;
 
-    const newShape = SVG(thisPathElement);
+    const newShape = SVG(result);
 
     this.setShape(newShape);
     this.configureAll();
     this.setColor(fill);
-
-    console.log(this.getGroup());
-    console.log(this.getShape());
   }
 
   private startEditing() {

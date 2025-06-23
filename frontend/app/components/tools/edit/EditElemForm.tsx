@@ -6,7 +6,8 @@ import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Elem } from "~/model/elem/Elem";
-import { Palette } from "lucide-react";
+import { Palette, Underline } from "lucide-react";
+import { ShapeType } from "~/model/DiagramSerialized";
 
 
 const formSchema = z.object({
@@ -18,7 +19,11 @@ const formSchema = z.object({
 	strokeWidth: z.number().optional(),
 	width: z.number().min(0),
 	height: z.number().min(0),
-	color: z.string().min(7).max(7)
+	color: z.string().min(7).max(7),
+  x1: z.number().min(0).optional(),
+  x2: z.number().min(0).optional(),
+  y1: z.number().min(0).optional(),
+  y2: z.number().min(0).optional(),
 })
 
 export interface EditElemProps {
@@ -41,6 +46,11 @@ export const EditElemForm = ({ elem }: EditElemProps) => {
 			strokeWidth: elem.getCustomConfig().stroke?.width,
 			strokeColor: elem.getCustomConfig().stroke?.color,
 			opacity: elem.getCustomConfig().opacity,
+
+      x1: elem.getType() === ShapeType.Line ? elem.getX1() : undefined,
+      y1: elem.getType() === ShapeType.Line ? elem.getY1() : undefined,
+      x2: elem.getType() === ShapeType.Line ? elem.getX2() : undefined,
+      y2: elem.getType() === ShapeType.Line ? elem.getY2() : undefined,
     },
   })
 
@@ -64,9 +74,12 @@ export const EditElemForm = ({ elem }: EditElemProps) => {
 			});
 
 			elem.setColor(formVal.color)
-			elem.setWidth(formVal.width);
-			elem.setHeigth(formVal.height);
-
+      if (elem.getType() === ShapeType.Line) {
+        elem.setPoints(formVal.x1!, formVal.y1!, formVal.x2!, formVal.y2!);
+      } else {
+        elem.setWidth(formVal.width);
+        elem.setHeigth(formVal.height);
+      }
   }, [form, elem]);
 
   return (
@@ -151,38 +164,98 @@ export const EditElemForm = ({ elem }: EditElemProps) => {
             </FormItem>
           )}
         />
-				<FormField
-          control={form.control}
-          name="width"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Width</FormLabel>
-              <FormControl>
-                <Input placeholder="50" {...field} onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
-              </FormControl>
-              <FormDescription>
-                Write width size here.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-				<FormField
-          control={form.control}
-          name="height"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Height</FormLabel>
-              <FormControl>
-                <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
-              </FormControl>
-              <FormDescription>
-                Write height size here.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {elem.getType() !== ShapeType.Line && (
+          <>
+            <FormField
+              control={form.control}
+              name="width"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Width</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" {...field} onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormDescription>
+                    Write width size here.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="height"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Height</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormDescription>
+                    Write height size here.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+        {elem.getType() === ShapeType.Line && (
+          <>
+            <FormField
+              control={form.control}
+              name="x1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>X1</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="y1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Y1</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="x2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>X2</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="y2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Y2</FormLabel>
+                  <FormControl>
+                    <Input placeholder="50" { ...field } onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
 
         <Button form="uniqueFormId" type="submit" onClick={onSubmit}>Submit</Button>
       </form>

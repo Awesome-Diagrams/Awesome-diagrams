@@ -31,11 +31,13 @@ export enum ShapeType {
     Rect = "rect",
     Ellipse = "ellipse",
     Polyline = "polyline",
+    Line = "line",
     Square = "square",
     Combined = "combined",
     UMLClass = 'uml_class',
     UMLInterface = 'uml_interface',
     UMLActor = 'uml_actor',
+    Grouped = 'grouped',
 }
 
 export type ShapeSerialized = {
@@ -50,6 +52,9 @@ export type ShapeSerialized = {
     rx?: number;
     ry?: number;
     r?: number;
+    x2?: number;
+    y2?: number;
+    group?: string;
 }
 
 export type customsSerialized = {

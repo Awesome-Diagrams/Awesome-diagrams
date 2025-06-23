@@ -91,6 +91,7 @@ export class Diagram {
     }
 
     addElem(elem: Elem) {
+        console.log(elem)
         this.elems.push(elem);
     }
 
@@ -130,6 +131,17 @@ export class Diagram {
         selectedShapes.forEach((elem) => {
             this.deleteConnectorsForElem(elem);
         });
+    }
+
+    groupElements() {
+        if (selectedShapes.length !== 2) {
+            return;
+        }
+        const first = selectedShapes[0];
+        const second = selectedShapes[1];
+
+        first.groupElement(second);
+        second.remove();
     }
 
     combineElements() {
