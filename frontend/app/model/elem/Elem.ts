@@ -27,6 +27,8 @@ import { ShapeType } from "../DiagramSerialized";
 import SVGPathCommander, { ShapeTypes } from "svg-path-commander";
 import paper from 'paper';
 import { shapeToPath } from "~/internal/svg/path/utils";
+import { UMLClassData } from "../DiagramSerialized";
+import { Point } from "../Point";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -52,6 +54,7 @@ export class Elem {
   private widthShape: number;
   private heightShape: number;
   private color: string = "#000000";
+  private umlData: UMLClassData;
 
   private textInfo: TextSerialized;
 
@@ -115,6 +118,14 @@ export class Elem {
     //scale
     this.heightShape = this.shape.height() as number;
     this.widthShape = this.shape.width() as number;
+    this.umlData = {
+          className: 'classname',
+          attributes: [
+          ],
+          methods: [
+              '+ methods(): void',
+          ],
+    }
 
     // TODO: fix it
     // configure
@@ -198,6 +209,12 @@ export class Elem {
   public setWidth(width: number) {
     this.widthShape = width;
     if (
+      this.shapetype === ShapeType.UMLClass ||
+      this.shapetype === ShapeType.UMLInterface
+    ) {
+      return ;
+    }
+    else if (
       this.shapetype === ShapeType.Circle ||
       this.shapetype === ShapeType.Square
     ) {
@@ -209,6 +226,12 @@ export class Elem {
   public setHeigth(height: number) {
     this.heightShape = height;
     if (
+      this.shapetype === ShapeType.UMLClass ||
+      this.shapetype === ShapeType.UMLInterface
+    ) {
+      return ;
+    }
+    else if (
       this.shapetype === ShapeType.Circle ||
       this.shapetype === ShapeType.Square
     ) {
@@ -350,6 +373,23 @@ export class Elem {
       case "combined":
         this.shape = new Path().plot(shape.path!);
         break;
+      case "uml_class":
+        const originalX = shape.x;
+        const originalY = shape.y;
+        this.shape = this.createUMLClass(shape);
+        console.log(shape.x, shape.y)
+
+        const group = this.shape as G;
+        group.move(originalX, originalY);
+        break;
+          
+      case ShapeType.UMLInterface:
+          this.shape = this.createUMLInterface(shape);
+          break;
+          
+      case ShapeType.UMLActor:
+          this.shape = this.createUMLActor(shape);
+          break;
     }
 
     this.heightShape = this.shape.height() as number;
@@ -358,10 +398,352 @@ export class Elem {
     return this;
   }
 
+// uml class -----------------------------------------------
+
+  private createUMLClass(shape: ShapeSerialized): Shape {
+    const baseWidth = shape.width || 200;
+    const baseHeight = 120;
+    
+    const classGroup = new G();
+    
+    // Базовая фигура (без текста)
+    const classRect = new Rect()
+        .size(baseWidth, baseHeight)
+        .fill('#ffffff')
+        .stroke({ width: 2, color: '#000000' })
+        .addClass('uml-main-rect')
+        .addTo(classGroup);
+
+    // Разделители
+    const headerDivider = new Line()
+        .stroke({ color: '#e0e0e0', width: 1 })
+        .addTo(classGroup);
+        
+
+    const methodDivider = new Line()
+        .stroke({ color: '#e0e0e0', width: 1 })
+        .addTo(classGroup);
+
+    classGroup.move(shape.x || 0, shape.y || 0);
+    return classGroup as unknown as Shape;
+  }
+
+  //---------------------------------------------
+
+  public getUMLClassData() {
+    return {
+      className: this.umlData?.className || "",
+      attributes: this.umlData?.attributes || [],
+      methods: this.umlData?.methods || []
+    };
+  }
+
+  public setUMLClassData(data: UMLClassData): void {
+    if (this.shapetype !== ShapeType.UMLClass) return;
+
+    const group = this.shape as G;
+
+    // Сохраняем текущую позицию группы перед изменениями
+    const originalX = group.x();
+    const originalY = group.y();
+    
+    group.find('text').forEach(t => t.remove());
+    group.find('rect').forEach(t => t.remove());
+    group.find('line').forEach(t => t.remove());
+
+    // Конфигурация
+    const textSize = 18;
+    const lineHeight = textSize + 8;
+    const xPadding = 15;
+    const yPadding = 10;
+    const headerHeight = 40;
+    const minSectionHeight = 40;
+    const defaultWidth = 200;
+
+    // Рассчитываем высоту
+    const attributesHeight = Math.max(
+        minSectionHeight,
+        data.attributes.length * lineHeight + yPadding * 2
+    );
+    const methodsHeight = Math.max(
+        minSectionHeight,
+        data.methods.length * lineHeight + yPadding * 2
+    );
+    const totalHeight = headerHeight + attributesHeight + methodsHeight;
+
+    // Создаем основной прямоугольник
+    const classRect = new Rect()
+        .size(defaultWidth, totalHeight)
+        .fill('#ffffff')
+        .stroke({ width: 2, color: '#000000' })
+        .addTo(group);
+
+    // Разделительные линии
+    const headerDivider = new Line()
+        .plot([[0, headerHeight], [defaultWidth, headerHeight]])
+        .stroke({ color: '#e0e0e0', width: 5 })
+        .addTo(group);
+
+    const methodDivider = new Line()
+        .plot([[0, headerHeight + attributesHeight], [defaultWidth, headerHeight + attributesHeight]])
+        .stroke({ color: '#e0e0e0', width: 5 })
+        .addTo(group);
+
+    // Добавляем текст с правильным позиционированием
+    // Название класса (центрированное)
+    new Text()
+        .text(data.className)
+        .attr({
+            'font-size': textSize,
+            'font-weight': 'bold',
+            'text-anchor': 'middle',
+            x: defaultWidth / 2,
+            y: headerHeight / 2,
+            'dominant-baseline': 'central'
+        })
+        .addTo(group);
+
+    // Атрибуты
+    data.attributes.forEach((attr, index) => {
+        new Text()
+            .text(attr)
+            .attr({
+                'font-size': textSize,
+                x: xPadding,
+                y: headerHeight + yPadding + index * lineHeight,
+                'dominant-baseline': 'hanging'
+            })
+            .addTo(group);
+    });
+
+    // Методы
+    data.methods.forEach((method, index) => {
+        new Text()
+            .text(method)
+            .attr({
+                'font-size': textSize,
+                x: xPadding,
+                y: headerHeight + attributesHeight + yPadding + index * lineHeight,
+                'dominant-baseline': 'hanging'
+            })
+            .addTo(group);
+    });
+
+    // Восстанавливаем оригинальную позицию
+    group.move(originalX, originalY);
+
+    this.configureSelectionOutline();
+    this.configureGroup();
+
+    // Сохраняем новые данные
+    this.umlData = data;
+  }
+// --------------
+// uml interface
+
+  private createUMLInterface(shape: ShapeSerialized): Shape {
+    const baseWidth = shape.width || 200;
+    const baseHeight = 120;
+    
+    const classGroup = new G();
+    
+    // Базовая фигура (без текста)
+    const classRect = new Rect()
+        .size(baseWidth, baseHeight)
+        .fill('#ffffff')
+        .stroke({ width: 2, color: '#000000' })
+        .addClass('uml-main-rect')
+        .addTo(classGroup);
+
+    const methodDivider = new Line()
+        .stroke({ color: '#e0e0e0', width: 1 })
+        .addTo(classGroup);
+
+    classGroup.move(shape.x || 0, shape.y || 0);
+    return classGroup as unknown as Shape;
+  }
+
+  public getUMLInterfaceData() {
+    return {
+      className: this.umlData?.className || "",
+      attributes: [],
+      methods: this.umlData?.methods || []
+    };
+  }
+
+// Получаем центр элемента
+  public getCenter(): { x: number, y: number } {
+      return {
+          x: this.getGroup().cx() as number,
+          y: this.getGroup().cy() as number
+      };
+  }
+
+  // Получаем границы элемента (bounding box)
+  public getBBox(): {
+      x: number,
+      y: number,
+      width: number,
+      height: number
+  } {
+      const node = this.getGroup().node as SVGGraphicsElement;
+      const bbox = node.getBBox();
+      return {
+          x: bbox.x,
+          y: bbox.y,
+          width: bbox.width,
+          height: bbox.height
+      };
+  }
+
+// Получаем точку на стороне элемента
+  public getSidePoint(side: 'top'|'right'|'bottom'|'left'): { x: number, y: number } {
+      const bbox = this.getBBox();
+      switch(side) {
+          case 'top': return { x: bbox.x + bbox.width/2, y: bbox.y };
+          case 'right': return { x: bbox.x + bbox.width, y: bbox.y + bbox.height/2 };
+          case 'bottom': return { x: bbox.x + bbox.width/2, y: bbox.y + bbox.height };
+          case 'left': return { x: bbox.x, y: bbox.y + bbox.height/2 };
+          default: return { x: bbox.x, y: bbox.y };
+      }
+  }
+
+  public setUMLInterfaceData(data: UMLClassData): void {
+    if (this.shapetype !== ShapeType.UMLInterface) return;
+    const group = this.shape as G;
+
+    // Сохраняем текущую позицию группы перед изменениями
+    const originalX = group.x();
+    const originalY = group.y();
+    
+    group.find('text').forEach(t => t.remove());
+    group.find('rect').forEach(t => t.remove());
+    group.find('line').forEach(t => t.remove());
+
+    // Конфигурация
+    const textSize = 18;
+    const lineHeight = textSize + 8;
+    const xPadding = 15;
+    const yPadding = 10;
+    const headerHeight = 40;
+    const minSectionHeight = 40;
+    const defaultWidth = 200;
+
+    const methodsHeight = Math.max(
+        minSectionHeight,
+        data.methods.length * lineHeight + yPadding * 2
+    );
+    const totalHeight = headerHeight + methodsHeight;
+
+    // Создаем основной прямоугольник
+    const classRect = new Rect()
+        .size(defaultWidth, totalHeight)
+        .fill('#ffffff')
+        .stroke({ width: 2, color: '#000000' })
+        .addTo(group);
+
+    // Разделительные линии
+    const headerDivider = new Line()
+        .plot([[0, headerHeight], [defaultWidth, headerHeight]])
+        .stroke({ color: '#e0e0e0', width: 5 })
+        .addTo(group);
+
+    // Добавляем текст с правильным позиционированием
+    // Название класса (центрированное)
+    new Text()
+        .text(data.className)
+        .attr({
+            'font-size': textSize,
+            'font-weight': 'bold',
+            'text-anchor': 'middle',
+            x: defaultWidth / 2,
+            y: headerHeight / 2,
+            'dominant-baseline': 'central'
+        })
+        .addTo(group);
+
+    // Методы
+    data.methods.forEach((method, index) => {
+        new Text()
+            .text(method)
+            .attr({
+                'font-size': textSize,
+                x: xPadding,
+                y: headerHeight + yPadding + index * lineHeight,
+                'dominant-baseline': 'hanging'
+            })
+            .addTo(group);
+    });
+
+    // Восстанавливаем оригинальную позицию
+    group.move(originalX, originalY);
+
+    this.configureSelectionOutline();
+    this.configureGroup();
+
+    // Сохраняем новые данные
+    this.umlData = data;
+  }
+
+// uml actor 
+
+private createUMLActor(shape: ShapeSerialized): Shape {
+    const size = 100; // Размер актора
+    const group = new G();
+    
+    // Голова 
+    new Circle({ r: size * 0.2, cx: size/2, cy: size * 0.25 })
+        .fill('#ffffff')
+        .stroke({ color: '#000000', width: 2 })
+        .addTo(group);
+    
+    // Тело 
+    new Line()
+        .plot([
+            [size/2, size * 0.45], 
+            [size/2, size * 0.7]
+        ])
+        .stroke({ color: '#000000', width: 2 })
+        .addTo(group);
+    
+    // Руки 
+    new Line()
+        .plot([
+            [size * 0.2, size * 0.5], 
+            [size * 0.8, size * 0.5]
+        ])
+        .stroke({ color: '#000000', width: 2 })
+        .addTo(group);
+    
+    // Ноги 
+    new Line()
+        .plot([
+            [size/2, size * 0.7], 
+            [size * 0.3, size * 0.9]
+        ])
+        .stroke({ color: '#000000', width: 2 })
+        .addTo(group);
+        
+    new Line()
+        .plot([
+            [size/2, size * 0.7], 
+            [size * 0.7, size * 0.9]
+        ])
+        .stroke({ color: '#000000', width: 2 })
+        .addTo(group);
+    
+    return group as unknown as Shape;
+  }
+
+//-----------------------------------  
+
+
   public setText(textInfo: TextSerialized): Elem {
     this.textInfo = textInfo;
-
-    if (textInfo.text.trim() === "") {
+    if (this.shapetype === "uml_class" || this.shapetype === "uml_interface") {
+      return this;
+    }
+    else if (textInfo.text.trim() === "") {
       this.textElement.plain(textInfo.text);
     } else {
       this.textElement.text(textInfo.text);
@@ -371,7 +753,6 @@ export class Elem {
         anchor: "middle",
       });
     }
-
     return this;
   }
 
