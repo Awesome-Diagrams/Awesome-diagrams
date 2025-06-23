@@ -133,6 +133,17 @@ export class Diagram {
         });
     }
 
+    groupElements() {
+        if (selectedShapes.length !== 2) {
+            return;
+        }
+        const first = selectedShapes[0];
+        const second = selectedShapes[1];
+
+        first.groupElement(second);
+        second.remove();
+    }
+
     combineElements() {
         if (selectedShapes.length !== 2) {
             return;

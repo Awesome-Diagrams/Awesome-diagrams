@@ -37,6 +37,7 @@ export enum ShapeType {
     UMLClass = 'uml_class',
     UMLInterface = 'uml_interface',
     UMLActor = 'uml_actor',
+    Grouped = 'grouped',
 }
 
 export type ShapeSerialized = {

@@ -1,11 +1,7 @@
 import { Button } from "~/components/ui/button";
 import { useDiagram } from "~/components/contexts/DiagramContextProvider";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Connector } from "~/model/elem/Connector";
-import { ConnectorType } from "~/model/elem/ConnectorType";
-import { LucideProps, LucideTrendingUp, Minus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
-import { Elem } from "~/model/elem/Elem";
 import { useUser } from "~/hooks/useUser";
 import { deserializeElem } from "~/internal/serialization/DiagramDeserializator";
 import { ElemSerialized } from "~/model/DiagramSerialized";

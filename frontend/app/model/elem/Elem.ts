@@ -939,6 +939,19 @@ private createUMLActor(shape: ShapeSerialized): Shape {
     this.setColor(fill);
   }
 
+  public groupElement(other: Elem) {
+    this.shapetype = ShapeType.Grouped;
+
+    const oldShape = this.shape;
+    const newShape = new G();
+
+    newShape.add(oldShape);
+    newShape.add(other.shape);
+
+    this.setShape(newShape);
+    this.configureAll();
+  }
+
   public combineElement(other: Elem) {
     this.shapetype = ShapeType.Combined;
     paper.setup(new paper.Size(400, 400));

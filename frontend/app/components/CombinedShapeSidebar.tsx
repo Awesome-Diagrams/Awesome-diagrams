@@ -28,6 +28,7 @@ import {
 import { Button } from "~/components/ui/button"
 import { useUser } from "~/hooks/useUser"
 import { SaveCombinedShapeButton } from "./tools/shape/SaveCombinedShape"
+import { GroupShapeButton } from "./tools/elem/GroupShapeButton"
 
 const items = [
   {
@@ -49,6 +50,10 @@ const items = [
   {
     title: "save combined shape",
     content: <SaveCombinedShapeButton />
+  },
+  {
+    title: "group shapes",
+    content: <GroupShapeButton />
   },
 ]
 
