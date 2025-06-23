@@ -54,6 +54,7 @@ export type ShapeSerialized = {
     r?: number;
     x2?: number;
     y2?: number;
+    group?: string;
 }
 
 export type customsSerialized = {

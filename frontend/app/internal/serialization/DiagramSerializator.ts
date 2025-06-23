@@ -34,6 +34,7 @@ export const serializeElem = (elem: Elem): ElemSerialized => {
             path: elem.getPath(),
             x2: elem.getType() === ShapeType.Line ? elem.getX2() : undefined,
             y2: elem.getType() === ShapeType.Line ? elem.getY2() : undefined,
+            group: elem.getType() === ShapeType.Grouped ? elem.getShape().svg() : undefined,
         },
         textElement: {
             color: elem.getText().color,

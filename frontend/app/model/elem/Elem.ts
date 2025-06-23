@@ -29,6 +29,7 @@ import paper from 'paper';
 import { shapeToPath } from "~/internal/svg/path/utils";
 import { UMLClassData } from "../DiagramSerialized";
 import { Point } from "../Point";
+import { Group } from "paper/dist/paper-core";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -371,6 +372,9 @@ export class Elem {
         break;
       case "combined":
         this.shape = new Path().plot(shape.path!);
+        break;
+      case "grouped":
+        this.shape = SVG(shape.group!);
         break;
       case "uml_class":
         const originalX = shape.x;
