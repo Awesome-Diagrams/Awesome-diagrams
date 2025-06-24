@@ -6,7 +6,7 @@ import { Point } from "./Point";
 import { DiagramSchemaType } from "./diagram/DiagramSchemaType";
 
 export type DiagramSerialized = {
-    type: DiagramSchemaType;
+    type: string;
     height: number;
     width: number;
     elems: ElemSerialized[];
