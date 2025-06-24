@@ -152,6 +152,7 @@ export class Diagram {
         const second = selectedShapes[1];
 
         first.combineElement(second);
+        second.remove();
     }
 
     excludeElements() {
@@ -162,6 +163,7 @@ export class Diagram {
         const second = selectedShapes[1];
 
         first.excludeElement(second);
+        second.remove();
     }
     
     private deleteConnectorsForElem(elem: Elem) {
