@@ -5,9 +5,11 @@ import { ConnectorSerialized, DiagramSerialized, ElemSerialized } from "~/model/
 import { Connector } from "~/model/elem/Connector";
 import { Elem } from "~/model/elem/Elem";
 import { ElemBuilder } from "~/model/elem/ElemBuilder";
+import { DiagramSchemaType } from "~/model/diagram/DiagramSchemaType";
+import { DiagramSchemaAdapter } from "~/model/schema/DiagramSchemaAdapter";
 
 export const deserializeDiagram = (diagramSerialized: DiagramSerialized): Diagram => {
-    const res = new Diagram(diagramSerialized.type)
+    const res = new Diagram(new DiagramSchemaAdapter(diagramSerialized.type as DiagramSchemaType).getCustomSchema())
     
     res.setHeight(diagramSerialized.height)
     res.setWidth(diagramSerialized.width)
