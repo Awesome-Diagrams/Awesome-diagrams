@@ -84,7 +84,7 @@ const ShapeDropDownMenu = forwardRef<HTMLButtonElement, DiagramDropDownMenuProps
     const fetchSchemas = async () => {
       if (!user || loaded) return;
 
-      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
+      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user.username}`, {
         credentials: "include",
       });
       const { id } = await resId.json();
