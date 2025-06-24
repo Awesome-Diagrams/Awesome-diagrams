@@ -25,7 +25,7 @@ export default function SchemasPage() {
     }
 
     try {
-      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user}`, {
+      const resId = await fetch(`http://localhost:8080/idByUsername?username=${user.username}`, {
         credentials: "include",
       });
       const data = await resId.json();

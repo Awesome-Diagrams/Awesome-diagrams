@@ -59,7 +59,7 @@ export default function DiagramPage() {
     }, [diagramData, diagram, svg]);
 
     return (
-        <div className="flex text-black place-items-center w-full">
+        <div className="flex text-black place-items-center w-full h-full">
             <div className="flex grow items-center w-full h-full justify-center">
                 <div>
                     <div className="outline rounded-md"
