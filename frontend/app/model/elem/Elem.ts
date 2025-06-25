@@ -896,11 +896,6 @@ private createUMLActor(shape: ShapeSerialized): Shape {
       this.group.add(this.shape);
     }
 
-    this.textElement.cx(this.shape.cx()).cy(this.shape.cy());
-    if (!this.group.has(this.textElement)) {
-      this.group.add(this.textElement);
-    }
-
     this.rect.cx(this.shape.cx()).cy(this.shape.cy());
     if (!this.group.has(this.rect)) {
       this.group.add(this.rect);
@@ -909,6 +904,12 @@ private createUMLActor(shape: ShapeSerialized): Shape {
     this.selectionOutline.cx(this.shape.cx()).cy(this.shape.cy());
     if (!this.group.has(this.selectionOutline)) {
       this.group.add(this.selectionOutline);
+    }
+
+    this.group.find('text').forEach(t => t.remove());
+    this.textElement.cx(this.shape.cx()).cy(this.shape.cy());
+    if (!this.group.has(this.textElement)) {
+      this.group.add(this.textElement);
     }
 
     this.svgGroup.add(this.group);
