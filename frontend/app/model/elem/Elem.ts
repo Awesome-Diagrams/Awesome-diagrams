@@ -21,7 +21,7 @@ import { DraggableType } from "./draggable/DraggableType";
 import { SelectionController } from "~/components/tools/SelectionController";
 import { DeltaDraggable } from "./draggable/DeltaDraggable";
 import { MultiMovable } from "./movable/MultiMovable";
-import { ShapeSerialized, TextSerialized } from "../DiagramSerialized";
+import { ElemSerialized, ShapeSerialized, TextSerialized } from "../DiagramSerialized";
 import { CustomConfig } from "./customs/CustomConfig";
 import { ShapeType } from "../DiagramSerialized";
 import SVGPathCommander, { ShapeTypes } from "svg-path-commander";
@@ -30,6 +30,8 @@ import { shapeToPath } from "~/internal/svg/path/utils";
 import { UMLClassData } from "../DiagramSerialized";
 import { Point } from "../Point";
 import { Group } from "paper/dist/paper-core";
+import { serializeElem } from "~/internal/serialization/DiagramSerializator";
+import { deserializeElem } from "~/internal/serialization/DiagramDeserializator";
 
 export class Elem {
   private eventListeners: { [event: string]: ((...args: any[]) => void)[] } =
@@ -314,6 +316,14 @@ export class Elem {
     this.widthShape = this.shape.width() as number;
 
     return this;
+  }
+
+  public serialize() : ElemSerialized {
+    return serializeElem(this);
+  }
+
+  public deserialize(elemSerialized: ElemSerialized, selController : SelectionController, group: G): Elem {
+    return deserializeElem(elemSerialized, selController, group);
   }
 
   public setShapeFromScratch(shape: ShapeSerialized): Elem {

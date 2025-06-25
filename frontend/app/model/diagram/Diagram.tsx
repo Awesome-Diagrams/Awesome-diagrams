@@ -4,6 +4,9 @@ import { selectedConnectors, selectedShapes, SelectionController } from "~/compo
 import { Connector } from "../elem/Connector";
 import { ElemBuilder } from "../elem/ElemBuilder";
 import { CustomSchema } from "../schema/CustomSchema";
+import { serializeDiagram } from "~/internal/serialization/DiagramSerializator";
+import { DiagramSerialized } from "../DiagramSerialized";
+import { deserializeDiagram } from "~/internal/serialization/DiagramDeserializator";
 
 export class Diagram {
     private elems: Elem[] = []
@@ -165,6 +168,14 @@ export class Diagram {
         first.excludeElement(second);
         second.remove();
     }
+
+    public serialize(): DiagramSerialized {
+        return serializeDiagram(this);
+    }
+
+    public deserialize(diagramSerialized: DiagramSerialized): Diagram {
+        return deserializeDiagram(diagramSerialized);
+    } 
     
     private deleteConnectorsForElem(elem: Elem) {
         this.connectors = this.connectors.filter((connector) => {

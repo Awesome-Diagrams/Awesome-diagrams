@@ -3,6 +3,9 @@ import { Elem } from "./Elem";
 import { selectedConnectors, SelectionController } from "~/components/tools/SelectionController";
 import { ConnectorType, getInternalPointCount } from "./ConnectorType";
 import { Point } from "../Point";
+import { ConnectorSerialized } from "../DiagramSerialized";
+import { serializeConnector } from "~/internal/serialization/DiagramSerializator";
+import { deserializeConnector } from "~/internal/serialization/DiagramDeserializator";
 
 export type UMLConnectorType = ConnectorType | 'inheritance' | 'aggregation' | 'composition' | 'association' | 'dependency';
 
@@ -209,6 +212,14 @@ export class Connector {
 
     public getType(): ConnectorType {
         return this.connectorType;
+    }
+
+    public serialize() : ConnectorSerialized {
+        return serializeConnector(this);
+    }
+
+    public deserialize(conSerialized: ConnectorSerialized, elems : Elem[], group: G): Connector {
+        return deserializeConnector(conSerialized, elems, group);
     }
 
     public getInternalPoints(): Point[] {
